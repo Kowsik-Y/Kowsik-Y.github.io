@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
-import { Send, Mail, Github, Linkedin, Code2, Terminal } from "lucide-react";
+import { Send, Mail, Github, Linkedin, Code2, Terminal, type LucideIcon } from "lucide-react";
 import FadeIn from "@/components/ui/fade-in";
 import ContactCanvasClient from "@/components/three/ContactCanvasClient";
 import { Button } from "@/components/ui/button";
@@ -90,7 +90,7 @@ export default function ContactPage() {
             value: `@${profile.hackerrankUrl.replace(/\/$/, "").split("/").pop()}`,
             href: profile.hackerrankUrl,
         },
-    ].filter(Boolean) as { icon: React.ElementType; label: string; value: string; href: string }[];
+    ].filter(Boolean) as { icon: LucideIcon; label: string; value: string; href: string }[];
 
     return (
         <div className="relative">
