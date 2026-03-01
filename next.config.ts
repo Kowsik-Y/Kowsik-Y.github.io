@@ -1,7 +1,20 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  images: {
+    localPatterns: [
+      {
+        pathname: "/**",
+        search: "**",
+      },
+    ],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "**.blob.vercel-storage.com",
+      },
+    ],
+  },
 };
 
 export default nextConfig;
