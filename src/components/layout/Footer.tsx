@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Github, Linkedin, Code2, Terminal, Mail, Globe, Link as LinkIcon } from "lucide-react";
+import { Github, Linkedin, Code2, Terminal, Mail, Globe, Link as LinkIcon, type LucideIcon } from "lucide-react";
 
 async function getProfile() {
     try {
@@ -23,7 +23,7 @@ export default async function Footer() {
         profile?.websiteUrl && { href: profile.websiteUrl, label: "Website", icon: Globe },
         profile?.email && { href: `mailto:${profile.email}`, label: "Email", icon: Mail },
         ...((profile?.customLinks ?? []).filter((cl: { label: string; url: string }) => cl.url).map((cl: { label: string; url: string }) => ({ href: cl.url, label: cl.label || cl.url, icon: LinkIcon }))),
-    ].filter(Boolean) as { href: string; label: string; icon: React.ElementType }[];
+    ].filter(Boolean) as { href: string; label: string; icon: LucideIcon }[];
 
     return (
         <footer className="border-t border-white/5 mt-20">

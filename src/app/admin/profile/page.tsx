@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import ImageUpload from "@/components/ui/image-upload";
 import { blobDisplayUrl } from "@/lib/blob-url";
-import { Plus, Trash2, Github, Globe, Link as LinkIcon } from "lucide-react";
+import { Plus, Trash2, Github, Globe, Link as LinkIcon, type LucideIcon } from "lucide-react";
 
 import type { IProfile } from "@/types";
 
@@ -22,7 +22,7 @@ const EMPTY: IProfile = {
     githubActivityLinks: [],
 };
 
-function SectionHeader({ icon: Icon, label }: { icon: React.ElementType; label: string }) {
+function SectionHeader({ icon: Icon, label }: { icon: LucideIcon; label: string }) {
     return (
         <div className="flex items-center gap-2 border-b border-white/10 pb-3">
             <Icon size={15} className="text-violet-400" />
