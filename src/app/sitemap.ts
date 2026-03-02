@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import dbConnect from "@/lib/db";
 import Project from "@/models/Project";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://kowsik.dev";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://kowsik.me";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes: MetadataRoute.Sitemap = [

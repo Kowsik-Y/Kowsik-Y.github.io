@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://kowsik.dev";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://kowsik.me";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

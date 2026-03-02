@@ -3,7 +3,7 @@ import dbConnect from "@/lib/db";
 import Project from "@/models/Project";
 import ProjectDetailContent from "./ProjectDetailContent";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://kowsik.dev";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://kowsik.me";
 
 export async function generateMetadata(
     { params }: { params: Promise<{ id: string }> }
