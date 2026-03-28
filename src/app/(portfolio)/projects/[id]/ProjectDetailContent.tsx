@@ -1,10 +1,11 @@
 "use client";
 
+import { useMemo, useState } from "react";
 import useSWR from "swr";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, Github, ExternalLink, Link as LinkIcon } from "lucide-react";
+import { ArrowLeft, Github, ExternalLink, Link as LinkIcon, ChevronLeft, ChevronRight, X } from "lucide-react";
 import FadeIn from "@/components/ui/fade-in";
 import ProjectsCanvasClient from "@/components/three/ProjectsCanvasClient";
 import { blobDisplayUrl } from "@/lib/blob-url";
@@ -18,6 +19,23 @@ export default function ProjectDetailContent() {
         id ? `/api/projects/${id}` : null,
         fetcher
     );
+    const [activeScreenshot, setActiveScreenshot] = useState(0);
+    const [lightboxOpen, setLightboxOpen] = useState(false);
+
+    const screenshots = useMemo(() => project?.screenshots ?? [], [project?.screenshots]);
+
+    const hasScreenshots = screenshots.length > 0;
+    const currentIndex = Math.min(activeScreenshot, Math.max(screenshots.length - 1, 0));
+
+    const goPrev = () => {
+        if (!hasScreenshots) return;
+        setActiveScreenshot((prev) => (prev - 1 + screenshots.length) % screenshots.length);
+    };
+
+    const goNext = () => {
+        if (!hasScreenshots) return;
+        setActiveScreenshot((prev) => (prev + 1) % screenshots.length);
+    };
 
     if (isLoading) {
         return (
@@ -129,20 +147,123 @@ export default function ProjectDetailContent() {
                 </FadeIn>
 
                 {/* Screenshots */}
-                {project.screenshots && project.screenshots.length > 0 && (
+                {hasScreenshots && (
                     <FadeIn delay={0.25}>
                         <h2 className="text-xl font-bold text-white mb-4">Screenshots</h2>
-                        <div className="grid sm:grid-cols-2 gap-4">
-                            {project.screenshots.map((src, i) => (
-                                <a key={i} href={blobDisplayUrl(src)} target="_blank" rel="noopener noreferrer"
-                                    className="relative block aspect-video rounded-xl overflow-hidden border border-white/10 hover:border-violet-500/50 transition-colors group">
-                                    <Image src={blobDisplayUrl(src)} alt={`Screenshot ${i + 1}`} fill className="object-cover group-hover:scale-105 transition-transform duration-300" unoptimized />
+                        <div className="glass-card p-4 sm:p-5">
+                            <div className="relative aspect-video rounded-xl overflow-hidden border border-white/10 group">
+                                <a
+                                    href={blobDisplayUrl(screenshots[currentIndex])}
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        setLightboxOpen(true);
+                                    }}
+                                    className="absolute inset-0 block"
+                                >
+                                    <Image
+                                        src={blobDisplayUrl(screenshots[currentIndex])}
+                                        alt={`Screenshot ${currentIndex + 1}`}
+                                        fill
+                                        className="object-cover group-hover:scale-105 transition-transform duration-300"
+                                        unoptimized
+                                    />
                                 </a>
-                            ))}
+
+                                {screenshots.length > 1 && (
+                                    <>
+                                        <button
+                                            type="button"
+                                            onClick={goPrev}
+                                            className="absolute left-2 top-1/2 -translate-y-1/2 z-10 h-8 w-8 rounded-full bg-slate-900/70 border border-white/10 text-white hover:bg-slate-800 transition-colors flex items-center justify-center"
+                                            aria-label="Previous screenshot"
+                                        >
+                                            <ChevronLeft size={16} />
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={goNext}
+                                            className="absolute right-2 top-1/2 -translate-y-1/2 z-10 h-8 w-8 rounded-full bg-slate-900/70 border border-white/10 text-white hover:bg-slate-800 transition-colors flex items-center justify-center"
+                                            aria-label="Next screenshot"
+                                        >
+                                            <ChevronRight size={16} />
+                                        </button>
+                                    </>
+                                )}
+                            </div>
+
+                            {screenshots.length > 1 && (
+                                <div className="mt-4 flex gap-2 overflow-x-auto pb-1">
+                                    {screenshots.map((src, i) => (
+                                        <button
+                                            key={i}
+                                            type="button"
+                                            onClick={() => setActiveScreenshot(i)}
+                                            className={`relative h-16 w-28 shrink-0 overflow-hidden rounded-lg border transition-colors ${i === currentIndex
+                                                ? "border-violet-400"
+                                                : "border-white/10 hover:border-violet-500/40"
+                                                }`}
+                                            aria-label={`Go to screenshot ${i + 1}`}
+                                        >
+                                            <Image
+                                                src={blobDisplayUrl(src)}
+                                                alt={`Thumbnail ${i + 1}`}
+                                                fill
+                                                className="object-cover"
+                                                unoptimized
+                                            />
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
                         </div>
                     </FadeIn>
                 )}
             </div>
+
+            {lightboxOpen && hasScreenshots && (
+                <div className="fixed inset-0 z-70 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4">
+                    <button
+                        type="button"
+                        onClick={() => setLightboxOpen(false)}
+                        className="absolute top-4 right-4 h-9 w-9 rounded-full bg-slate-900/80 border border-white/15 text-white hover:bg-slate-800 transition-colors flex items-center justify-center"
+                        aria-label="Close image viewer"
+                    >
+                        <X size={18} />
+                    </button>
+
+                    {screenshots.length > 1 && (
+                        <button
+                            type="button"
+                            onClick={goPrev}
+                            className="absolute left-4 sm:left-8 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-slate-900/80 border border-white/15 text-white hover:bg-slate-800 transition-colors flex items-center justify-center"
+                            aria-label="Previous screenshot"
+                        >
+                            <ChevronLeft size={20} />
+                        </button>
+                    )}
+
+                    <div className="relative w-full max-w-6xl aspect-video rounded-2xl overflow-hidden border border-white/10 shadow-2xl shadow-black/60">
+                        <Image
+                            src={blobDisplayUrl(screenshots[currentIndex])}
+                            alt={`Screenshot ${currentIndex + 1}`}
+                            fill
+                            className="object-contain bg-black"
+                            unoptimized
+                        />
+                    </div>
+
+                    {screenshots.length > 1 && (
+                        <button
+                            type="button"
+                            onClick={goNext}
+                            className="absolute right-4 sm:right-8 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-slate-900/80 border border-white/15 text-white hover:bg-slate-800 transition-colors flex items-center justify-center"
+                            aria-label="Next screenshot"
+                        >
+                            <ChevronRight size={20} />
+                        </button>
+                    )}
+                </div>
+            )}
         </div>
     );
 }

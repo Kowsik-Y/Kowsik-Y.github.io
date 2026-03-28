@@ -1,6 +1,6 @@
 "use client";
 
-import useSWR from "swr";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Github, ExternalLink, Star, ArrowRight } from "lucide-react";
@@ -8,8 +8,7 @@ import FadeIn from "@/components/ui/fade-in";
 import ProjectsCanvasClient from "@/components/three/ProjectsCanvasClient";
 import { blobDisplayUrl } from "@/lib/blob-url";
 import type { IProject } from "@/types";
-
-const fetcher = (url: string) => fetch(url).then((r) => r.json());
+import { usePortfolioStore } from "@/lib/stores/portfolioStore";
 
 function ProjectCard({ project, index }: { project: IProject; index: number }) {
     const router = useRouter();
@@ -79,7 +78,16 @@ function ProjectCard({ project, index }: { project: IProject; index: number }) {
 }
 
 export default function ProjectsPage() {
-    const { data: projects, isLoading } = useSWR<IProject[]>("/api/projects", fetcher);
+    const projects = usePortfolioStore((s) => s.projects);
+    const isLoading = usePortfolioStore((s) => s.loading);
+    const hydrated = usePortfolioStore((s) => s.hydrated);
+    const fetchOverview = usePortfolioStore((s) => s.fetchOverview);
+
+    useEffect(() => {
+        if (!hydrated) {
+            void fetchOverview();
+        }
+    }, [fetchOverview, hydrated]);
 
     return (
         <div className="relative">
@@ -101,7 +109,7 @@ export default function ProjectsPage() {
                     <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
                         {[...Array(3)].map((_, i) => (<div key={i} className="glass-card p-6 h-72 animate-pulse" />))}
                     </div>
-                ) : projects && projects.length > 0 ? (
+                ) : projects.length > 0 ? (
                     <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
                         {projects.map((p, i) => (<ProjectCard key={String(p._id)} project={p} index={i} />))}
                     </div>

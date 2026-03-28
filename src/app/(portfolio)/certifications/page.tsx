@@ -1,21 +1,27 @@
 "use client";
 
-import useSWR from "swr";
-import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
-import { ExternalLink, Award, X } from "lucide-react";
+import { useEffect, useState } from "react";
+import { ExternalLink, Award } from "lucide-react";
 import FadeIn from "@/components/ui/fade-in";
 import CertsCanvasClient from "@/components/three/CertsCanvasClient";
 import { blobDisplayUrl } from "@/lib/blob-url";
 import type { ICertificate } from "@/types";
 import CertDialog from "@/components/ui/certDialog";
-
-const fetcher = (url: string) => fetch(url).then((r) => r.json());
+import { usePortfolioStore } from "@/lib/stores/portfolioStore";
 
 export default function CertificationsPage() {
-    const { data: certs, isLoading } = useSWR<ICertificate[]>("/api/certificates", fetcher);
+    const certs = usePortfolioStore((s) => s.certificates);
+    const isLoading = usePortfolioStore((s) => s.loading);
+    const hydrated = usePortfolioStore((s) => s.hydrated);
+    const fetchOverview = usePortfolioStore((s) => s.fetchOverview);
     const [selected, setSelected] = useState<ICertificate | null>(null);
+
+    useEffect(() => {
+        if (!hydrated) {
+            void fetchOverview();
+        }
+    }, [fetchOverview, hydrated]);
 
     return (
         <div className="relative">
@@ -35,7 +41,7 @@ export default function CertificationsPage() {
                     <div className="space-y-4">
                         {[...Array(3)].map((_, i) => (<div key={i} className="glass-card p-6 h-24 animate-pulse" />))}
                     </div>
-                ) : certs && certs.length > 0 ? (
+                ) : certs.length > 0 ? (
                     <div className="space-y-4">
                         {certs.map((cert, i) => (
                             <FadeIn key={String(cert._id)} delay={i * 0.07}>

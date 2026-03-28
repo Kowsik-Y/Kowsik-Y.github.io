@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import type { IProfile } from "@/types";
+import { usePortfolioStore } from "@/lib/stores/portfolioStore";
 
 const schema = z.object({
     name: z.string().min(2, "Name must be at least 2 characters"),
@@ -24,11 +25,15 @@ type FormValues = z.infer<typeof schema>;
 
 export default function ContactPage() {
     const [submitting, setSubmitting] = useState(false);
-    const [profile, setProfile] = useState<Partial<IProfile>>({});
+    const profile = (usePortfolioStore((s) => s.profile) ?? {}) as Partial<IProfile>;
+    const hydrated = usePortfolioStore((s) => s.hydrated);
+    const fetchOverview = usePortfolioStore((s) => s.fetchOverview);
 
     useEffect(() => {
-        fetch("/api/profile").then((r) => r.json()).then(setProfile);
-    }, []);
+        if (!hydrated) {
+            void fetchOverview();
+        }
+    }, [fetchOverview, hydrated]);
 
     const {
         register,
@@ -151,7 +156,7 @@ export default function ContactPage() {
                                 <Textarea
                                     id="message"
                                     {...register("message")}
-                                    placeholder="Tell me about your project or idea..."
+                                    placeholder="Tell me your message..."
                                     rows={5}
                                     className="bg-white/5 border-white/10 text-white placeholder:text-slate-600 focus:border-violet-500 resize-none"
                                 />

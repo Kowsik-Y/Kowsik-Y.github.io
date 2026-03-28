@@ -14,6 +14,20 @@ export interface IProject {
   createdAt?: string;
 }
 
+export interface IBlog {
+  _id: string;
+  slug: string;
+  title: string;
+  excerpt: string;
+  content: string;
+  coverImage?: string;
+  tags: string[];
+  published: boolean;
+  order: number;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
 export interface ICertificate {
   _id: string;
   name: string;
@@ -91,4 +105,35 @@ export interface IProfile {
   availability?: string;
   customLinks?: { label: string; url: string }[];
   githubActivityLinks?: { label: string; url: string }[];
+}
+
+export interface IPortfolioSummary {
+  projectsCount: number;
+  blogsCount: number;
+  certificatesCount: number;
+  achievementsCount: number;
+  skillsCount: number;
+  educationCount: number;
+  languagesCount: number;
+  hobbiesCount: number;
+}
+
+export interface IAdminOverview {
+  profileName: string;
+  profileTitle: string;
+  updatedAt?: string;
+}
+
+export interface IPortfolioOverviewResponse {
+  profile: IProfile | null;
+  projects: IProject[];
+  blogs: IBlog[];
+  skills: ISkill[];
+  education: IEducation[];
+  languages: ILanguage[];
+  hobbies: IHobby[];
+  certificates: ICertificate[];
+  achievements: IAchievement[];
+  summary: IPortfolioSummary;
+  adminOverview?: IAdminOverview;
 }

@@ -6,7 +6,9 @@ import FadeIn from "@/components/ui/fade-in";
 import SkillIcon from "@/components/ui/skill-icon";
 import HeroCanvasClient from "@/components/three/HeroCanvasClient";
 import { Code2, Wrench, Heart, Globe, MapPin, User, Github, Linkedin, Terminal, Mail, Link as LinkIcon } from "lucide-react";
-import type { ISkill, IEducation, ILanguage, IHobby, IProfile } from "@/types";
+import type { IProfile } from "@/types";
+import { usePortfolioStore } from "@/lib/stores/portfolioStore";
+import { useAdminStore } from "@/lib/stores/adminStore";
 import { blobDisplayUrl } from "@/lib/blob-url";
 
 const SkillPill = ({ label, color }: { label: string; color: string }) => (
@@ -29,15 +31,60 @@ const CardSkeleton = () => (
     </div>
 );
 
+function CountUpValue({ value, duration = 1100 }: { value: string; duration?: number }) {
+    const parsed = Number(value);
+    const isNumeric = Number.isFinite(parsed);
+    const decimals = value.includes(".") ? (value.split(".")[1]?.length ?? 0) : 0;
+    const [display, setDisplay] = useState(0);
+
+    useEffect(() => {
+        if (!isNumeric) return;
+
+        let raf = 0;
+        const start = performance.now();
+
+        const tick = (now: number) => {
+            const progress = Math.min((now - start) / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            setDisplay(parsed * eased);
+            if (progress < 1) {
+                raf = requestAnimationFrame(tick);
+            }
+        };
+
+        raf = requestAnimationFrame(tick);
+        return () => cancelAnimationFrame(raf);
+    }, [duration, isNumeric, parsed, value]);
+
+    if (!isNumeric) {
+        return <>{value}</>;
+    }
+
+    return (
+        <>
+            {display.toLocaleString(undefined, {
+                minimumFractionDigits: decimals,
+                maximumFractionDigits: decimals,
+            })}
+        </>
+    );
+}
+
 export default function AboutPage() {
-    const [profile, setProfile] = useState<Partial<IProfile>>({});
-    const [skills, setSkills] = useState<ISkill[]>([]);
-    const [education, setEducation] = useState<IEducation[]>([]);
-    const [languages, setLanguages] = useState<ILanguage[]>([]);
-    const [hobbies, setHobbies] = useState<IHobby[]>([]);
-    const [projectsCount, setProjectsCount] = useState(0);
-    const [certsCount, setCertsCount] = useState(0);
-    const [loading, setLoading] = useState(true);
+    const profile = (usePortfolioStore((s) => s.profile) ?? {}) as Partial<IProfile>;
+    const skills = usePortfolioStore((s) => s.skills);
+    const education = usePortfolioStore((s) => s.education);
+    const languages = usePortfolioStore((s) => s.languages);
+    const hobbies = usePortfolioStore((s) => s.hobbies);
+    const summary = usePortfolioStore((s) => s.summary);
+    const loading = usePortfolioStore((s) => s.loading);
+    const hydrated = usePortfolioStore((s) => s.hydrated);
+    const fetchOverview = usePortfolioStore((s) => s.fetchOverview);
+    const hydrateAdminFromOverview = useAdminStore((s) => s.hydrateFromOverview);
+
+    const projectsCount = summary.projectsCount;
+    const certsCount = summary.certificatesCount;
+
     const [snakeLoaded, setSnakeLoaded] = useState(false);
     const [snakeMouse, setSnakeMouse] = useState({ x: 0, y: 0 });
     const [snakeHover, setSnakeHover] = useState(false);
@@ -45,24 +92,26 @@ export default function AboutPage() {
     const [streakState, setStreakState] = useState<"loading" | "loaded" | "error">("loading");
 
     useEffect(() => {
-        Promise.all([
-            fetch("/api/profile").then((r) => r.json()),
-            fetch("/api/skills").then((r) => r.json()),
-            fetch("/api/education").then((r) => r.json()),
-            fetch("/api/languages").then((r) => r.json()),
-            fetch("/api/hobbies").then((r) => r.json()),
-            fetch("/api/projects").then((r) => r.json()),
-            fetch("/api/certificates").then((r) => r.json()),
-        ]).then(([pr, sk, ed, la, ho, proj, certs]) => {
-            setProfile(pr);
-            setSkills(sk);
-            setEducation(ed);
-            setLanguages(la);
-            setHobbies(ho);
-            setProjectsCount(Array.isArray(proj) ? proj.length : 0);
-            setCertsCount(Array.isArray(certs) ? certs.length : 0);
-        }).finally(() => setLoading(false));
-    }, []);
+        if (!hydrated) {
+            fetchOverview({ includeAdminMeta: true }).then(() => {
+                const state = usePortfolioStore.getState();
+                if (state.hydrated) {
+                    hydrateAdminFromOverview({
+                        profile: state.profile,
+                        projects: state.projects,
+                        blogs: state.blogs,
+                        skills: state.skills,
+                        education: state.education,
+                        languages: state.languages,
+                        hobbies: state.hobbies,
+                        certificates: state.certificates,
+                        achievements: state.achievements,
+                        summary: state.summary,
+                    });
+                }
+            });
+        }
+    }, [fetchOverview, hydrateAdminFromOverview, hydrated]);
 
     const techSkills = skills.filter((s) => s.category === "Tech");
     const toolSkills = skills.filter((s) => s.category === "Tool");
@@ -188,7 +237,9 @@ export default function AboutPage() {
                                 { label: "Certifications", value: certsCount > 0 ? String(certsCount) : null },
                             ].filter((s) => s.value).map(({ label, value }) => (
                                 <div key={label} className="glass-card p-5 text-center">
-                                    <p className="text-2xl sm:text-3xl font-bold gradient-text">{value}</p>
+                                    <p className="text-2xl sm:text-3xl font-bold gradient-text">
+                                        <CountUpValue value={String(value)} />
+                                    </p>
                                     <p className="text-sm text-slate-500 mt-1">{label}</p>
                                 </div>
                             ))}

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { FolderKanban, Award, Trophy, Zap, GraduationCap, Globe, Heart, User, Pencil } from "lucide-react";
+import { FolderKanban, Award, Trophy, Zap, GraduationCap, Globe, Heart, User, Pencil, BookOpen } from "lucide-react";
 import dbConnect from "@/lib/db";
 import Project from "@/models/Project";
 import Certificate from "@/models/Certificate";
@@ -8,13 +8,15 @@ import Skill from "@/models/Skill";
 import Education from "@/models/Education";
 import Language from "@/models/Language";
 import Hobby from "@/models/Hobby";
+import Blog from "@/models/Blog";
 import Profile from "@/models/Profile";
 import { blobDisplayUrl } from "@/lib/blob-url";
 
 async function getCounts() {
     await dbConnect();
-    const [projects, certs, achievements, skills, education, languages, hobbies, profile] = await Promise.all([
+    const [projects, blogs, certs, achievements, skills, education, languages, hobbies, profile] = await Promise.all([
         Project.countDocuments(),
+        Blog.countDocuments(),
         Certificate.countDocuments(),
         Achievement.countDocuments(),
         Skill.countDocuments(),
@@ -27,7 +29,7 @@ async function getCounts() {
             { upsert: true, returnDocument: "after", lean: true }
         ),
     ]);
-    return { projects, certs, achievements, skills, education, languages, hobbies, profile: profile as { name?: string; title?: string; bio?: string; photoUrl?: string } | null };
+    return { projects, blogs, certs, achievements, skills, education, languages, hobbies, profile: profile as { name?: string; title?: string; bio?: string; photoUrl?: string } | null };
 }
 
 export default async function AdminDashboard() {
@@ -35,6 +37,7 @@ export default async function AdminDashboard() {
 
     const CARDS = [
         { label: "Projects", value: counts.projects, icon: FolderKanban, href: "/admin/projects", color: "text-violet-400 bg-violet-500/15" },
+        { label: "Blogs", value: counts.blogs, icon: BookOpen, href: "/admin/blogs", color: "text-indigo-400 bg-indigo-500/15" },
         { label: "Certificates", value: counts.certs, icon: Award, href: "/admin/certificates", color: "text-cyan-400 bg-cyan-500/15" },
         { label: "Achievements", value: counts.achievements, icon: Trophy, href: "/admin/achievements", color: "text-amber-400 bg-amber-500/15" },
         { label: "Skills", value: counts.skills, icon: Zap, href: "/admin/skills", color: "text-pink-400 bg-pink-500/15" },

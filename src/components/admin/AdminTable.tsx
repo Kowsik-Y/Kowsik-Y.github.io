@@ -1,7 +1,6 @@
 "use client";
 
-import { useState } from "react";
-import useSWR, { mutate } from "swr";
+import { useEffect, useMemo, useState } from "react";
 import { Plus, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -12,8 +11,8 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog";
-
-const fetcher = (url: string) => fetch(url).then((r) => r.json());
+import { useAdminStore } from "@/lib/stores/adminStore";
+import { usePortfolioStore } from "@/lib/stores/portfolioStore";
 
 interface Column<T> {
     key: keyof T;
@@ -41,16 +40,58 @@ export default function AdminTable<T extends { _id: string }>({
     FormComponent,
     emptyMessage = "No items yet.",
 }: AdminTableProps<T>) {
-    const { data, isLoading } = useSWR<T[]>(apiPath, fetcher);
+    const [initialLoading, setInitialLoading] = useState(true);
     const [open, setOpen] = useState(false);
     const [editing, setEditing] = useState<T | null>(null);
+    const data = useAdminStore((s) => s.getCollection<T>(apiPath));
+    const fetchCollection = useAdminStore((s) => s.fetchCollection);
+    const hydrateFromOverview = useAdminStore((s) => s.hydrateFromOverview);
+    const loadingByPath = useAdminStore((s) => s.loadingByPath);
+    const isLoading = initialLoading || Boolean(loadingByPath[apiPath]);
+
+    useEffect(() => {
+        let mounted = true;
+        const load = async () => {
+            if (!useAdminStore.getState().getCollection<T>(apiPath)) {
+                const portfolioState = usePortfolioStore.getState();
+                if (!portfolioState.hydrated) {
+                    await portfolioState.fetchOverview({ includeAdminMeta: true });
+                    const nextPortfolioState = usePortfolioStore.getState();
+                    if (nextPortfolioState.hydrated) {
+                        hydrateFromOverview({
+                            profile: nextPortfolioState.profile,
+                            projects: nextPortfolioState.projects,
+                            blogs: nextPortfolioState.blogs,
+                            skills: nextPortfolioState.skills,
+                            education: nextPortfolioState.education,
+                            languages: nextPortfolioState.languages,
+                            hobbies: nextPortfolioState.hobbies,
+                            certificates: nextPortfolioState.certificates,
+                            achievements: nextPortfolioState.achievements,
+                            summary: nextPortfolioState.summary,
+                        });
+                    }
+                }
+            }
+            await fetchCollection<T>(apiPath);
+        };
+
+        load().finally(() => {
+            if (mounted) setInitialLoading(false);
+        });
+        return () => {
+            mounted = false;
+        };
+    }, [apiPath, fetchCollection, hydrateFromOverview]);
+
+    const rows = useMemo(() => data ?? [], [data]);
 
     const handleDelete = async (id: string) => {
         if (!confirm("Delete this item?")) return;
         const res = await fetch(`${apiPath}/${id}`, { method: "DELETE" });
         if (res.ok) {
             toast.success("Deleted.");
-            mutate(apiPath);
+            void fetchCollection<T>(apiPath, true);
         } else {
             toast.error("Delete failed.");
         }
@@ -68,7 +109,7 @@ export default function AdminTable<T extends { _id: string }>({
 
     const handleSuccess = () => {
         setOpen(false);
-        mutate(apiPath);
+        void fetchCollection<T>(apiPath, true);
     };
 
     return (
@@ -87,7 +128,7 @@ export default function AdminTable<T extends { _id: string }>({
             <div className="glass-card overflow-hidden">
                 {isLoading ? (
                     <div className="p-8 text-center text-slate-500 animate-pulse">Loading…</div>
-                ) : !data || data.length === 0 ? (
+                ) : rows.length === 0 ? (
                     <div className="p-8 text-center text-slate-500">{emptyMessage}</div>
                 ) : (
                     <div className="overflow-x-auto">
@@ -108,7 +149,7 @@ export default function AdminTable<T extends { _id: string }>({
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-white/5">
-                                {data.map((row) => (
+                                {rows.map((row) => (
                                     <tr key={row._id} className="hover:bg-white/3 transition-colors">
                                         {columns.map((col) => (
                                             <td key={String(col.key)} className="px-5 py-4 text-slate-300">

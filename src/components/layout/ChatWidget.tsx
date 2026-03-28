@@ -125,7 +125,7 @@ export default function ChatWidget() {
                             <Bot size={16} className="text-white" />
                         </div>
                         <div>
-                            <p className="text-sm font-semibold text-white leading-none">Portfolio AI</p>
+                            <p className="text-sm font-semibold text-white leading-none">Ask Kowsik</p>
                             <p className="text-xs text-slate-500 mt-0.5 flex items-center gap-1">
                                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block animate-pulse" />
                                 Online

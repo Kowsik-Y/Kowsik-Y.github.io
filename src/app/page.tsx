@@ -1,4 +1,6 @@
 import Link from "next/link";
+import type { Metadata } from "next";
+import { cache } from "react";
 import Navbar from "@/components/layout/Navbar";
 import FadeIn from "@/components/ui/fade-in";
 import HeroCanvasClient from "@/components/three/HeroCanvasClient";
@@ -7,23 +9,77 @@ import dbConnect from "@/lib/db";
 import Profile from "@/models/Profile";
 import { blobDisplayUrl } from "@/lib/blob-url";
 import ChatWidget from "@/components/layout/ChatWidget";
+import Image from "next/image";
 
-async function getPageData() {
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://kowsik.me";
+
+type HomeProfile = {
+  name?: string;
+  title?: string;
+  bio?: string;
+  photoUrl?: string;
+  githubUrl?: string;
+  linkedinUrl?: string;
+  leetcodeUrl?: string;
+  hackerrankUrl?: string;
+  websiteUrl?: string;
+  email?: string;
+  cgpa?: string;
+  semester?: string;
+  interests?: string[];
+  availability?: string;
+};
+
+const getProfile = cache(async (): Promise<HomeProfile | null> => {
   await dbConnect();
-  const [profile] = await Promise.all([
-    Profile.findOneAndUpdate(
-      { _key: "main" },
-      { $setOnInsert: { _key: "main" } },
-      { upsert: true, returnDocument: "after", lean: true }
-    )
-  ]);
+  const profile = await Profile.findOneAndUpdate(
+    { _key: "main" },
+    { $setOnInsert: { _key: "main" } },
+    { upsert: true, returnDocument: "after", lean: true }
+  );
+  return profile as HomeProfile | null;
+});
+
+export async function generateMetadata(): Promise<Metadata> {
+  const profile = await getProfile();
+
+  const displayName = profile?.name?.trim() || "Kowsik Y";
+  const displayTitle = profile?.title?.trim() || "AI & ML Engineer";
+  const description =
+    profile?.bio?.trim() ||
+    `Portfolio of ${displayName}. ${displayTitle}, full-stack developer, and AI agent builder. Explore projects, skills, and achievements.`;
+
   return {
-    profile: profile as { name?: string; title?: string; bio?: string; photoUrl?: string; githubUrl?: string; linkedinUrl?: string; leetcodeUrl?: string; hackerrankUrl?: string; websiteUrl?: string; email?: string; cgpa?: string; semester?: string; interests?: string[]; availability?: string } | null
+    title: `${displayName} - ${displayTitle} | Portfolio`,
+    description,
+    alternates: {
+      canonical: siteUrl,
+    },
+    openGraph: {
+      title: `${displayName} - ${displayTitle}`,
+      description,
+      url: siteUrl,
+      type: "website",
+      images: [
+        {
+          url: "/og-home.png",
+          width: 1200,
+          height: 630,
+          alt: `${displayName} Portfolio`,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${displayName} - ${displayTitle}`,
+      description,
+      images: ["/og-home.png"],
+    },
   };
 }
 
 export default async function HomePage() {
-  const { profile } = await getPageData();
+  const profile = await getProfile();
   const photoSrc = profile?.photoUrl ? blobDisplayUrl(profile.photoUrl) : null;
   const displayName = profile?.name;
   const displayTitle = profile?.title;
@@ -42,7 +98,7 @@ export default async function HomePage() {
       <Navbar />
       <main>
         {/* ── Hero ── */}
-        <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+        <section className="relative min-h-screen flex items-center justify-center overflow-hidden sm:mb-0 mb-10">
           <HeroCanvasClient />
 
           {/* Gradient overlay */}
@@ -60,11 +116,13 @@ export default async function HomePage() {
                   {/* Main square frame */}
                   <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-2xl shadow-violet-500/20 bg-slate-900 border border-violet-500/30">
                     {photoSrc ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
+                      <Image
                         src={photoSrc}
-                        alt={displayName}
+                        about={displayName}
+                        alt={displayName as string}
                         className="w-full h-full object-cover"
+                        width={112}
+                        height={112}
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center">

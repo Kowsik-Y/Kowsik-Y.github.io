@@ -3,12 +3,13 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { Menu, X, Cpu } from "lucide-react";
+import { Menu, X } from "lucide-react";
 
 const NAV_LINKS = [
     { href: "/", label: "Home" },
     { href: "/about", label: "About" },
     { href: "/projects", label: "Projects" },
+    { href: "/blogs", label: "Blogs" },
     { href: "/certifications", label: "Certifications" },
     { href: "/achievements", label: "Achievements" },
     { href: "/contact", label: "Contact" },
@@ -21,17 +22,7 @@ export default function Navbar() {
     return (
         <header className="fixed top-0 inset-x-0 z-50">
             <nav className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-                <div className="border border-[#ffffff14] shadow-none bg-background/15 backdrop-blur supports-[backdrop-filter]:bg-background/60 mt-3 rounded-2xl px-5 py-3 flex items-center justify-between">
-                    {/* Logo */}
-                    <Link
-                        href="/"
-                        className="flex items-center gap-2 font-bold text-lg"
-                    >
-                        <span className="p-1.5 rounded-lg bg-violet-500/20 text-violet-400">
-                            <Cpu size={18} />
-                        </span>
-                        <span className="gradient-text">Kowsik</span>
-                    </Link>
+                <div className="border border-[#ffffff14] shadow-none bg-background/15 backdrop-blur supports-backdrop-filter:bg-background/60 mt-3 rounded-2xl px-5 py-3 flex items-center justify-end sm:justify-center">
 
                     {/* Desktop links */}
                     <ul className="hidden md:flex items-center gap-1">
@@ -42,8 +33,8 @@ export default function Navbar() {
                                     <Link
                                         href={href}
                                         className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${active
-                                                ? "bg-violet-500/20 text-violet-300"
-                                                : "text-slate-400 hover:text-white hover:bg-white/5"
+                                            ? "bg-violet-500/20 text-violet-300"
+                                            : "text-slate-400 hover:text-white hover:bg-white/5"
                                             }`}
                                     >
                                         {label}
@@ -65,7 +56,7 @@ export default function Navbar() {
 
                 {/* Mobile menu */}
                 {open && (
-                    <div className="border border-[#ffffff14] shadow-none bg-background/15 backdrop-blur supports-[backdrop-filter]:bg-background/60 mt-2 rounded-2xl px-5 py-4 md:hidden">
+                    <div className="border border-[#ffffff14] shadow-none bg-background/15 backdrop-blur supports-backdrop-filter:bg-background/60 mt-2 rounded-2xl px-5 py-4 md:hidden">
                         <ul className="flex flex-col gap-1">
                             {NAV_LINKS.map(({ href, label }) => {
                                 const active = pathname === href;
@@ -75,8 +66,8 @@ export default function Navbar() {
                                             href={href}
                                             onClick={() => setOpen(false)}
                                             className={`block px-3 py-2 rounded-lg text-sm font-medium transition-colors ${active
-                                                    ? "bg-violet-500/20 text-violet-300"
-                                                    : "text-slate-400 hover:text-white hover:bg-white/5"
+                                                ? "bg-violet-500/20 text-violet-300"
+                                                : "text-slate-400 hover:text-white hover:bg-white/5"
                                                 }`}
                                         >
                                             {label}

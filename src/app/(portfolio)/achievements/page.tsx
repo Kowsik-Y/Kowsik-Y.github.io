@@ -1,21 +1,25 @@
 "use client";
 
-import useSWR from "swr";
-import Link from "next/link";
-import Image from "next/image";
-import { Trophy, Building2, ExternalLink, ImageDown, ImageIcon, Calendar } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Trophy, Building2, ExternalLink, ImageIcon, Calendar } from "lucide-react";
 import FadeIn from "@/components/ui/fade-in";
 import AchievementsCanvasClient from "@/components/three/AchievementsCanvasClient";
-import { blobDisplayUrl } from "@/lib/blob-url";
 import type { IAchievement } from "@/types";
-import { useState } from "react";
 import CertDialog from "@/components/ui/certDialog";
-
-const fetcher = (url: string) => fetch(url).then((r) => r.json());
+import { usePortfolioStore } from "@/lib/stores/portfolioStore";
 
 export default function AchievementsPage() {
-    const { data: achievements, isLoading } = useSWR<IAchievement[]>("/api/achievements", fetcher);
+    const achievements = usePortfolioStore((s) => s.achievements);
+    const isLoading = usePortfolioStore((s) => s.loading);
+    const hydrated = usePortfolioStore((s) => s.hydrated);
+    const fetchOverview = usePortfolioStore((s) => s.fetchOverview);
     const [selected, setSelected] = useState<IAchievement | null>(null);
+
+    useEffect(() => {
+        if (!hydrated) {
+            void fetchOverview();
+        }
+    }, [fetchOverview, hydrated]);
     return (
         <div className="relative">
             <div className="fixed inset-0 -z-10 opacity-20 pointer-events-none">
@@ -34,7 +38,7 @@ export default function AchievementsPage() {
                     <div className="space-y-4">
                         {[...Array(2)].map((_, i) => (<div key={i} className="glass-card p-6 h-28 animate-pulse" />))}
                     </div>
-                ) : achievements && achievements.length > 0 ? (
+                ) : achievements.length > 0 ? (
                     <div className="space-y-5">
                         {achievements.map((ach, i) => (
                             <FadeIn key={String(ach._id)} delay={i * 0.08}>

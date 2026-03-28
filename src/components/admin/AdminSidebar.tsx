@@ -6,6 +6,7 @@ import { signOut } from "next-auth/react";
 import {
     LayoutDashboard,
     FolderKanban,
+    BookOpen,
     Award,
     Trophy,
     Zap,
@@ -22,6 +23,7 @@ const LINKS = [
     { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
     { href: "/admin/profile", label: "Profile", icon: User },
     { href: "/admin/projects", label: "Projects", icon: FolderKanban },
+    { href: "/admin/blogs", label: "Blogs", icon: BookOpen },
     { href: "/admin/certificates", label: "Certificates", icon: Award },
     { href: "/admin/achievements", label: "Achievements", icon: Trophy },
     { href: "/admin/skills", label: "Skills", icon: Zap },

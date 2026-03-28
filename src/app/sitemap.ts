@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import dbConnect from "@/lib/db";
 import Project from "@/models/Project";
+import Blog from "@/models/Blog";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://kowsik.me";
 
@@ -25,6 +26,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.9,
     },
     {
+      url: `${siteUrl}/blogs`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.85,
+    },
+    {
       url: `${siteUrl}/achievements`,
       lastModified: new Date(),
       changeFrequency: "monthly",
@@ -46,9 +53,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   try {
     await dbConnect();
-    const projects = await Project.find({})
-      .select("_id updatedAt createdAt")
-      .lean();
+    const [projects, blogs] = await Promise.all([
+      Project.find({})
+        .select("_id updatedAt createdAt")
+        .lean(),
+      Blog.find({ published: true })
+        .select("_id slug updatedAt createdAt")
+        .lean(),
+    ]);
 
     const projectRoutes: MetadataRoute.Sitemap = projects.map((p) => {
       const doc = p as { _id: unknown; updatedAt?: Date; createdAt?: Date };
@@ -60,7 +72,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       };
     });
 
-    return [...staticRoutes, ...projectRoutes];
+    const blogRoutes: MetadataRoute.Sitemap = blogs.map((b) => {
+      const doc = b as { _id: unknown; slug?: string; updatedAt?: Date; createdAt?: Date };
+      return {
+        url: `${siteUrl}/blogs/${doc.slug || doc._id}`,
+        lastModified: doc.updatedAt ?? doc.createdAt ?? new Date(),
+        changeFrequency: "monthly" as const,
+        priority: 0.75,
+      };
+    });
+
+    return [...staticRoutes, ...projectRoutes, ...blogRoutes];
   } catch {
     // If DB is unavailable during build, return static routes only
     return staticRoutes;

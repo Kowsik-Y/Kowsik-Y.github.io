@@ -1,6 +1,21 @@
 import { auth } from "@/lib/auth";
+import type { Metadata } from "next";
 import AdminSidebar from "@/components/admin/AdminSidebar";
 import SessionProvider from "@/components/admin/SessionProvider";
+
+export const metadata: Metadata = {
+    robots: {
+        index: false,
+        follow: false,
+        nocache: true,
+        googleBot: {
+            index: false,
+            follow: false,
+            noimageindex: true,
+            "max-snippet": 0,
+        },
+    },
+};
 
 export default async function AdminLayout({
     children,
