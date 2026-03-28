@@ -55,7 +55,8 @@ function normalizeBlogMarkdown(content: string) {
         .trim();
 }
 
-function normalizeLinkUrl(url: string) {
+function normalizeLinkUrl(url?: string | Blob | null) {
+    if (typeof url !== "string") return "";
     if (url.startsWith("www.")) return `https://${url}`;
     return url;
 }
