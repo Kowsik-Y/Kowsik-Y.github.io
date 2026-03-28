@@ -35,11 +35,10 @@ function toSlug(input: string) {
         .replace(/^-|-$/g, "");
 }
 
-BlogSchema.pre("validate", function (next) {
+BlogSchema.pre("validate", function () {
     if (!this.slug && this.title) {
         this.slug = toSlug(this.title);
     }
-    next();
 });
 
 BlogSchema.index({ slug: 1 }, { unique: true });
