@@ -2,8 +2,11 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { Menu, X } from "lucide-react";
+import NProgress from "nprogress";
+import "nprogress/nprogress.css";
+import "@/styles/nprogress.css";
 
 const NAV_LINKS = [
     { href: "/", label: "Home" },
@@ -15,9 +18,35 @@ const NAV_LINKS = [
     { href: "/contact", label: "Contact" },
 ];
 
+function NavLink({ href, label, active, onClick }: { href: string; label: string; active: boolean; onClick: () => void }) {
+    return (
+        <Link
+            href={href}
+            onClick={onClick}
+            className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${active
+                ? "bg-violet-500/20 text-violet-300"
+                : "text-slate-400 hover:text-white hover:bg-white/5"
+                }`}
+        >
+            {label}
+        </Link>
+    );
+}
+
 export default function Navbar() {
     const pathname = usePathname();
     const [open, setOpen] = useState(false);
+    const [isPending, startTransition] = useTransition();
+
+    // Configure NProgress on mount
+    NProgress.configure({ showSpinner: false });
+
+    // Start progress bar when navigation starts
+    if (isPending) {
+        NProgress.start();
+    } else {
+        NProgress.done();
+    }
 
     return (
         <header className="fixed top-0 inset-x-0 z-50">
@@ -30,15 +59,12 @@ export default function Navbar() {
                             const active = pathname === href;
                             return (
                                 <li key={href}>
-                                    <Link
+                                    <NavLink
                                         href={href}
-                                        className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${active
-                                            ? "bg-violet-500/20 text-violet-300"
-                                            : "text-slate-400 hover:text-white hover:bg-white/5"
-                                            }`}
-                                    >
-                                        {label}
-                                    </Link>
+                                        label={label}
+                                        active={active}
+                                        onClick={() => startTransition(() => { })}
+                                    />
                                 </li>
                             );
                         })}
@@ -62,16 +88,15 @@ export default function Navbar() {
                                 const active = pathname === href;
                                 return (
                                     <li key={href}>
-                                        <Link
+                                        <NavLink
                                             href={href}
-                                            onClick={() => setOpen(false)}
-                                            className={`block px-3 py-2 rounded-lg text-sm font-medium transition-colors ${active
-                                                ? "bg-violet-500/20 text-violet-300"
-                                                : "text-slate-400 hover:text-white hover:bg-white/5"
-                                                }`}
-                                        >
-                                            {label}
-                                        </Link>
+                                            label={label}
+                                            active={active}
+                                            onClick={() => {
+                                                startTransition(() => { });
+                                                setOpen(false);
+                                            }}
+                                        />
                                     </li>
                                 );
                             })}

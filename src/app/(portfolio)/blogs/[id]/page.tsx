@@ -226,8 +226,9 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ id:
                                     {children}
                                 </blockquote>
                             ),
-                            code: ({ inline, children }) => {
-                                if (inline) {
+                            code: ({ className, children }) => {
+                                const isCodeBlock = className?.includes('language-');
+                                if (!isCodeBlock) {
                                     return <code className="bg-slate-900 text-violet-300 px-2 py-1 rounded text-sm font-mono">{children}</code>;
                                 }
                                 return <code className="bg-slate-900 text-violet-300 px-1">{children}</code>;
