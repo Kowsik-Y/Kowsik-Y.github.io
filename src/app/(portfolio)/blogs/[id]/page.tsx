@@ -186,7 +186,11 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ id:
                             h1: ({ children }) => <h1 className="text-3xl font-bold text-white mt-8 mb-4">{children}</h1>,
                             h2: ({ children }) => <h2 className="text-2xl font-semibold text-white mt-7 mb-3">{children}</h2>,
                             h3: ({ children }) => <h3 className="text-xl font-semibold text-white mt-6 mb-3">{children}</h3>,
-                            hr: () => <hr className="border-t my-6" />,
+                            h4: ({ children }) => <h4 className="text-lg font-semibold text-white mt-5 mb-2">{children}</h4>,
+                            h5: ({ children }) => <h5 className="text-base font-semibold text-white mt-4 mb-2">{children}</h5>,
+                            h6: ({ children }) => <h6 className="text-sm font-semibold text-slate-300 mt-3 mb-2">{children}</h6>,
+                            p: ({ children }) => <p className="text-slate-300 my-4 leading-relaxed">{children}</p>,
+                            hr: () => <hr className="border-t border-slate-700 my-6" />,
                             a: ({ href, children }) => {
                                 const safeHref = normalizeLinkUrl(href || "");
                                 const isExternal = /^https?:\/\//.test(safeHref);
@@ -214,6 +218,57 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ id:
                                     />
                                 );
                             },
+                            ul: ({ children }) => <ul className="list-disc list-inside my-4 space-y-2 text-slate-300 ml-4">{children}</ul>,
+                            ol: ({ children }) => <ol className="list-decimal list-inside my-4 space-y-2 text-slate-300 ml-4">{children}</ol>,
+                            li: ({ children }) => <li className="text-slate-300 leading-relaxed">{children}</li>,
+                            blockquote: ({ children }) => (
+                                <blockquote className="border-l-4 border-violet-500 pl-4 my-4 italic text-slate-400 bg-violet-500/10 py-2 pr-4 rounded">
+                                    {children}
+                                </blockquote>
+                            ),
+                            code: ({ inline, children }) => {
+                                if (inline) {
+                                    return <code className="bg-slate-900 text-violet-300 px-2 py-1 rounded text-sm font-mono">{children}</code>;
+                                }
+                                return <code className="bg-slate-900 text-violet-300 px-1">{children}</code>;
+                            },
+                            pre: ({ children }) => (
+                                <pre className="bg-slate-900 border border-slate-700 rounded-lg p-4 my-4 overflow-x-auto">
+                                    {children}
+                                </pre>
+                            ),
+                            table: ({ children }) => (
+                                <table className="border-collapse my-4 w-full border border-slate-700">
+                                    {children}
+                                </table>
+                            ),
+                            thead: ({ children }) => (
+                                <thead className="bg-slate-800 border-b border-slate-700">
+                                    {children}
+                                </thead>
+                            ),
+                            tbody: ({ children }) => (
+                                <tbody>
+                                    {children}
+                                </tbody>
+                            ),
+                            tr: ({ children }) => (
+                                <tr className="border-b border-slate-700">
+                                    {children}
+                                </tr>
+                            ),
+                            th: ({ children }) => (
+                                <th className="text-white font-semibold text-left px-4 py-2 text-sm">
+                                    {children}
+                                </th>
+                            ),
+                            td: ({ children }) => (
+                                <td className="text-slate-300 px-4 py-2 text-sm">
+                                    {children}
+                                </td>
+                            ),
+                            strong: ({ children }) => <strong className="font-bold text-white">{children}</strong>,
+                            em: ({ children }) => <em className="italic text-slate-200">{children}</em>,
                         }}
                     >
                         {normalizedContent}

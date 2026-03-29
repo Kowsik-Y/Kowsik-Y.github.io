@@ -41,8 +41,6 @@ BlogSchema.pre("validate", function () {
     }
 });
 
-BlogSchema.index({ slug: 1 }, { unique: true });
-
 const Blog = models.Blog || mongoose.model<BlogDocument>("Blog", BlogSchema);
 
 export default Blog;
