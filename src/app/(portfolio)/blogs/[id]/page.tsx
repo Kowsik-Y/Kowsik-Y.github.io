@@ -8,6 +8,8 @@ import ReactMarkdown from "react-markdown";
 import remarkBreaks from "remark-breaks";
 import remarkGfm from "remark-gfm";
 import { ArrowLeft } from "lucide-react";
+import Breadcrumbs from "@/components/layout/Breadcrumbs";
+import { detailBreadcrumbs } from "@/lib/breadcrumbs";
 import { permanentRedirect } from "next/navigation";
 import { blobDisplayUrl } from "@/lib/blob-url";
 
@@ -153,6 +155,11 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ id:
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-16">
             <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
             <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }} />
+
+            <Breadcrumbs
+                className="mb-6"
+                items={detailBreadcrumbs("Blogs", "/blogs", blog.title || "Blog", `/blogs/${publicSlug}`)}
+            />
 
             <Link href="/blogs" className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-violet-400 transition-colors mb-8">
                 <ArrowLeft size={16} /> Back to Blogs

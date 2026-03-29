@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import { ExternalLink, Award } from "lucide-react";
 import FadeIn from "@/components/ui/fade-in";
 import CertsCanvasClient from "@/components/three/CertsCanvasClient";
+import Breadcrumbs from "@/components/layout/Breadcrumbs";
+import { sectionBreadcrumbs } from "@/lib/breadcrumbs";
 import { blobDisplayUrl } from "@/lib/blob-url";
 import type { ICertificate } from "@/types";
 import CertDialog from "@/components/ui/certDialog";
@@ -29,6 +31,10 @@ export default function CertificationsPage() {
                 <CertsCanvasClient />
             </div>
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-28">
+                <Breadcrumbs
+                    className="mb-6"
+                    items={sectionBreadcrumbs("Certifications", "/certifications")}
+                />
                 <FadeIn>
                     <div className="mb-2 text-sm font-medium text-violet-400 uppercase tracking-widest">Credentials</div>
                     <h1 className="text-4xl sm:text-5xl font-bold mb-4">

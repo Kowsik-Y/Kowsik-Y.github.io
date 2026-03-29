@@ -12,6 +12,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import Breadcrumbs from "@/components/layout/Breadcrumbs";
+import { sectionBreadcrumbs } from "@/lib/breadcrumbs";
 import type { IProfile } from "@/types";
 import { usePortfolioStore } from "@/lib/stores/portfolioStore";
 
@@ -103,6 +105,10 @@ export default function ContactPage() {
                 <ContactCanvasClient />
             </div>
             <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-28">
+                <Breadcrumbs
+                    className="mb-6"
+                    items={sectionBreadcrumbs("Contact", "/contact")}
+                />
                 <FadeIn>
                     <div className="mb-2 text-sm font-medium text-violet-400 uppercase tracking-widest">
                         Get In Touch

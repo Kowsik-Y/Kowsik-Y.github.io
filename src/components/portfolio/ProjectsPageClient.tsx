@@ -4,6 +4,8 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Github, ExternalLink, Star, ArrowRight } from "lucide-react";
 import FadeIn from "@/components/ui/fade-in";
+import Breadcrumbs from "@/components/layout/Breadcrumbs";
+import { sectionBreadcrumbs } from "@/lib/breadcrumbs";
 import ProjectsCanvasClient from "@/components/three/ProjectsCanvasClient";
 import { blobDisplayUrl } from "@/lib/blob-url";
 import type { IProject } from "@/types";
@@ -85,6 +87,10 @@ export default function ProjectsPageClient({ initialProjects }: ProjectsPageClie
                 <ProjectsCanvasClient />
             </div>
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-28">
+                <Breadcrumbs
+                    className="mb-6"
+                    items={sectionBreadcrumbs("Projects", "/projects")}
+                />
                 <FadeIn>
                     <div className="text-sm font-medium text-violet-400 uppercase tracking-widest">My Work</div>
                     <h1 className="text-4xl sm:text-5xl font-bold mb-4">

@@ -5,6 +5,8 @@ import Link from "next/link";
 import FadeIn from "@/components/ui/fade-in";
 import SkillIcon from "@/components/ui/skill-icon";
 import HeroCanvasClient from "@/components/three/HeroCanvasClient";
+import Breadcrumbs from "@/components/layout/Breadcrumbs";
+import { sectionBreadcrumbs } from "@/lib/breadcrumbs";
 import { Code2, Wrench, Heart, Globe, MapPin, User, Github, Linkedin, Terminal, Mail, Link as LinkIcon } from "lucide-react";
 import type { IProfile } from "@/types";
 import { usePortfolioStore } from "@/lib/stores/portfolioStore";
@@ -124,6 +126,10 @@ export default function AboutPage() {
                 <HeroCanvasClient />
             </div>
             <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-28">
+                <Breadcrumbs
+                    className="mb-6"
+                    items={sectionBreadcrumbs("About", "/about")}
+                />
                 <FadeIn>
                     <div className="flex flex-col sm:flex-row sm:items-center gap-8 mb-16">
                         <div className="shrink-0">

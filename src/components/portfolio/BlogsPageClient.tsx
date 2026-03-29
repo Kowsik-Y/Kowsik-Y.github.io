@@ -5,6 +5,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import FadeIn from "@/components/ui/fade-in";
+import Breadcrumbs from "@/components/layout/Breadcrumbs";
+import { sectionBreadcrumbs } from "@/lib/breadcrumbs";
 import { blobDisplayUrl } from "@/lib/blob-url";
 import type { IBlog } from "@/types";
 
@@ -72,6 +74,10 @@ export default function BlogsPageClient({ initialBlogs }: BlogsPageClientProps) 
 
     return (
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-28">
+            <Breadcrumbs
+                className="mb-6"
+                items={sectionBreadcrumbs("Blogs", "/blogs")}
+            />
             <FadeIn>
                 <div className="text-sm font-medium text-violet-400 uppercase tracking-widest">Insights</div>
                 <h1 className="text-4xl sm:text-5xl font-bold mb-4">

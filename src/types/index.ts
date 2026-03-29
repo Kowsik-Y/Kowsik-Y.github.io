@@ -137,3 +137,9 @@ export interface IPortfolioOverviewResponse {
   summary: IPortfolioSummary;
   adminOverview?: IAdminOverview;
 }
+
+export interface BreadcrumbItem {
+  label: string;
+  href: string;
+  current?: boolean;
+}

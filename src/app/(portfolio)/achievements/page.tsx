@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { Trophy, Building2, ExternalLink, ImageIcon, Calendar } from "lucide-react";
 import FadeIn from "@/components/ui/fade-in";
 import AchievementsCanvasClient from "@/components/three/AchievementsCanvasClient";
+import Breadcrumbs from "@/components/layout/Breadcrumbs";
+import { sectionBreadcrumbs } from "@/lib/breadcrumbs";
 import type { IAchievement } from "@/types";
 import CertDialog from "@/components/ui/certDialog";
 import { usePortfolioStore } from "@/lib/stores/portfolioStore";
@@ -26,6 +28,10 @@ export default function AchievementsPage() {
                 <AchievementsCanvasClient />
             </div>
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-28">
+                <Breadcrumbs
+                    className="mb-6"
+                    items={sectionBreadcrumbs("Achievements", "/achievements")}
+                />
                 <FadeIn>
                     <div className="mb-2 text-sm font-medium text-violet-400 uppercase tracking-widest">Recognition</div>
                     <h1 className="text-4xl sm:text-5xl font-bold mb-4">

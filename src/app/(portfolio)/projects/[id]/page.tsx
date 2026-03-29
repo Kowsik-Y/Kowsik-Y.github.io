@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { cache } from "react";
 import dbConnect from "@/lib/db";
 import Project from "@/models/Project";
+import Breadcrumbs from "@/components/layout/Breadcrumbs";
+import { detailBreadcrumbs } from "@/lib/breadcrumbs";
 import ProjectDetailContent from "./ProjectDetailContent";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://kowsik.me";
@@ -167,6 +169,11 @@ export default async function ProjectDetailPage(
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
             />
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-2">
+                <Breadcrumbs
+                    items={detailBreadcrumbs("Projects", "/projects", project?.title || "Project", `/projects/${id}`)}
+                />
+            </div>
             <ProjectDetailContent />
         </>
     );
