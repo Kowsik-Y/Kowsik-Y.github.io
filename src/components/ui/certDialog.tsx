@@ -1,10 +1,25 @@
+"use client";
+
 import { blobDisplayUrl } from "@/lib/blob-url";
 import { ICertificate, IAchievement } from "@/types";
 import { Award, ExternalLink, X } from "lucide-react";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 
 export default function CertDialog({ cert, onClose }: { cert: ICertificate | IAchievement; onClose: () => void }) {
-    return (
+    const [mounted, setMounted] = useState(false);
+
+    
+    useEffect(() => {
+        setTimeout(() => setMounted(true), 0);
+        document.body.style.overflow = "hidden";
+        return () => {
+            document.body.style.overflow = "unset";
+        };
+    }, []);
+
+    const modalContent = (
         <div
             className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
             onClick={onClose}
@@ -15,7 +30,7 @@ export default function CertDialog({ cert, onClose }: { cert: ICertificate | IAc
             >
                 <button
                     onClick={onClose}
-                    className="absolute top-3 right-3 z-10 p-1.5 rounded-full bg-white/10 text-slate-400 cursor-pointer hover:bg-white/20 transition-colors"
+                    className="absolute top-3 right-3 z-10 p-1.5 rounded-full bg-white/10 text-muted-foreground cursor-pointer hover:bg-white/20 transition-colors"
                     aria-label="Close"
                 >
                     <X size={16} />
@@ -40,13 +55,13 @@ export default function CertDialog({ cert, onClose }: { cert: ICertificate | IAc
                             <Award size={22} />
                         </div>
                         <div>
-                            <h2 className="font-bold text-lg text-white leading-snug">{'name' in cert ? cert.name : cert.title}</h2>
+                            <h2 className="font-bold text-lg text-foreground leading-snug">{'name' in cert ? cert.name : cert.title}</h2>
                             <p className="text-sm text-violet-300 mt-0.5">{(('issue' in cert ? cert.issue : '') || ('org' in cert ? cert.org : '')) as string}</p>
                             {'description' in cert && cert.description && (
-                                <p className="text-xs text-slate-500 mt-1">{cert.description}</p>
+                                <p className="text-xs text-muted-foreground/80 mt-1">{cert.description}</p>
                             )}
                             {cert.date && (
-                                <p className="text-xs text-slate-500 mt-1">{cert.date}</p>
+                                <p className="text-xs text-muted-foreground/80 mt-1">{cert.date}</p>
                             )}
                         </div>
                     </div>
@@ -65,4 +80,7 @@ export default function CertDialog({ cert, onClose }: { cert: ICertificate | IAc
             </div>
         </div>
     );
+
+    if (!mounted) return null;
+    return createPortal(modalContent, document.body);
 }

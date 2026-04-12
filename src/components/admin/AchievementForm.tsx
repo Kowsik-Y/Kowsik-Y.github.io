@@ -60,30 +60,30 @@ export default function AchievementForm({ initial, onSuccess, apiPath, editId }:
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div>
-                <Label className="text-slate-300 mb-1 block">Title *</Label>
-                <Input {...register("title")} className="bg-white/5 border-white/10 text-white" />
+                <Label className="text-foreground/80 mb-1 block">Title *</Label>
+                <Input {...register("title")} className="bg-foreground/5 border-border/60 text-foreground" />
                 {errors.title && <p className="text-red-400 text-xs mt-1">{errors.title.message}</p>}
             </div>
             <div>
-                <Label className="text-slate-300 mb-1 block">Description *</Label>
-                <Textarea {...register("description")} rows={3} className="bg-white/5 border-white/10 text-white resize-none" />
+                <Label className="text-foreground/80 mb-1 block">Description *</Label>
+                <Textarea {...register("description")} rows={3} className="bg-foreground/5 border-border/60 text-foreground resize-none" />
                 {errors.description && <p className="text-red-400 text-xs mt-1">{errors.description.message}</p>}
             </div>
             <div>
-                <Label className="text-slate-300 mb-1 block">Organization</Label>
-                <Input {...register("org")} className="bg-white/5 border-white/10 text-white" />
+                <Label className="text-foreground/80 mb-1 block">Organization</Label>
+                <Input {...register("org")} className="bg-foreground/5 border-border/60 text-foreground" />
             </div>
             <div>
-                <Label className="text-slate-300 mb-1 block">Date</Label>
-                <Input {...register("date")} placeholder="e.g. March 2025" className="bg-white/5 border-white/10 text-white" />
+                <Label className="text-foreground/80 mb-1 block">Date</Label>
+                <Input {...register("date")} placeholder="e.g. March 2025" className="bg-foreground/5 border-border/60 text-foreground" />
             </div>
             <div>
-                <Label className="text-slate-300 mb-1 block">Achievement Link</Label>
-                <Input {...register("link")} placeholder="https://..." className="bg-white/5 border-white/10 text-white" />
+                <Label className="text-foreground/80 mb-1 block">Achievement Link</Label>
+                <Input {...register("link")} placeholder="https://..." className="bg-foreground/5 border-border/60 text-foreground" />
             </div>
             <ImageUpload label="Achievement Image" value={imageUrl} onChange={setImageUrl} />
             <div className="flex justify-end pt-2">
-                <Button type="submit" disabled={loading} className="bg-violet-600 hover:bg-violet-500 text-white">
+                <Button type="submit" disabled={loading} className="bg-violet-600 hover:bg-violet-500 text-white dark:text-white">
                     {loading ? "Saving…" : editId ? "Update" : "Create"}
                 </Button>
             </div>

@@ -53,20 +53,20 @@ export default function LanguageForm({ initial, onSuccess, apiPath, editId }: Pr
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div>
-                <Label className="text-slate-300 mb-1 block">Language *</Label>
-                <Input {...register("name")} placeholder="e.g. English" className="bg-white/5 border-white/10 text-white" />
+                <Label className="text-foreground/80 mb-1 block">Language *</Label>
+                <Input {...register("name")} placeholder="e.g. English" className="bg-foreground/5 border-border/60 text-foreground" />
                 {errors.name && <p className="text-red-400 text-xs mt-1">{errors.name.message}</p>}
             </div>
             <div>
-                <Label className="text-slate-300 mb-1 block">Proficiency *</Label>
-                <Input {...register("proficiency")} placeholder="e.g. Read, Write, Speak" className="bg-white/5 border-white/10 text-white" />
+                <Label className="text-foreground/80 mb-1 block">Proficiency *</Label>
+                <Input {...register("proficiency")} placeholder="e.g. Read, Write, Speak" className="bg-foreground/5 border-border/60 text-foreground" />
                 {errors.proficiency && <p className="text-red-400 text-xs mt-1">{errors.proficiency.message}</p>}
             </div>
             <div>
-                <Label className="text-slate-300 mb-1 block">Order</Label>
-                <Input {...register("order", { valueAsNumber: true })} type="number" placeholder="0" className="bg-white/5 border-white/10 text-white" />
+                <Label className="text-foreground/80 mb-1 block">Order</Label>
+                <Input {...register("order", { valueAsNumber: true })} type="number" placeholder="0" className="bg-foreground/5 border-border/60 text-foreground" />
             </div>
-            <Button type="submit" disabled={loading} className="w-full bg-violet-600 hover:bg-violet-700 text-white">
+            <Button type="submit" disabled={loading} className="w-full bg-violet-600 hover:bg-violet-700 text-white dark:text-white">
                 {loading ? "Saving…" : editId ? "Update" : "Create"}
             </Button>
         </form>

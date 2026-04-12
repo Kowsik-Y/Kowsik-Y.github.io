@@ -95,7 +95,9 @@ export const usePortfolioStore = create<PortfolioState>((set, get) => ({
             if (includeAdminMeta) params.set("includeAdminMeta", "1");
             if (includeHeavyMedia) params.set("includeHeavyMedia", "1");
             const query = params.toString();
-            const res = await fetch(`/api/portfolio-overview${query ? `?${query}` : ""}`);
+            const res = await fetch(`/api/portfolio-overview${query ? `?${query}` : ""}`, {
+                cache: "no-store",
+            });
 
             if (!res.ok) {
                 throw new Error(`Overview request failed with status ${res.status}`);

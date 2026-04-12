@@ -40,7 +40,7 @@ export default function CertificationsPage() {
                     <h1 className="text-4xl sm:text-5xl font-bold mb-4">
                         <span className="gradient-text">Certifications</span>
                     </h1>
-                    <p className="text-slate-400 text-lg max-w-2xl mb-14">Verified credentials and training programs I&apos;ve completed.</p>
+                    <p className="text-muted-foreground text-lg max-w-2xl mb-14">Verified credentials and training programs I&apos;ve completed.</p>
                 </FadeIn>
 
                 {isLoading ? (
@@ -66,9 +66,9 @@ export default function CertificationsPage() {
                                                 <Award size={20} />
                                             </div>
                                             <div>
-                                                <h3 className="font-semibold text-white group-hover:text-violet-300 transition-colors">{cert.name}</h3>
-                                                <p className="text-sm text-slate-400">{cert.issuer}</p>
-                                                {cert.date && <p className="text-xs text-slate-600 mt-0.5">{cert.date}</p>}
+                                                <h3 className="font-semibold text-foreground group-hover:text-violet-300 transition-colors">{cert.name}</h3>
+                                                <p className="text-sm text-muted-foreground">{cert.issuer}</p>
+                                                {cert.date && <p className="text-xs text-muted-foreground mt-0.5">{cert.date}</p>}
                                             </div>
                                         </div>
                                         <span className="shrink-0 flex items-center gap-1.5 text-xs text-violet-400 border border-violet-500/25 px-3 py-1.5 rounded-lg group-hover:bg-violet-500/10 transition-colors">
@@ -80,7 +80,7 @@ export default function CertificationsPage() {
                         ))}
                     </div>
                 ) : (
-                    <div className="glass-card p-12 text-center text-slate-500">No certifications added yet.</div>
+                    <div className="glass-card p-12 text-center text-muted-foreground/80">No certifications added yet.</div>
                 )}
             </div>
 

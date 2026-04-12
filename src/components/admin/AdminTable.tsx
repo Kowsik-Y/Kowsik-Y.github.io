@@ -119,7 +119,7 @@ export default function AdminTable<T extends { _id: string }>({
                 <Button
                     onClick={openAdd}
                     size="sm"
-                    className="bg-violet-600 hover:bg-violet-500 text-white"
+                    className="bg-violet-600 hover:bg-violet-500 text-white dark:text-white"
                 >
                     <Plus size={15} className="mr-1" /> Add
                 </Button>
@@ -127,23 +127,23 @@ export default function AdminTable<T extends { _id: string }>({
 
             <div className="glass-card overflow-hidden">
                 {isLoading ? (
-                    <div className="p-8 text-center text-slate-500 animate-pulse">Loading…</div>
+                    <div className="p-8 text-center text-muted-foreground/80 animate-pulse">Loading…</div>
                 ) : rows.length === 0 ? (
-                    <div className="p-8 text-center text-slate-500">{emptyMessage}</div>
+                    <div className="p-8 text-center text-muted-foreground/80">{emptyMessage}</div>
                 ) : (
                     <div className="overflow-x-auto">
                         <table className="w-full text-sm">
                             <thead>
-                                <tr className="border-b border-white/5">
+                                <tr className="border-b border-border/40">
                                     {columns.map((col) => (
                                         <th
                                             key={String(col.key)}
-                                            className="px-5 py-3.5 text-left text-xs font-medium text-slate-500 uppercase tracking-wider"
+                                            className="px-5 py-3.5 text-left text-xs font-medium text-muted-foreground/80 uppercase tracking-wider"
                                         >
                                             {col.label}
                                         </th>
                                     ))}
-                                    <th className="px-5 py-3.5 text-right text-xs font-medium text-slate-500 uppercase tracking-wider">
+                                    <th className="px-5 py-3.5 text-right text-xs font-medium text-muted-foreground/80 uppercase tracking-wider">
                                         Actions
                                     </th>
                                 </tr>
@@ -152,7 +152,7 @@ export default function AdminTable<T extends { _id: string }>({
                                 {rows.map((row) => (
                                     <tr key={row._id} className="hover:bg-white/3 transition-colors">
                                         {columns.map((col) => (
-                                            <td key={String(col.key)} className="px-5 py-4 text-slate-300">
+                                            <td key={String(col.key)} className="px-5 py-4 text-foreground/80">
                                                 {col.render
                                                     ? col.render(row[col.key], row)
                                                     : String(row[col.key] ?? "")}
@@ -162,13 +162,13 @@ export default function AdminTable<T extends { _id: string }>({
                                             <div className="flex items-center justify-end gap-2">
                                                 <button
                                                     onClick={() => openEdit(row)}
-                                                    className="p-1.5 rounded-lg text-slate-500 hover:text-violet-400 hover:bg-violet-500/10 transition-colors"
+                                                    className="p-1.5 rounded-lg text-muted-foreground/80 hover:text-violet-600 dark:text-violet-400 hover:bg-violet-500/10 transition-colors"
                                                 >
                                                     <Pencil size={14} />
                                                 </button>
                                                 <button
                                                     onClick={() => handleDelete(row._id)}
-                                                    className="p-1.5 rounded-lg text-slate-500 hover:text-red-400 hover:bg-red-500/10 transition-colors"
+                                                    className="p-1.5 rounded-lg text-muted-foreground/80 hover:text-red-400 hover:bg-red-500/10 transition-colors"
                                                 >
                                                     <Trash2 size={14} />
                                                 </button>
@@ -183,7 +183,7 @@ export default function AdminTable<T extends { _id: string }>({
             </div>
 
             <Dialog open={open} onOpenChange={setOpen}>
-                <DialogContent className="bg-[#0d0d1a] border-white/10 text-white max-w-lg">
+                <DialogContent className="ui-surface border-border/60 text-foreground max-w-lg">
                     <DialogHeader>
                         <DialogTitle className="gradient-text">
                             {editing ? "Edit" : "Add"} {title.replace(/s$/, "")}

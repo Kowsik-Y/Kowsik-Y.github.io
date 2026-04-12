@@ -27,6 +27,29 @@ const getProjectSeoData = cache(async (id: string): Promise<ProjectSeoData | nul
     return project as ProjectSeoData | null;
 });
 
+
+function createSoftwareApplicationJsonLd(project: ProjectSeoData, id: string) {
+    const canonicalUrl = `${siteUrl}/projects/${id}`;
+    
+    return {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        name: project.title,
+        description: project.description,
+        applicationCategory: "WebApplication",
+        operatingSystem: "Web",
+        url: project.liveUrl || canonicalUrl,
+        author: {
+            "@type": "Person",
+            name: "Kowsik Y",
+            url: siteUrl
+        },
+        image: project.imageUrl ? [project.imageUrl] : [],
+        datePublished: project.createdAt ? new Date(project.createdAt).toISOString() : new Date().toISOString(),
+        dateModified: project.updatedAt ? new Date(project.updatedAt).toISOString() : new Date().toISOString(),
+    };
+}
+
 export async function generateMetadata(
     { params }: { params: Promise<{ id: string }> }
 ): Promise<Metadata> {

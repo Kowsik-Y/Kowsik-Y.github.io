@@ -7,6 +7,8 @@ import SkillIcon from "@/components/ui/skill-icon";
 import HeroCanvasClient from "@/components/three/HeroCanvasClient";
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import { sectionBreadcrumbs } from "@/lib/breadcrumbs";
+import EducationTimeline from "@/components/portfolio/EducationTimeline";
+import SkillsMatrix from "@/components/portfolio/SkillsMatrix";
 import { Code2, Wrench, Heart, Globe, MapPin, User, Github, Linkedin, Terminal, Mail, Link as LinkIcon } from "lucide-react";
 import type { IProfile } from "@/types";
 import { usePortfolioStore } from "@/lib/stores/portfolioStore";
@@ -143,7 +145,7 @@ export default function AboutPage() {
                                 <div className="absolute top-1/2 -left-6 w-6 h-6 rounded-lg bg-violet-600/30 -rotate-6 border border-violet-500/40" />
                                 <div className="absolute top-1/3 -right-4 w-5 h-5 rounded-lg bg-cyan-500/25 rotate-12 border border-cyan-400/35" />
                                 {/* Main square photo frame */}
-                                <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-2xl shadow-violet-500/25 bg-slate-900 border border-violet-500/30">
+                                <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-2xl shadow-violet-500/25 bg-card border border-violet-500/30">
                                     {profile.photoUrl ? (
                                         // eslint-disable-next-line @next/next/no-img-element
                                         <img
@@ -153,7 +155,7 @@ export default function AboutPage() {
                                         />
                                     ) : (
                                         <div className="w-full h-full flex items-center justify-center">
-                                            <User size={56} className="text-slate-500" />
+                                            <User size={56} className="text-muted-foreground/80" />
                                         </div>
                                     )}
                                     {/* Grid overlay — boxes effect */}
@@ -173,13 +175,13 @@ export default function AboutPage() {
                             </div>
                         </div>
                         <div>
-                            <div className="mb-2 text-sm font-medium text-violet-400 uppercase tracking-widest">
+                            <div className="mb-2 text-sm font-medium text-primary uppercase tracking-widest">
                                 About Me
                             </div>
                             <h1 className="text-3xl sm:text-4xl font-bold mb-4">
                                 Crafting <span className="gradient-text">Intelligent</span> Solutions
                             </h1>
-                            <p className="text-slate-400 text-lg leading-relaxed max-w-2xl">
+                            <p className="text-muted-foreground text-lg leading-relaxed max-w-2xl">
                                 {profile.bio || "Passionate about building intelligent systems — from neural networks to production-ready full-stack apps. Currently pursuing B.Tech in AI & ML at Bannari Amman Institute of Technology."}
                             </p>
 
@@ -187,43 +189,43 @@ export default function AboutPage() {
                             <div className="flex flex-wrap items-center gap-2 mt-5">
                                 {profile.githubUrl && (
                                     <Link href={profile.githubUrl} target="_blank" rel="noopener noreferrer"
-                                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border border-white/10 text-slate-400 bg-white/5 hover:text-violet-400 hover:border-violet-500/40 transition-colors">
+                                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border border-border text-muted-foreground bg-white/5 hover:text-primary hover:border-violet-500/40 transition-colors">
                                         <Github size={13} /> GitHub
                                     </Link>
                                 )}
                                 {profile.linkedinUrl && (
                                     <Link href={profile.linkedinUrl} target="_blank" rel="noopener noreferrer"
-                                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border border-white/10 text-slate-400 bg-white/5 hover:text-cyan-400 hover:border-cyan-500/40 transition-colors">
+                                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border border-border text-muted-foreground bg-white/5 hover:text-cyan-400 hover:border-cyan-500/40 transition-colors">
                                         <Linkedin size={13} /> LinkedIn
                                     </Link>
                                 )}
                                 {profile.leetcodeUrl && (
                                     <Link href={profile.leetcodeUrl} target="_blank" rel="noopener noreferrer"
-                                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border border-white/10 text-slate-400 bg-white/5 hover:text-yellow-400 hover:border-yellow-500/40 transition-colors">
+                                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border border-border text-muted-foreground bg-white/5 hover:text-yellow-400 hover:border-yellow-500/40 transition-colors">
                                         <Code2 size={13} /> LeetCode
                                     </Link>
                                 )}
                                 {profile.hackerrankUrl && (
                                     <Link href={profile.hackerrankUrl} target="_blank" rel="noopener noreferrer"
-                                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border border-white/10 text-slate-400 bg-white/5 hover:text-emerald-400 hover:border-emerald-500/40 transition-colors">
+                                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border border-border text-muted-foreground bg-white/5 hover:text-emerald-400 hover:border-emerald-500/40 transition-colors">
                                         <Terminal size={13} /> HackerRank
                                     </Link>
                                 )}
                                 {profile.email && (
                                     <Link href={`mailto:${profile.email}`}
-                                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border border-white/10 text-slate-400 bg-white/5 hover:text-rose-400 hover:border-rose-500/40 transition-colors">
+                                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border border-border text-muted-foreground bg-white/5 hover:text-rose-400 hover:border-rose-500/40 transition-colors">
                                         <Mail size={13} /> {profile.email}
                                     </Link>
                                 )}
                                 {profile.websiteUrl && (
                                     <Link href={profile.websiteUrl} target="_blank" rel="noopener noreferrer"
-                                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border border-white/10 text-slate-400 bg-white/5 hover:text-violet-400 hover:border-violet-500/40 transition-colors">
+                                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border border-border text-muted-foreground bg-white/5 hover:text-primary hover:border-violet-500/40 transition-colors">
                                         <Globe size={13} /> Website
                                     </Link>
                                 )}
                                 {(profile.customLinks ?? []).map((cl, i) => cl.url && (
                                     <Link key={i} href={cl.url} target="_blank" rel="noopener noreferrer"
-                                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border border-white/10 text-slate-400 bg-white/5 hover:text-cyan-400 hover:border-cyan-500/40 transition-colors">
+                                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border border-border text-muted-foreground bg-white/5 hover:text-cyan-400 hover:border-cyan-500/40 transition-colors">
                                         <LinkIcon size={13} /> {cl.label || cl.url}
                                     </Link>
                                 ))}
@@ -246,7 +248,7 @@ export default function AboutPage() {
                                     <p className="text-2xl sm:text-3xl font-bold gradient-text">
                                         <CountUpValue value={String(value)} />
                                     </p>
-                                    <p className="text-sm text-slate-500 mt-1">{label}</p>
+                                    <p className="text-sm text-muted-foreground/80 mt-1">{label}</p>
                                 </div>
                             ))}
                         </div>
@@ -260,12 +262,12 @@ export default function AboutPage() {
                         {loading ? <CardSkeleton /> : (
                             <div className="glass-card p-6 h-full">
                                 <div className="flex items-center gap-2 mb-4">
-                                    <Code2 className="text-violet-400" size={20} />
-                                    <span className="font-semibold text-sm text-slate-300 uppercase tracking-wide">Tech Skills</span>
+                                    <Code2 className="text-primary" size={20} />
+                                    <span className="font-semibold text-sm text-foreground/80 uppercase tracking-wide">Tech Skills</span>
                                 </div>
                                 <div className="flex flex-wrap gap-2">
                                     {techSkills.map((s) => (
-                                        <SkillPill key={s._id} label={s.name} color="border-violet-500/30 text-violet-300 bg-violet-500/10" />
+                                        <SkillPill key={s._id} label={s.name} color="border-violet-500/30 text-primary bg-violet-500/10" />
                                     ))}
                                 </div>
                             </div>
@@ -278,11 +280,11 @@ export default function AboutPage() {
                             <div className="glass-card p-6 h-full">
                                 <div className="flex items-center gap-2 mb-4">
                                     <Wrench className="text-cyan-400" size={20} />
-                                    <span className="font-semibold text-sm text-slate-300 uppercase tracking-wide">Tools &amp; Frameworks</span>
+                                    <span className="font-semibold text-sm text-foreground/80 uppercase tracking-wide">Tools &amp; Frameworks</span>
                                 </div>
                                 <div className="flex flex-wrap gap-2">
                                     {toolSkills.map((s) => (
-                                        <SkillPill key={s._id} label={s.name} color="border-cyan-500/30 text-cyan-300 bg-cyan-500/10" />
+                                        <SkillPill key={s._id} label={s.name} color="dark:border-cyan-500/30 dark:text-cyan-300 text-cyan-500 bg-cyan-500/10" />
                                     ))}
                                 </div>
                             </div>
@@ -295,11 +297,11 @@ export default function AboutPage() {
                             <div className="glass-card p-6 h-full">
                                 <div className="flex items-center gap-2 mb-4">
                                     <Heart className="text-pink-400" size={20} />
-                                    <span className="font-semibold text-sm text-slate-300 uppercase tracking-wide">Soft Skills</span>
+                                    <span className="font-semibold text-sm text-foreground/80 uppercase tracking-wide">Soft Skills</span>
                                 </div>
                                 <div className="flex flex-wrap gap-2">
                                     {softSkills.map((s) => (
-                                        <SkillPill key={s._id} label={s.name} color="border-pink-500/30 text-pink-300 bg-pink-500/10" />
+                                        <SkillPill key={s._id} label={s.name} color="dark:border-pink-500/30 dark:text-pink-300 text-pink-500 bg-pink-500/10" />
                                     ))}
                                 </div>
                             </div>
@@ -322,13 +324,13 @@ export default function AboutPage() {
                         ) : education.map((edu) => (
                             <div key={edu._id} className="glass-card p-6">
                                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
-                                    <h3 className="font-semibold text-white">{edu.school}</h3>
-                                    <span className="text-sm text-slate-500">{edu.years}</span>
+                                    <h3 className="font-semibold text-foreground">{edu.school}</h3>
+                                    <span className="text-sm text-muted-foreground/80">{edu.years}</span>
                                 </div>
-                                <p className="text-violet-300 text-sm mb-1">{edu.degree}</p>
+                                <p className="text-primary text-sm mb-1">{edu.degree}</p>
                                 <div className="flex items-center gap-2 flex-wrap text-sm">
-                                    {edu.detail && <span className="text-slate-400">{edu.detail}</span>}
-                                    {edu.detail && edu.location && <span className="text-slate-600">·</span>}
+                                    {edu.detail && <span className="text-muted-foreground">{edu.detail}</span>}
+                                    {edu.detail && edu.location && <span className="text-muted-foreground">·</span>}
                                     {edu.location && (
                                         edu.mapsUrl ? (
                                             <Link
@@ -341,7 +343,7 @@ export default function AboutPage() {
                                                 {edu.location}
                                             </Link>
                                         ) : (
-                                            <span className="flex items-center gap-1 text-slate-400">
+                                            <span className="flex items-center gap-1 text-muted-foreground">
                                                 <MapPin size={12} />
                                                 {edu.location}
                                             </span>
@@ -359,14 +361,14 @@ export default function AboutPage() {
                         <div className="glass-card p-6">
                             <div className="flex items-center gap-2 mb-4">
                                 <Globe className="text-cyan-400" size={18} />
-                                <span className="font-semibold text-sm text-slate-300 uppercase tracking-wide">Languages</span>
+                                <span className="font-semibold text-sm text-foreground/80 uppercase tracking-wide">Languages</span>
                             </div>
                             {loading ? (
                                 <div className="space-y-2">
                                     {[...Array(2)].map((_, i) => <div key={i} className="h-3 w-40 bg-white/5 rounded animate-pulse" />)}
                                 </div>
                             ) : (
-                                <ul className="text-slate-400 text-sm space-y-1">
+                                <ul className="text-muted-foreground text-sm space-y-1">
                                     {languages.map((l) => (
                                         <li key={l._id}>{l.name} — {l.proficiency}</li>
                                     ))}
@@ -375,15 +377,15 @@ export default function AboutPage() {
                         </div>
                         <div className="glass-card p-6">
                             <div className="flex items-center gap-2 mb-4">
-                                <Heart className="text-violet-400" size={18} />
-                                <span className="font-semibold text-sm text-slate-300 uppercase tracking-wide">Hobbies</span>
+                                <Heart className="text-primary" size={18} />
+                                <span className="font-semibold text-sm text-foreground/80 uppercase tracking-wide">Hobbies</span>
                             </div>
                             {loading ? (
                                 <div className="space-y-2">
                                     {[...Array(2)].map((_, i) => <div key={i} className="h-3 w-48 bg-white/5 rounded animate-pulse" />)}
                                 </div>
                             ) : (
-                                <ul className="text-slate-400 text-sm space-y-1">
+                                <ul className="text-muted-foreground text-sm space-y-1">
                                     {hobbies.map((h) => (
                                         <li key={h._id}>{h.name}</li>
                                     ))}
@@ -392,6 +394,13 @@ export default function AboutPage() {
                         </div>
                     </div>
                 </FadeIn>
+
+                {!loading && (
+                    <>
+                        <EducationTimeline education={education} />
+                        <SkillsMatrix skills={skills} />
+                    </>
+                )}
 
                 {/* GitHub Stats */}
                 {!loading && (() => {
@@ -412,7 +421,7 @@ export default function AboutPage() {
                                                 href={cl.url}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border border-violet-500/30 text-violet-300 bg-violet-500/10 hover:bg-violet-500/20 hover:border-violet-500/50 transition-colors"
+                                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border border-violet-500/30 text-primary bg-violet-500/10 hover:bg-violet-500/20 hover:border-violet-500/50 transition-colors"
                                             >
                                                 <Github size={12} />
                                                 {cl.label || cl.url}
@@ -432,7 +441,7 @@ export default function AboutPage() {
                                     className="glass-card p-1 flex items-center justify-center rounded-2xl hover:ring-2 hover:ring-violet-500/40 transition-all min-h-35"
                                 >
                                     {!profile.githubStatsUrl || statsState === "error" ? (
-                                        <span className="text-slate-500 text-sm">Stats unavailable</span>
+                                        <span className="text-muted-foreground/80 text-sm">Stats unavailable</span>
                                     ) : (
                                         <div className="relative w-full">
                                             {statsState === "loading" && (
@@ -461,7 +470,7 @@ export default function AboutPage() {
                                     className="glass-card p-1 flex items-center justify-center rounded-2xl hover:ring-2 hover:ring-cyan-500/40 transition-all min-h-35"
                                 >
                                     {!profile.githubStreakUrl || streakState === "error" ? (
-                                        <span className="text-slate-500 text-sm">Streak stats unavailable</span>
+                                        <span className="text-muted-foreground/80 text-sm">Streak stats unavailable</span>
                                     ) : (
                                         <div className="relative w-full">
                                             {streakState === "loading" && (
@@ -484,7 +493,7 @@ export default function AboutPage() {
 
                             {/* Contribution Snake */}
                             <div className="relative glass-card p-4 rounded-2xl mb-6">
-                                <p className="text-xs font-medium text-slate-500 uppercase tracking-widest mb-3">
+                                <p className="text-xs font-medium text-muted-foreground/80 uppercase tracking-widest mb-3">
                                     Contribution Snake
                                 </p>
                                 <img
@@ -500,7 +509,7 @@ export default function AboutPage() {
                             {/* Extra Links (Socials custom links) */}
                             {(profile.customLinks ?? []).filter((cl) => cl.url).length > 0 && (
                                 <div className="glass-card p-5 rounded-2xl">
-                                    <p className="text-xs font-medium text-slate-500 uppercase tracking-widest mb-3">
+                                    <p className="text-xs font-medium text-muted-foreground/80 uppercase tracking-widest mb-3">
                                         More Links
                                     </p>
                                     <div className="flex flex-wrap gap-2">
@@ -510,7 +519,7 @@ export default function AboutPage() {
                                                 href={cl.url}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border border-white/10 text-slate-400 bg-white/5 hover:text-cyan-400 hover:border-cyan-500/40 transition-colors"
+                                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border border-border text-muted-foreground bg-white/5 hover:text-cyan-400 hover:border-cyan-500/40 transition-colors"
                                             >
                                                 <LinkIcon size={12} />
                                                 {cl.label || cl.url}

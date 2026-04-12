@@ -4,8 +4,7 @@ const nextConfig: NextConfig = {
   images: {
     localPatterns: [
       {
-        pathname: "/**",
-        search: "**",
+        pathname: "/api/image",
       },
     ],
     remotePatterns: [

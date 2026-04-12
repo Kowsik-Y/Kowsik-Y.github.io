@@ -9,12 +9,12 @@ export default function AdminLoginPage() {
         <div className="min-h-screen flex items-center justify-center px-4">
             <div className="glass-card p-10 max-w-sm w-full text-center">
                 <div className="mb-6 flex justify-center">
-                    <span className="p-3 rounded-xl bg-violet-500/20 text-violet-400">
+                    <span className="p-3 rounded-xl bg-violet-500/20 text-violet-600 dark:text-violet-400">
                         <Cpu size={28} />
                     </span>
                 </div>
                 <h1 className="text-2xl font-bold mb-2">Admin Access</h1>
-                <p className="text-slate-400 text-sm mb-8">
+                <p className="text-muted-foreground text-sm mb-8">
                     Sign in with your GitHub account to manage portfolio content.
                 </p>
                 <Button
@@ -24,7 +24,7 @@ export default function AdminLoginPage() {
                     <Github size={18} className="mr-2" />
                     Sign in with GitHub
                 </Button>
-                <p className="text-xs text-slate-600 mt-5">
+                <p className="text-xs text-muted-foreground mt-5">
                     Access restricted to authorized accounts only.
                 </p>
             </div>

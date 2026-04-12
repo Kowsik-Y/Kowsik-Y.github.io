@@ -3,6 +3,11 @@ import { useRef, useMemo } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
+function seededNoise(seed: number) {
+    const value = Math.sin(seed * 12.9898) * 43758.5453;
+    return value - Math.floor(value);
+}
+
 // Floating grid of glowing dots (circuit board style) — for Projects page
 function GridDots() {
     const COUNT = 120;
@@ -10,12 +15,12 @@ function GridDots() {
     const dummy = useMemo(() => new THREE.Object3D(), []);
 
     const data = useMemo(() =>
-        Array.from({ length: COUNT }, () => ({
-            x: (Math.random() - 0.5) * 18,
-            y: (Math.random() - 0.5) * 12,
-            z: (Math.random() - 0.5) * 6,
-            speed: Math.random() * 0.4 + 0.1,
-            phase: Math.random() * Math.PI * 2,
+        Array.from({ length: COUNT }, (_, index) => ({
+            x: (seededNoise((index + 1) * 1.2) - 0.5) * 18,
+            y: (seededNoise((index + 1) * 2.2) - 0.5) * 12,
+            z: (seededNoise((index + 1) * 3.2) - 0.5) * 6,
+            speed: seededNoise((index + 1) * 4.2) * 0.4 + 0.1,
+            phase: seededNoise((index + 1) * 5.2) * Math.PI * 2,
         })), []);
 
     useFrame((state) => {

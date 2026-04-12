@@ -37,7 +37,7 @@ export default function AchievementsPage() {
                     <h1 className="text-4xl sm:text-5xl font-bold mb-4">
                         <span className="gradient-text">Achievements</span>
                     </h1>
-                    <p className="text-slate-400 text-lg max-w-2xl mb-14">Highlights, wins &amp; milestones from my journey.</p>
+                    <p className="text-muted-foreground text-lg max-w-2xl mb-14">Highlights, wins &amp; milestones from my journey.</p>
                 </FadeIn>
 
                 {isLoading ? (
@@ -57,26 +57,26 @@ export default function AchievementsPage() {
                                             </div>
                                             <div className="flex-1">
                                                 <div className="flex items-start justify-between gap-4">
-                                                    <h3 className="font-bold text-lg text-white mb-1">{ach.title}</h3>
+                                                    <h3 className="font-bold text-lg text-foreground mb-1">{ach.title}</h3>
                                                     <div
                                                         className="shrink-0 flex items-center gap-1.5 text-xs text-amber-400 hover:text-amber-300 border border-amber-500/25 px-3 py-1.5 rounded-lg transition-colors hover:bg-amber-500/10">
                                                         <ExternalLink size={13} /> View
                                                     </div>
                                                 </div>
-                                                <p className="text-slate-400 text-sm leading-relaxed mb-3">{ach.description}</p>
+                                                <p className="text-muted-foreground text-sm leading-relaxed mb-3">{ach.description}</p>
                                                 <div className="flex items-center gap-4 flex-wrap">
 
 
                                                     {ach.org && (
-                                                        <div className="flex items-center gap-1.5 text-xs text-slate-500">
+                                                        <div className="flex items-center gap-1.5 text-xs text-muted-foreground/80">
                                                             <Building2 size={13} />{ach.org}
                                                         </div>
                                                     )}
-                                                    {ach.date && <span className="flex items-center gap-1.5 text-xs text-slate-500">
+                                                    {ach.date && <span className="flex items-center gap-1.5 text-xs text-muted-foreground/80">
                                                         <Calendar size={13} />
                                                         {ach.date}</span>}
                                                     {ach.imageUrl && (
-                                                        <div className="flex items-center gap-1.5 text-xs text-slate-500">
+                                                        <div className="flex items-center gap-1.5 text-xs text-muted-foreground/80">
                                                             <ImageIcon size={13} />
                                                         </div>
                                                     )}
@@ -89,7 +89,7 @@ export default function AchievementsPage() {
                         ))}
                     </div>
                 ) : (
-                    <div className="glass-card p-12 text-center text-slate-500">No achievements added yet.</div>
+                    <div className="glass-card p-12 text-center text-muted-foreground/80">No achievements added yet.</div>
                 )}
             </div>
             {selected && <CertDialog cert={selected} onClose={() => setSelected(null)} />}

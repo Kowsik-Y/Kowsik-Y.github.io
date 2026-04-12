@@ -53,8 +53,8 @@ export default function ProjectDetailContent() {
             <div className="relative min-h-screen flex items-center justify-center">
                 <div className="fixed inset-0 -z-10 opacity-20 pointer-events-none"><ProjectsCanvasClient /></div>
                 <div className="text-center">
-                    <p className="text-slate-400 mb-6">Project not found.</p>
-                    <Link href="/projects" className="text-violet-400 hover:text-violet-300 flex items-center gap-2 justify-center">
+                    <p className="text-muted-foreground mb-6">Project not found.</p>
+                    <Link href="/projects" className="text-primary hover:text-primary flex items-center gap-2 justify-center">
                         <ArrowLeft size={16} /> Back to Projects
                     </Link>
                 </div>
@@ -67,10 +67,10 @@ export default function ProjectDetailContent() {
             <div className="fixed inset-0 -z-10 opacity-20 pointer-events-none">
                 <ProjectsCanvasClient />
             </div>
-            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-28">
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
                 {/* Back */}
                 <FadeIn>
-                    <Link href="/projects" className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-violet-400 transition-colors mb-8">
+                    <Link href="/projects" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors mb-8">
                         <ArrowLeft size={16} /> Back to Projects
                     </Link>
                 </FadeIn>
@@ -81,11 +81,11 @@ export default function ProjectDetailContent() {
                         <div className="flex flex-col sm:flex-row sm:items-start gap-6">
                             {/* App icon */}
                             {project.imageUrl ? (
-                                <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-3xl overflow-hidden shrink-0 border border-white/10 shadow-xl bg-white/5">
+                                <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-3xl overflow-hidden shrink-0 border border-border shadow-xl bg-white/5">
                                     <Image src={blobDisplayUrl(project.imageUrl)} alt={project.title} fill className="object-cover" unoptimized />
                                 </div>
                             ) : (
-                                <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-3xl shrink-0 border border-white/10 bg-violet-500/15 flex items-center justify-center text-violet-300 text-4xl font-bold shadow-xl">
+                                <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-3xl shrink-0 border border-border bg-violet-500/15 flex items-center justify-center text-primary text-4xl font-bold shadow-xl">
                                     {project.title.charAt(0)}
                                 </div>
                             )}
@@ -98,12 +98,12 @@ export default function ProjectDetailContent() {
                                         </span>
                                     )}
                                 </div>
-                                <h1 className="text-2xl sm:text-3xl font-bold text-white mb-3 leading-tight">{project.title}</h1>
-                                <p className="text-slate-400 text-sm leading-relaxed mb-5">{project.description}</p>
+                                <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-3 leading-tight">{project.title}</h1>
+                                <p className="text-muted-foreground text-sm leading-relaxed mb-5">{project.description}</p>
                                 <div className="flex flex-wrap gap-2">
                                     {project.githubUrl && (
                                         <Link href={project.githubUrl} target="_blank" rel="noopener noreferrer"
-                                            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-sm text-slate-300 hover:text-violet-400 hover:border-violet-500/40 transition-colors">
+                                            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 border border-border text-sm text-foreground/80 hover:text-primary hover:border-violet-500/40 transition-colors">
                                             <Github size={15} /> Source Code
                                         </Link>
                                     )}
@@ -115,7 +115,7 @@ export default function ProjectDetailContent() {
                                     )}
                                     {project.otherLinks?.map((l) => (
                                         <Link key={l.url} href={l.url} target="_blank" rel="noopener noreferrer"
-                                            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-sm text-slate-300 hover:text-cyan-400 hover:border-cyan-500/40 transition-colors">
+                                            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 border border-border text-sm text-foreground/80 hover:text-cyan-400 hover:border-cyan-500/40 transition-colors">
                                             <LinkIcon size={14} /> {l.label}
                                         </Link>
                                     ))}
@@ -129,7 +129,7 @@ export default function ProjectDetailContent() {
                 <FadeIn delay={0.1}>
                     <div className="flex flex-wrap gap-2 mb-8">
                         {project.techStack.map((tech) => (
-                            <span key={tech} className="px-3 py-1 rounded-full text-xs font-medium border border-violet-500/30 text-violet-300 bg-violet-500/10">
+                            <span key={tech} className="px-3 py-1 rounded-full text-xs font-medium border border-violet-500/30 text-primary bg-violet-500/10">
                                 {tech}
                             </span>
                         ))}
@@ -139,8 +139,8 @@ export default function ProjectDetailContent() {
                 {/* Description */}
                 <FadeIn delay={0.2}>
                     <div className="glass-card p-6 mb-8">
-                        <h2 className="text-lg font-semibold text-white mb-3">About this project</h2>
-                        <p className="text-slate-400 leading-relaxed whitespace-pre-wrap">
+                        <h2 className="text-lg font-semibold text-foreground mb-3">About this project</h2>
+                        <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
                             {project.longDescription || project.description}
                         </p>
                     </div>
@@ -149,9 +149,9 @@ export default function ProjectDetailContent() {
                 {/* Screenshots */}
                 {hasScreenshots && (
                     <FadeIn delay={0.25}>
-                        <h2 className="text-xl font-bold text-white mb-4">Screenshots</h2>
+                        <h2 className="text-xl font-bold text-foreground mb-4">Screenshots</h2>
                         <div className="glass-card p-4 sm:p-5">
-                            <div className="relative aspect-video rounded-xl overflow-hidden border border-white/10 group">
+                            <div className="relative aspect-video rounded-xl overflow-hidden border border-border group">
                                 <a
                                     href={blobDisplayUrl(screenshots[currentIndex])}
                                     onClick={(e) => {
@@ -174,7 +174,7 @@ export default function ProjectDetailContent() {
                                         <button
                                             type="button"
                                             onClick={goPrev}
-                                            className="absolute left-2 top-1/2 -translate-y-1/2 z-10 h-8 w-8 rounded-full bg-slate-900/70 border border-white/10 text-white hover:bg-slate-800 transition-colors flex items-center justify-center"
+                                            className="absolute left-2 top-1/2 -translate-y-1/2 z-10 h-8 w-8 rounded-full bg-card border border-border text-foreground hover:ui-surface transition-colors flex items-center justify-center"
                                             aria-label="Previous screenshot"
                                         >
                                             <ChevronLeft size={16} />
@@ -182,7 +182,7 @@ export default function ProjectDetailContent() {
                                         <button
                                             type="button"
                                             onClick={goNext}
-                                            className="absolute right-2 top-1/2 -translate-y-1/2 z-10 h-8 w-8 rounded-full bg-slate-900/70 border border-white/10 text-white hover:bg-slate-800 transition-colors flex items-center justify-center"
+                                            className="absolute right-2 top-1/2 -translate-y-1/2 z-10 h-8 w-8 rounded-full bg-card border border-border text-foreground hover:ui-surface transition-colors flex items-center justify-center"
                                             aria-label="Next screenshot"
                                         >
                                             <ChevronRight size={16} />
@@ -200,7 +200,7 @@ export default function ProjectDetailContent() {
                                             onClick={() => setActiveScreenshot(i)}
                                             className={`relative h-16 w-28 shrink-0 overflow-hidden rounded-lg border transition-colors ${i === currentIndex
                                                 ? "border-violet-400"
-                                                : "border-white/10 hover:border-violet-500/40"
+                                                : "border-border hover:border-violet-500/40"
                                                 }`}
                                             aria-label={`Go to screenshot ${i + 1}`}
                                         >
@@ -225,7 +225,7 @@ export default function ProjectDetailContent() {
                     <button
                         type="button"
                         onClick={() => setLightboxOpen(false)}
-                        className="absolute top-4 right-4 h-9 w-9 rounded-full bg-slate-900/80 border border-white/15 text-white hover:bg-slate-800 transition-colors flex items-center justify-center"
+                        className="absolute top-4 right-4 h-9 w-9 rounded-full bg-card border border-border text-foreground hover:ui-surface transition-colors flex items-center justify-center"
                         aria-label="Close image viewer"
                     >
                         <X size={18} />
@@ -235,14 +235,14 @@ export default function ProjectDetailContent() {
                         <button
                             type="button"
                             onClick={goPrev}
-                            className="absolute left-4 sm:left-8 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-slate-900/80 border border-white/15 text-white hover:bg-slate-800 transition-colors flex items-center justify-center"
+                            className="absolute left-4 sm:left-8 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-card border border-border text-foreground hover:ui-surface transition-colors flex items-center justify-center"
                             aria-label="Previous screenshot"
                         >
                             <ChevronLeft size={20} />
                         </button>
                     )}
 
-                    <div className="relative w-full max-w-6xl aspect-video rounded-2xl overflow-hidden border border-white/10 shadow-2xl shadow-black/60">
+                    <div className="relative w-full max-w-6xl aspect-video rounded-2xl overflow-hidden border border-border shadow-2xl shadow-black/60">
                         <Image
                             src={blobDisplayUrl(screenshots[currentIndex])}
                             alt={`Screenshot ${currentIndex + 1}`}
@@ -256,7 +256,7 @@ export default function ProjectDetailContent() {
                         <button
                             type="button"
                             onClick={goNext}
-                            className="absolute right-4 sm:right-8 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-slate-900/80 border border-white/15 text-white hover:bg-slate-800 transition-colors flex items-center justify-center"
+                            className="absolute right-4 sm:right-8 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-card border border-border text-foreground hover:ui-surface transition-colors flex items-center justify-center"
                             aria-label="Next screenshot"
                         >
                             <ChevronRight size={20} />

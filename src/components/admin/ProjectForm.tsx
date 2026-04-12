@@ -86,44 +86,44 @@ export default function ProjectForm({ initial, onSuccess, apiPath, editId }: Pro
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 max-h-[70vh] overflow-y-auto pr-1">
             <div>
-                <Label className="text-slate-300 mb-1 block">Title *</Label>
-                <Input {...register("title")} className="bg-white/5 border-white/10 text-white" />
+                <Label className="text-foreground/80 mb-1 block">Title *</Label>
+                <Input {...register("title")} className="bg-foreground/5 border-border/60 text-foreground" />
                 {errors.title && <p className="text-red-400 text-xs mt-1">{errors.title.message}</p>}
             </div>
             <div>
-                <Label className="text-slate-300 mb-1 block">Short Description *</Label>
-                <Textarea {...register("description")} rows={2} className="bg-white/5 border-white/10 text-white resize-none" />
+                <Label className="text-foreground/80 mb-1 block">Short Description *</Label>
+                <Textarea {...register("description")} rows={2} className="bg-foreground/5 border-border/60 text-foreground resize-none" />
                 {errors.description && <p className="text-red-400 text-xs mt-1">{errors.description.message}</p>}
             </div>
             <div>
-                <Label className="text-slate-300 mb-1 block">Long Description (detail page)</Label>
-                <Textarea {...register("longDescription")} rows={4} className="bg-white/5 border-white/10 text-white resize-none" placeholder="Full project description shown on the detail page..." />
+                <Label className="text-foreground/80 mb-1 block">Long Description (detail page)</Label>
+                <Textarea {...register("longDescription")} rows={4} className="bg-foreground/5 border-border/60 text-foreground resize-none" placeholder="Full project description shown on the detail page..." />
             </div>
             <div>
-                <Label className="text-slate-300 mb-1 block">Tech Stack (comma-separated)</Label>
-                <Input {...register("techStack")} placeholder="React, Node.js, MongoDB" className="bg-white/5 border-white/10 text-white" />
+                <Label className="text-foreground/80 mb-1 block">Tech Stack (comma-separated)</Label>
+                <Input {...register("techStack")} placeholder="React, Node.js, MongoDB" className="bg-foreground/5 border-border/60 text-foreground" />
             </div>
             <div>
-                <Label className="text-slate-300 mb-1 block">GitHub URL</Label>
-                <Input {...register("githubUrl")} className="bg-white/5 border-white/10 text-white" />
+                <Label className="text-foreground/80 mb-1 block">GitHub URL</Label>
+                <Input {...register("githubUrl")} className="bg-foreground/5 border-border/60 text-foreground" />
             </div>
             <div>
-                <Label className="text-slate-300 mb-1 block">Live URL</Label>
-                <Input {...register("liveUrl")} className="bg-white/5 border-white/10 text-white" />
+                <Label className="text-foreground/80 mb-1 block">Live URL</Label>
+                <Input {...register("liveUrl")} className="bg-foreground/5 border-border/60 text-foreground" />
             </div>
             <div>
-                <Label className="text-slate-300 mb-1 block">Other Links (JSON array)</Label>
-                <Input {...register("otherLinks")} placeholder='[{"label":"Demo","url":"https://..."}]' className="bg-white/5 border-white/10 text-white text-xs" />
+                <Label className="text-foreground/80 mb-1 block">Other Links (JSON array)</Label>
+                <Input {...register("otherLinks")} placeholder='[{"label":"Demo","url":"https://..."}]' className="bg-foreground/5 border-border/60 text-foreground text-xs" />
             </div>
             <ImageUpload label="Cover Image" value={imageUrl} onChange={setImageUrl} />
 
             {/* Screenshots */}
             <div>
-                <Label className="text-slate-300 mb-2 block">Screenshots ({screenshots.length}/5)</Label>
+                <Label className="text-foreground/80 mb-2 block">Screenshots ({screenshots.length}/5)</Label>
                 <div className="space-y-2">
                     {screenshots.map((src, i) => (
                         <div key={i} className="flex items-center gap-2">
-                            <span className="text-xs text-slate-400 truncate flex-1">{src}</span>
+                            <span className="text-xs text-muted-foreground truncate flex-1">{src}</span>
                             <button type="button" onClick={() => setScreenshots((p) => p.filter((_, j) => j !== i))}
                                 className="text-xs text-red-400 hover:text-red-300 shrink-0">✕</button>
                         </div>
@@ -140,14 +140,14 @@ export default function ProjectForm({ initial, onSuccess, apiPath, editId }: Pro
 
             <div className="flex items-center gap-2">
                 <input type="checkbox" {...register("featured")} id="featured" className="accent-violet-500" />
-                <Label htmlFor="featured" className="text-slate-300 text-sm">Featured project</Label>
+                <Label htmlFor="featured" className="text-foreground/80 text-sm">Featured project</Label>
             </div>
             <div>
-                <Label className="text-slate-300 mb-1 block">Order</Label>
-                <Input {...register("order")} type="number" className="bg-white/5 border-white/10 text-white w-24" />
+                <Label className="text-foreground/80 mb-1 block">Order</Label>
+                <Input {...register("order")} type="number" className="bg-foreground/5 border-border/60 text-foreground w-24" />
             </div>
             <div className="flex justify-end pt-2">
-                <Button type="submit" disabled={loading} className="bg-violet-600 hover:bg-violet-500 text-white">
+                <Button type="submit" disabled={loading} className="bg-violet-600 hover:bg-violet-500 text-white dark:text-white">
                     {loading ? "Saving…" : editId ? "Update" : "Create"}
                 </Button>
             </div>

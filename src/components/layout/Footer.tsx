@@ -26,16 +26,16 @@ export default async function Footer() {
     ].filter(Boolean) as { href: string; label: string; icon: LucideIcon }[];
 
     return (
-        <footer className="border-t border-white/5 mt-20">
+        <footer className="border-t border-border/60 mt-20">
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-9 flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div>
-                    <p className="text-sm text-slate-500">{profile?.name}</p>
+                    <p className="text-sm text-muted-foreground">{profile?.name}</p>
                     {profile?.email && (
-                        <p className="text-xs text-slate-600 mt-0.5">
+                        <p className="text-xs text-muted-foreground mt-0.5">
                             Get in touch —{" "}
                             <a
                                 href={`mailto:${profile.email}`}
-                                className="text-violet-400 hover:text-violet-300 transition-colors"
+                                className="text-primary hover:text-violet-500 transition-colors"
                             >
                                 {profile.email}
                             </a>
@@ -50,7 +50,7 @@ export default async function Footer() {
                             target="_blank"
                             rel="noopener noreferrer"
                             aria-label={label}
-                            className="p-2 rounded-lg text-slate-500 hover:text-violet-400 hover:bg-violet-500/10 transition-colors"
+                            className="ui-icon-button p-2 rounded-lg"
                         >
                             <Icon size={18} />
                         </Link>

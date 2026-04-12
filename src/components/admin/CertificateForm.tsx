@@ -57,26 +57,26 @@ export default function CertificateForm({ initial, onSuccess, apiPath, editId }:
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div>
-                <Label className="text-slate-300 mb-1 block">Certification Name *</Label>
-                <Input {...register("name")} className="bg-white/5 border-white/10 text-white" />
+                <Label className="text-foreground/80 mb-1 block">Certification Name *</Label>
+                <Input {...register("name")} className="bg-foreground/5 border-border/60 text-foreground" />
                 {errors.name && <p className="text-red-400 text-xs mt-1">{errors.name.message}</p>}
             </div>
             <div>
-                <Label className="text-slate-300 mb-1 block">Issuer *</Label>
-                <Input {...register("issuer")} className="bg-white/5 border-white/10 text-white" />
+                <Label className="text-foreground/80 mb-1 block">Issuer *</Label>
+                <Input {...register("issuer")} className="bg-foreground/5 border-border/60 text-foreground" />
                 {errors.issuer && <p className="text-red-400 text-xs mt-1">{errors.issuer.message}</p>}
             </div>
             <div>
-                <Label className="text-slate-300 mb-1 block">Certificate Link</Label>
-                <Input {...register("link")} placeholder="https://..." className="bg-white/5 border-white/10 text-white" />
+                <Label className="text-foreground/80 mb-1 block">Certificate Link</Label>
+                <Input {...register("link")} placeholder="https://..." className="bg-foreground/5 border-border/60 text-foreground" />
             </div>
             <div>
-                <Label className="text-slate-300 mb-1 block">Date</Label>
-                <Input {...register("date")} placeholder="e.g. January 2025" className="bg-white/5 border-white/10 text-white" />
+                <Label className="text-foreground/80 mb-1 block">Date</Label>
+                <Input {...register("date")} placeholder="e.g. January 2025" className="bg-foreground/5 border-border/60 text-foreground" />
             </div>
             <ImageUpload label="Certificate Image" value={imageUrl} onChange={setImageUrl} />
             <div className="flex justify-end pt-2">
-                <Button type="submit" disabled={loading} className="bg-violet-600 hover:bg-violet-500 text-white">
+                <Button type="submit" disabled={loading} className="bg-violet-600 hover:bg-violet-500 text-white dark:text-white">
                     {loading ? "Saving…" : editId ? "Update" : "Create"}
                 </Button>
             </div>

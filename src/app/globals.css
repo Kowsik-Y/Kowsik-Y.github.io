@@ -31,13 +31,34 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
-/* ── Always dark mode ── */
 :root {
-  color-scheme: dark;
+  color-scheme: light;
   --radius: 0.75rem;
+  --background: oklch(0.985 0.006 265);
+  --foreground: oklch(0.24 0.015 265);
+  --card: oklch(0.997 0.005 265 / 0.86);
+  --card-foreground: oklch(0.23 0.016 265);
+  --popover: oklch(0.995 0.005 265);
+  --popover-foreground: oklch(0.24 0.015 265);
+  --primary: oklch(0.56 0.18 295);
+  --primary-foreground: oklch(0.98 0 0);
+  --secondary: oklch(0.95 0.01 265);
+  --secondary-foreground: oklch(0.3 0.02 265);
+  --muted: oklch(0.965 0.006 265);
+  --muted-foreground: oklch(0.48 0.015 265);
+  --accent: oklch(0.69 0.14 200);
+  --accent-foreground: oklch(0.16 0.015 265);
+  --destructive: oklch(0.61 0.22 24);
+  --border: oklch(0.86 0.012 265 / 72%);
+  --input: oklch(0.89 0.012 265 / 86%);
+  --ring: oklch(0.58 0.18 295);
+}
+
+.dark {
+  color-scheme: dark;
   --background: oklch(0.07 0.01 265);
   --foreground: oklch(0.95 0 0);
-  --card: oklch(0.11 0.015 265 / 0.7);
+  --card: oklch(0.11 0.015 265 / 0.72);
   --card-foreground: oklch(0.95 0 0);
   --popover: oklch(0.12 0.015 265);
   --popover-foreground: oklch(0.95 0 0);
@@ -67,12 +88,45 @@
   body {
     @apply bg-background text-foreground antialiased;
     background-image:
-      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(139, 92, 246, 0.12) 0%, transparent 60%),
-      radial-gradient(ellipse 60% 40% at 80% 80%, rgba(34, 211, 238, 0.06) 0%, transparent 50%);
+      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(99, 102, 241, 0.085) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 80%, rgba(6, 182, 212, 0.05) 0%, transparent 50%);
     min-height: 100dvh;
+    position: relative;
+    isolation: isolate;
   }
 
-  ::selection {
+  .dark body {
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(139, 92, 246, 0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 80%, rgba(34, 211, 238, 0.06) 0%, transparent 50%);
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0;
+    background:
+      radial-gradient(circle at 50% 10%, rgba(168, 85, 247, 0.14), transparent 38%),
+      radial-gradient(circle at 80% 80%, rgba(34, 211, 238, 0.08), transparent 32%);
+    transition: opacity 280ms ease, transform 280ms ease, background 280ms ease;
+    transform: scale(1.015);
+  }
+
+  .dark body::before {
+    background:
+      radial-gradient(circle at 50% 10%, rgba(168, 85, 247, 0.2), transparent 38%),
+      radial-gradient(circle at 80% 80%, rgba(34, 211, 238, 0.12), transparent 32%);
+  }
+
+  body>* {
+    position: relative;
+    z-index: 1;
+  }
+
+      ::selection {
     background: rgba(139, 92, 246, 0.35);
     color: #fff;
   }
@@ -93,22 +147,38 @@
 
 @layer utilities {
   .glass {
-    background: rgba(255, 255, 255, 0.05);
+    background: color-mix(in srgb, var(--card) 88%, transparent);
     backdrop-filter: blur(16px) saturate(140%);
     -webkit-backdrop-filter: blur(16px) saturate(140%);
+    border: 1px solid color-mix(in srgb, var(--border) 96%, transparent);
+  }
+
+  .dark .glass {
+    background: rgba(255, 255, 255, 0.05);
     border: 1px solid #ffffff14;
   }
 
   .glass-card {
-    background: rgba(255, 255, 255, 0.035);
+    background: color-mix(in srgb, var(--card) 92%, transparent);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.09);
+    border: 1px solid color-mix(in srgb, var(--border) 92%, transparent);
     border-radius: 1rem;
     transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s, background 0.25s;
   }
 
   .glass-card:hover {
+    background: color-mix(in srgb, var(--card) 82%, white 18%);
+    border-color: color-mix(in srgb, var(--primary) 30%, var(--border));
+
+  }
+
+  .dark .glass-card {
+    background: rgba(255, 255, 255, 0.035);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+  }
+
+  .dark .glass-card:hover {
     background: rgba(255, 255, 255, 0.065);
     border-color: rgba(139, 92, 246, 0.35);
     box-shadow: 0 12px 40px rgba(139, 92, 246, 0.18), 0 0 0 1px rgba(139, 92, 246, 0.12);
@@ -119,6 +189,47 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+  }
+
+  .ui-border {
+    border-color: color-mix(in srgb, var(--border) 100%, transparent);
+  }
+
+  .ui-surface {
+    background: color-mix(in srgb, var(--card) 98%, transparent);
+    border: 1px solid color-mix(in srgb, var(--border) 92%, transparent);
+  }
+
+  .ui-surface-strong {
+    background: color-mix(in srgb, var(--card) 76%, white 24%);
+    border: 1px solid color-mix(in srgb, var(--border) 88%, transparent);
+  }
+
+  .ui-chip {
+    background: color-mix(in srgb, var(--secondary) 90%, transparent);
+    border: 1px solid color-mix(in srgb, var(--border) 88%, transparent);
+    color: var(--foreground);
+  }
+
+  .ui-muted {
+    color: var(--muted-foreground);
+  }
+
+  .ui-strong {
+    color: var(--foreground);
+  }
+
+  .ui-icon-button {
+    background: color-mix(in srgb, var(--card) 84%, transparent);
+    border: 1px solid color-mix(in srgb, var(--border) 92%, transparent);
+    color: var(--muted-foreground);
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  }
+
+  .ui-icon-button:hover {
+    background: color-mix(in srgb, var(--card) 72%, white 28%);
+    border-color: color-mix(in srgb, var(--primary) 30%, var(--border));
+    color: var(--primary);
   }
 
   .gradient-border {
@@ -145,4 +256,116 @@
   .glow-cyan {
     box-shadow: 0 0 30px rgba(34, 211, 238, 0.35);
   }
+}
+/* View Transitions API overrides */
+::view-transition-new(root),
+::view-transition-old(root) {
+  mix-blend-mode: normal;
+  display: block;
+}
+
+::view-transition-image-pair(root) {
+  isolation: auto;
+}
+
+@keyframes theme-zoom-in {
+  from { 
+    opacity: 0; 
+    transform: scale(1.05); 
+    filter: blur(8px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: scale(1); 
+    filter: blur(0px); 
+  }
+}
+
+@keyframes theme-zoom-out {
+  from { 
+    opacity: 1; 
+    transform: scale(1); 
+    filter: blur(0px); 
+  }
+  to { 
+    opacity: 0; 
+    transform: scale(0.95); 
+    filter: blur(8px); 
+  }
+}
+
+::view-transition-old(root) {
+  animation: theme-zoom-out 500ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  z-index: 1;
+}
+
+::view-transition-new(root) {
+  animation: theme-zoom-in 500ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  z-index: 2;
+}
+
+::view-transition-image-pair(root) {
+  isolation: auto;
+}
+
+@property --fade-radius {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 0px;
+}
+
+@keyframes circle-in {
+  from { --fade-radius: 0px; }
+  to { --fade-radius: calc(var(--theme-r) * 1.5); }
+}
+
+@keyframes circle-out {
+  from { --fade-radius: calc(var(--theme-r) * 1.5); }
+  to { --fade-radius: 0px; }
+}
+
+/* Light -> Dark */
+.dark::view-transition-old(root) {
+  animation: none;
+  z-index: 1;
+}
+.dark::view-transition-new(root) {
+  animation: circle-in 600ms cubic-bezier(0.4, 0, 0.2, 1) both;
+  z-index: 9999;
+  mask-image: radial-gradient(
+    circle at var(--theme-x) var(--theme-y), 
+    black calc(var(--fade-radius) * 0.5), 
+    transparent var(--fade-radius)
+  );
+  -webkit-mask-image: radial-gradient(
+    circle at var(--theme-x) var(--theme-y), 
+    black calc(var(--fade-radius) * 0.5), 
+    transparent var(--fade-radius)
+  );
+}
+
+/* Dark -> Light */
+html:not(.dark)::view-transition-old(root) {
+  animation: circle-out 600ms cubic-bezier(0.4, 0, 0.2, 1) both;
+  z-index: 9999;
+  mask-image: radial-gradient(
+    circle at var(--theme-x) var(--theme-y), 
+    black calc(var(--fade-radius) * 0.5), 
+    transparent var(--fade-radius)
+  );
+  -webkit-mask-image: radial-gradient(
+    circle at var(--theme-x) var(--theme-y), 
+    black calc(var(--fade-radius) * 0.5), 
+    transparent var(--fade-radius)
+  );
+}
+html:not(.dark)::view-transition-new(root) {
+  animation: none;
+  z-index: 1;
+}
+
+
+/* Ensure Toaster is above fixed navbar */
+[data-sonner-toaster] {
+  z-index: 9999 !important;
 }

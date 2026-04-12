@@ -114,19 +114,19 @@ export default async function HomePage() {
                   <div className="absolute -bottom-3 -right-3 w-8 h-8 rounded-lg bg-cyan-500/25 -rotate-12 border border-cyan-400/35" />
                   <div className="absolute top-0 -right-3 w-4 h-4 rounded-md bg-violet-400/30 rotate-45 border border-violet-300/40" />
                   {/* Main square frame */}
-                  <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-2xl shadow-violet-500/20 bg-slate-900 border border-violet-500/30">
+                  <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-2xl shadow-violet-500/15 ui-surface-strong">
                     {photoSrc ? (
                       <Image
                         src={photoSrc}
-                        about={displayName}
                         alt={displayName as string}
                         className="w-full h-full object-cover"
                         width={112}
                         height={112}
+                        unoptimized
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center">
-                        <User size={40} className="text-slate-500" />
+                        <User size={40} className="text-muted-foreground" />
                       </div>
                     )}
                     {/* Grid overlay — boxes */}
@@ -147,7 +147,7 @@ export default async function HomePage() {
 
             {(profile?.availability) && (
               <FadeIn delay={0.05}>
-                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-sm text-slate-400 mb-6 border border-violet-500/20">
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-sm text-muted-foreground mb-6 ui-border">
                   <span className="h-1.5 w-1.5 rounded-full bg-violet-400 animate-pulse" />
                   {profile?.availability}
                 </div>
@@ -158,13 +158,13 @@ export default async function HomePage() {
               <h1 className="text-5xl sm:text-7xl font-bold tracking-tight mb-4">
                 <span className="gradient-text">{displayName}</span>
               </h1>
-              <p className="text-xl sm:text-2xl text-slate-300 font-medium mb-3">
+              <p className="text-xl sm:text-2xl text-foreground/80 font-medium mb-3">
                 {displayTitle}
               </p>
             </FadeIn>
 
             <FadeIn delay={0.2}>
-              <p className="text-slate-400 max-w-2xl mx-auto leading-relaxed mb-8">
+              <p className="text-muted-foreground max-w-2xl mx-auto leading-relaxed mb-8">
                 {displayBio}
               </p>
             </FadeIn>
@@ -174,7 +174,7 @@ export default async function HomePage() {
                 {(profile?.interests?.length ? profile.interests : []).map((item) => (
                   <span
                     key={item}
-                    className="px-3 py-1 rounded-full text-xs font-medium border border-violet-500/25 text-violet-300 bg-violet-500/10"
+                    className="ui-chip px-3 py-1 rounded-full text-xs font-medium"
                   >
                     {item}
                   </span>
@@ -193,7 +193,7 @@ export default async function HomePage() {
                 </Link>
                 <Link
                   href="/contact"
-                  className="flex items-center gap-2 px-6 py-3 rounded-xl glass text-slate-300 hover:text-white font-medium transition-all"
+                  className="flex items-center gap-2 px-6 py-3 rounded-xl glass text-foreground/80 hover:text-foreground font-medium transition-all"
                 >
                   Get In Touch
                 </Link>
@@ -202,7 +202,7 @@ export default async function HomePage() {
                     <Link
                       href={githubUrl}
                       target="_blank"
-                      className="p-3 rounded-xl glass text-slate-400 hover:text-violet-400 transition-colors"
+                      className="ui-icon-button p-3 rounded-xl"
                       aria-label="GitHub"
                     >
                       <Github size={18} />
@@ -212,7 +212,7 @@ export default async function HomePage() {
                     <Link
                       href={linkedinUrl}
                       target="_blank"
-                      className="p-3 rounded-xl glass text-slate-400 hover:text-cyan-400 transition-colors"
+                      className="ui-icon-button p-3 rounded-xl"
                       aria-label="LinkedIn"
                     >
                       <Linkedin size={18} />
@@ -222,7 +222,7 @@ export default async function HomePage() {
                     <Link
                       href={leetcodeUrl}
                       target="_blank"
-                      className="p-3 rounded-xl glass text-slate-400 hover:text-yellow-400 transition-colors"
+                      className="ui-icon-button p-3 rounded-xl"
                       aria-label="LeetCode"
                     >
                       <Code2 size={18} />
@@ -232,7 +232,7 @@ export default async function HomePage() {
                     <Link
                       href={hackerrankUrl}
                       target="_blank"
-                      className="p-3 rounded-xl glass text-slate-400 hover:text-emerald-400 transition-colors"
+                      className="ui-icon-button p-3 rounded-xl"
                       aria-label="HackerRank"
                     >
                       <Terminal size={18} />
@@ -241,7 +241,7 @@ export default async function HomePage() {
                   {email && (
                     <Link
                       href={`mailto:${email}`}
-                      className="p-3 rounded-xl glass text-slate-400 hover:text-rose-400 transition-colors"
+                      className="ui-icon-button p-3 rounded-xl"
                       aria-label="Email"
                     >
                       <Mail size={18} />
@@ -251,7 +251,7 @@ export default async function HomePage() {
                     <Link
                       href={websiteUrl}
                       target="_blank"
-                      className="p-3 rounded-xl glass text-slate-400 hover:text-violet-400 transition-colors"
+                      className="ui-icon-button p-3 rounded-xl"
                       aria-label="Website"
                     >
                       <Globe size={18} />

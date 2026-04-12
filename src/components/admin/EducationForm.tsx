@@ -61,37 +61,37 @@ export default function EducationForm({ initial, onSuccess, apiPath, editId }: P
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div>
-                <Label className="text-slate-300 mb-1 block">School *</Label>
-                <Input {...register("school")} placeholder="University / School name" className="bg-white/5 border-white/10 text-white" />
+                <Label className="text-foreground/80 mb-1 block">School *</Label>
+                <Input {...register("school")} placeholder="University / School name" className="bg-foreground/5 border-border/60 text-foreground" />
                 {errors.school && <p className="text-red-400 text-xs mt-1">{errors.school.message}</p>}
             </div>
             <div>
-                <Label className="text-slate-300 mb-1 block">Degree *</Label>
-                <Input {...register("degree")} placeholder="e.g. B.Tech in Computer Science" className="bg-white/5 border-white/10 text-white" />
+                <Label className="text-foreground/80 mb-1 block">Degree *</Label>
+                <Input {...register("degree")} placeholder="e.g. B.Tech in Computer Science" className="bg-foreground/5 border-border/60 text-foreground" />
                 {errors.degree && <p className="text-red-400 text-xs mt-1">{errors.degree.message}</p>}
             </div>
             <div>
-                <Label className="text-slate-300 mb-1 block">Years *</Label>
-                <Input {...register("years")} placeholder="e.g. 2020 – 2024" className="bg-white/5 border-white/10 text-white" />
+                <Label className="text-foreground/80 mb-1 block">Years *</Label>
+                <Input {...register("years")} placeholder="e.g. 2020 – 2024" className="bg-foreground/5 border-border/60 text-foreground" />
                 {errors.years && <p className="text-red-400 text-xs mt-1">{errors.years.message}</p>}
             </div>
             <div>
-                <Label className="text-slate-300 mb-1 block">Detail</Label>
-                <Input {...register("detail")} placeholder="e.g. CGPA 8.5 / Grade A" className="bg-white/5 border-white/10 text-white" />
+                <Label className="text-foreground/80 mb-1 block">Detail</Label>
+                <Input {...register("detail")} placeholder="e.g. CGPA 8.5 / Grade A" className="bg-foreground/5 border-border/60 text-foreground" />
             </div>
             <div>
-                <Label className="text-slate-300 mb-1 block">Location</Label>
-                <Input {...register("location")} placeholder="City, Country" className="bg-white/5 border-white/10 text-white" />
+                <Label className="text-foreground/80 mb-1 block">Location</Label>
+                <Input {...register("location")} placeholder="City, Country" className="bg-foreground/5 border-border/60 text-foreground" />
             </div>
             <div>
-                <Label className="text-slate-300 mb-1 block">Google Maps URL</Label>
-                <Input {...register("mapsUrl")} placeholder="https://maps.google.com/..." className="bg-white/5 border-white/10 text-white" />
+                <Label className="text-foreground/80 mb-1 block">Google Maps URL</Label>
+                <Input {...register("mapsUrl")} placeholder="https://maps.google.com/..." className="bg-foreground/5 border-border/60 text-foreground" />
             </div>
             <div>
-                <Label className="text-slate-300 mb-1 block">Order</Label>
-                <Input {...register("order", { valueAsNumber: true })} type="number" placeholder="0" className="bg-white/5 border-white/10 text-white" />
+                <Label className="text-foreground/80 mb-1 block">Order</Label>
+                <Input {...register("order", { valueAsNumber: true })} type="number" placeholder="0" className="bg-foreground/5 border-border/60 text-foreground" />
             </div>
-            <Button type="submit" disabled={loading} className="w-full bg-violet-600 hover:bg-violet-700 text-white">
+            <Button type="submit" disabled={loading} className="w-full bg-violet-600 hover:bg-violet-700 text-white dark:text-white">
                 {loading ? "Saving…" : editId ? "Update" : "Create"}
             </Button>
         </form>

@@ -41,19 +41,19 @@ export default function ImageUpload({ value, onChange, label = "Image" }: Props)
     return (
         <div className="space-y-2">
             <div className="flex items-center justify-between">
-                <span className="text-sm text-slate-300">{label}</span>
+                <span className="text-sm text-foreground/80">{label}</span>
                 <div className="flex gap-1">
                     <button
                         type="button"
                         onClick={() => setMode("upload")}
-                        className={`text-xs px-2 py-0.5 rounded transition-colors ${mode === "upload" ? "bg-violet-600 text-white" : "text-slate-400 hover:text-white"}`}
+                        className={`text-xs px-2 py-0.5 rounded transition-colors ${mode === "upload" ? "bg-violet-600 text-white" : "text-muted-foreground hover:text-foreground"}`}
                     >
                         <Upload size={11} className="inline mr-1" />Upload
                     </button>
                     <button
                         type="button"
                         onClick={() => setMode("url")}
-                        className={`text-xs px-2 py-0.5 rounded transition-colors ${mode === "url" ? "bg-violet-600 text-white" : "text-slate-400 hover:text-white"}`}
+                        className={`text-xs px-2 py-0.5 rounded transition-colors ${mode === "url" ? "bg-violet-600 text-white" : "text-muted-foreground hover:text-foreground"}`}
                     >
                         <Link size={11} className="inline mr-1" />URL
                     </button>
@@ -69,8 +69,8 @@ export default function ImageUpload({ value, onChange, label = "Image" }: Props)
                         <Loader2 size={20} className="animate-spin mx-auto text-violet-400" />
                     ) : (
                         <>
-                            <Upload size={20} className="mx-auto text-slate-500 mb-1" />
-                            <p className="text-xs text-slate-500">Click to upload image</p>
+                            <Upload size={20} className="mx-auto text-muted-foreground/80 mb-1" />
+                            <p className="text-xs text-muted-foreground/80">Click to upload image</p>
                         </>
                     )}
                     <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleFile} />
@@ -80,7 +80,7 @@ export default function ImageUpload({ value, onChange, label = "Image" }: Props)
                     value={urlInput}
                     onChange={(e) => { setUrlInput(e.target.value); onChange(e.target.value); }}
                     placeholder="https://..."
-                    className="bg-white/5 border-white/10 text-white text-sm"
+                    className="bg-white/5 border-white/10 text-foreground text-sm"
                 />
             )}
 
@@ -92,7 +92,7 @@ export default function ImageUpload({ value, onChange, label = "Image" }: Props)
                         onClick={() => { onChange(""); setUrlInput(""); }}
                         className="absolute top-1 right-1 bg-black/60 rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
                     >
-                        <X size={14} className="text-white" />
+                        <X size={14} className="text-foreground" />
                     </button>
                 </div>
             )}

@@ -243,42 +243,42 @@ export default function BlogForm({ initial, onSuccess, apiPath, editId }: Props)
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 max-h-[70vh] overflow-y-auto pr-1">
             <div>
-                <Label className="text-slate-300 mb-1 block">Title *</Label>
-                <Input {...register("title")} className="bg-white/5 border-white/10 text-white" />
+                <Label className="text-foreground/80 mb-1 block">Title *</Label>
+                <Input {...register("title")} className="bg-foreground/5 border-border/60 text-foreground" />
                 {errors.title && <p className="text-red-400 text-xs mt-1">{errors.title.message}</p>}
             </div>
 
             <div>
-                <Label className="text-slate-300 mb-1 block">Slug (optional)</Label>
+                <Label className="text-foreground/80 mb-1 block">Slug (optional)</Label>
                 <Input
                     {...slugField}
                     onChange={(event) => {
                         slugWasManuallyEditedRef.current = event.target.value.trim().length > 0;
                         slugField.onChange(event);
                     }}
-                    className="bg-white/5 border-white/10 text-white"
+                    className="bg-foreground/5 border-border/60 text-foreground"
                     placeholder="my-post-title"
                 />
-                <p className="text-xs text-slate-500 mt-1">If empty, slug will be generated from title.</p>
+                <p className="text-xs text-muted-foreground/80 mt-1">If empty, slug will be generated from title.</p>
             </div>
 
             <div>
-                <Label className="text-slate-300 mb-1 block">Excerpt *</Label>
+                <Label className="text-foreground/80 mb-1 block">Excerpt *</Label>
                 <Textarea
                     {...register("excerpt")}
                     rows={2}
-                    className="bg-white/5 border-white/10 text-white resize-none"
+                    className="bg-foreground/5 border-border/60 text-foreground resize-none"
                 />
                 {errors.excerpt && <p className="text-red-400 text-xs mt-1">{errors.excerpt.message}</p>}
             </div>
 
             <div>
-                <Label className="text-slate-300 mb-1 block">Content *</Label>
+                <Label className="text-foreground/80 mb-1 block">Content *</Label>
                 <Controller
                     control={control}
                     name="content"
                     render={({ field }) => (
-                        <div data-color-mode="dark" className="rounded-lg overflow-hidden border border-white/10">
+                        <div data-color-mode="dark" className="rounded-lg overflow-hidden border border-border/60">
                             <MarkdownEditor
                                 value={field.value || ""}
                                 onChange={(val) => field.onChange(val ?? "")}
@@ -298,28 +298,28 @@ export default function BlogForm({ initial, onSuccess, apiPath, editId }: Props)
             <ImageUpload label="Cover Image" value={coverImage} onChange={setCoverImage} />
 
             <div>
-                <Label className="text-slate-300 mb-1 block">Tags (comma-separated)</Label>
+                <Label className="text-foreground/80 mb-1 block">Tags (comma-separated)</Label>
                 <Input
                     {...register("tags")}
-                    className="bg-white/5 border-white/10 text-white"
+                    className="bg-foreground/5 border-border/60 text-foreground"
                     placeholder="AI, Next.js, Portfolio"
                 />
             </div>
 
             <div className="flex items-center gap-2">
                 <input type="checkbox" id="published" {...register("published")} className="accent-violet-500" />
-                <Label htmlFor="published" className="text-slate-300 text-sm">
+                <Label htmlFor="published" className="text-foreground/80 text-sm">
                     Published
                 </Label>
             </div>
 
             <div>
-                <Label className="text-slate-300 mb-1 block">Order</Label>
-                <Input {...register("order")} type="number" className="bg-white/5 border-white/10 text-white w-24" />
+                <Label className="text-foreground/80 mb-1 block">Order</Label>
+                <Input {...register("order")} type="number" className="bg-foreground/5 border-border/60 text-foreground w-24" />
             </div>
 
             <div className="flex justify-end pt-2">
-                <Button type="submit" disabled={loading} className="bg-violet-600 hover:bg-violet-500 text-white">
+                <Button type="submit" disabled={loading} className="bg-violet-600 hover:bg-violet-500 text-white dark:text-white">
                     {loading ? "Saving..." : editId ? "Update" : "Create"}
                 </Button>
             </div>

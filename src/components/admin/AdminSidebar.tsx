@@ -36,10 +36,10 @@ export default function AdminSidebar() {
     const pathname = usePathname();
 
     return (
-        <aside className="flex flex-col w-60 sticky top-0 h-screen glass border-r border-white/5 px-4 py-6">
+        <aside className="flex flex-col w-60 sticky top-0 h-screen glass border-r border-border/40 px-4 py-6">
             {/* Logo */}
             <div className="flex items-center gap-2 font-bold text-base mb-8 px-2">
-                <span className="p-1.5 rounded-lg bg-violet-500/20 text-violet-400">
+                <span className="p-1.5 rounded-lg bg-violet-500/20 text-violet-600 dark:text-violet-400">
                     <Cpu size={16} />
                 </span>
                 <span className="gradient-text">Admin</span>
@@ -56,8 +56,8 @@ export default function AdminSidebar() {
                             key={href}
                             href={href}
                             className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${isActive
-                                ? "bg-violet-500/20 text-violet-300"
-                                : "text-slate-400 hover:text-white hover:bg-white/5"
+                                ? "bg-violet-500/20 text-violet-600 dark:text-violet-300"
+                                : "text-muted-foreground hover:text-foreground hover:bg-foreground/5"
                                 }`}
                         >
                             <Icon size={16} />
@@ -71,7 +71,7 @@ export default function AdminSidebar() {
             {/* Sign out */}
             <button
                 onClick={() => signOut({ callbackUrl: "/" })}
-                className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-500 hover:text-red-400 hover:bg-red-500/8 transition-colors"
+                className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-muted-foreground/80 hover:text-red-400 hover:bg-red-500/8 transition-colors"
             >
                 <LogOut size={16} />
                 Sign Out

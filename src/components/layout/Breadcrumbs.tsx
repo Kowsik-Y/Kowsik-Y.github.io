@@ -23,19 +23,19 @@ export default function Breadcrumbs({ items, className }: BreadcrumbsProps) {
                             {isLast ? (
                                 <span
                                     aria-current="page"
-                                    className="max-w-[14rem] truncate text-slate-200 sm:max-w-[26rem]"
+                                    className="max-w-56 truncate text-foreground sm:max-w-104"
                                 >
                                     {item.label}
                                 </span>
                             ) : (
                                 <Link
                                     href={item.href}
-                                    className="text-slate-400 hover:text-violet-400 transition-colors"
+                                    className="text-muted-foreground hover:text-primary transition-colors"
                                 >
                                     {item.label}
                                 </Link>
                             )}
-                            {!isLast && <ChevronRight size={14} className="text-slate-600" aria-hidden="true" />}
+                            {!isLast && <ChevronRight size={14} className="text-border" aria-hidden="true" />}
                         </li>
                     );
                 })}

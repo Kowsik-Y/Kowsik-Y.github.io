@@ -12,11 +12,11 @@ const columns = [
         label: "Icon",
         render: (val: unknown, row: IProject) =>
             val ? (
-                <div className="relative w-10 h-10 rounded-xl overflow-hidden border border-white/10 bg-white/5 shrink-0">
+                <div className="relative w-10 h-10 rounded-xl overflow-hidden border border-border/60 bg-foreground/5 shrink-0">
                     <Image src={blobDisplayUrl(val as string)} alt={row.title} fill className="object-cover" unoptimized />
                 </div>
             ) : (
-                <div className="w-10 h-10 rounded-xl border border-white/10 bg-violet-500/15 flex items-center justify-center text-violet-300 text-sm font-bold shrink-0">
+                <div className="w-10 h-10 rounded-xl border border-border/60 bg-violet-500/15 flex items-center justify-center text-violet-600 dark:text-violet-300 text-sm font-bold shrink-0">
                     {row.title?.charAt(0) ?? "?"}
                 </div>
             ),
@@ -27,7 +27,7 @@ const columns = [
         label: "Stack",
         render: (val: unknown) =>
             Array.isArray(val) ? (
-                <span className="text-slate-500 text-xs">{(val as string[]).join(", ")}</span>
+                <span className="text-muted-foreground/80 text-xs">{(val as string[]).join(", ")}</span>
             ) : null,
     },
     {
@@ -37,7 +37,7 @@ const columns = [
             val ? (
                 <span className="text-amber-400 text-xs font-medium">★ Yes</span>
             ) : (
-                <span className="text-slate-600 text-xs">No</span>
+                <span className="text-muted-foreground text-xs">No</span>
             ),
     },
     { key: "order" as keyof IProject, label: "Order" },

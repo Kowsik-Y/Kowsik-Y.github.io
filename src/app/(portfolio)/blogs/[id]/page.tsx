@@ -12,6 +12,7 @@ import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import { detailBreadcrumbs } from "@/lib/breadcrumbs";
 import { permanentRedirect } from "next/navigation";
 import { blobDisplayUrl } from "@/lib/blob-url";
+import { getReadingTimeMinutes, getWordCount } from "@/lib/content-metrics";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://kowsik.me";
 
@@ -26,6 +27,14 @@ type BlogPageData = {
     published?: boolean;
     createdAt?: string | Date;
     updatedAt?: string | Date;
+};
+
+type RelatedBlog = {
+    _id: string;
+    slug?: string;
+    title: string;
+    excerpt?: string;
+    tags?: string[];
 };
 
 function normalizeBlogMarkdown(content: string) {
@@ -72,6 +81,58 @@ const getBlog = cache(async (slugOrId: string): Promise<BlogPageData | null> => 
     return blog as BlogPageData | null;
 });
 
+const getRelatedBlogs = cache(async (currentBlogId: string, tags: string[]): Promise<RelatedBlog[]> => {
+    if (tags.length === 0) return [];
+
+    await dbConnect();
+    const related = await Blog.find({
+        _id: { $ne: currentBlogId },
+        published: true,
+        tags: { $in: tags },
+    })
+        .select("_id slug title excerpt tags")
+        .limit(3)
+        .lean();
+
+    return (related as Array<RelatedBlog & { _id: { toString(): string } }>).map((item) => ({
+        _id: (item._id as any).toString(),
+        slug: item.slug,
+        title: item.title,
+        excerpt: item.excerpt,
+        tags: item.tags ?? [],
+    }));
+});
+
+
+function createArticleJsonLd(blog: BlogPageData, publicSlug: string) {
+    const canonicalUrl = `${siteUrl}/blogs/${publicSlug}`;
+    const image = blog.coverImage ? [blobDisplayUrl(blog.coverImage)] : [];
+    
+    return {
+        "@context": "https://schema.org",
+        "@type": "TechArticle",
+        headline: blog.title,
+        description: blog.excerpt,
+        image: image,
+        datePublished: blog.createdAt ? new Date(blog.createdAt).toISOString() : new Date().toISOString(),
+        dateModified: blog.updatedAt ? new Date(blog.updatedAt).toISOString() : new Date().toISOString(),
+        author: [{
+            "@type": "Person",
+            name: "Kowsik Y",
+            url: siteUrl
+        }],
+        publisher: {
+            "@type": "Person",
+            name: "Kowsik Y"
+        },
+        mainEntityOfPage: {
+            "@type": "WebPage",
+            "@id": canonicalUrl
+        },
+        keywords: blog.tags?.join(", ") ?? ""
+    };
+}
+
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
     const { id: slugOrId } = await params;
     const blog = await getBlog(slugOrId);
@@ -109,8 +170,8 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ id:
     if (!blog || !blog.published) {
         return (
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-28 text-center">
-                <p className="text-slate-400 mb-6">Blog post not found.</p>
-                <Link href="/blogs" className="text-violet-400 hover:text-violet-300 inline-flex items-center gap-2">
+                <p className="text-muted-foreground mb-6">Blog post not found.</p>
+                <Link href="/blogs" className="text-primary hover:text-primary inline-flex items-center gap-2">
                     <ArrowLeft size={16} /> Back to Blogs
                 </Link>
             </div>
@@ -124,6 +185,9 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ id:
 
     const publicSlug = blog.slug || slugOrId;
     const normalizedContent = normalizeBlogMarkdown(blog.content || "");
+    const readingTime = getReadingTimeMinutes(normalizedContent);
+    const wordCount = getWordCount(normalizedContent);
+    const relatedBlogs = blog._id ? await getRelatedBlogs(blog._id, blog.tags ?? []) : [];
 
     const breadcrumbJsonLd = {
         "@context": "https://schema.org",
@@ -161,18 +225,29 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ id:
                 items={detailBreadcrumbs("Blogs", "/blogs", blog.title || "Blog", `/blogs/${publicSlug}`)}
             />
 
-            <Link href="/blogs" className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-violet-400 transition-colors mb-8">
+            <Link href="/blogs" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors mb-8">
                 <ArrowLeft size={16} /> Back to Blogs
             </Link>
 
             <article className="glass-card p-6 sm:p-8">
-                <h1 className="text-3xl sm:text-4xl font-bold text-white mb-4 leading-tight">{blog.title}</h1>
-                <p className="text-slate-400 mb-6">{blog.excerpt}</p>
+                <h1 className="text-3xl sm:text-4xl font-bold text-foreground mb-4 leading-tight">{blog.title}</h1>
+                <p className="text-muted-foreground mb-3">{blog.excerpt}</p>
+                <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground mb-6">
+                    <span>{readingTime} min read</span>
+                    <span className="text-border">•</span>
+                    <span>{wordCount.toLocaleString()} words</span>
+                    {blog.createdAt && (
+                        <>
+                            <span className="text-border">•</span>
+                            <span>{new Date(blog.createdAt).toLocaleDateString()}</span>
+                        </>
+                    )}
+                </div>
 
                 {blog.tags && blog.tags.length > 0 && (
                     <div className="flex flex-wrap gap-2 mb-6">
                         {blog.tags.map((tag) => (
-                            <span key={tag} className="px-2.5 py-1 rounded-full text-xs font-medium border border-violet-500/30 text-violet-300 bg-violet-500/10">
+                            <span key={tag} className="px-2.5 py-1 rounded-full text-xs font-medium border border-violet-500/30 text-violet-700 dark:text-primary bg-violet-500/10">
                                 {tag}
                             </span>
                         ))}
@@ -180,24 +255,24 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ id:
                 )}
 
                 {blog.coverImage && (
-                    <div className="relative w-full aspect-16/8 rounded-xl overflow-hidden border border-white/10 mb-8">
+                    <div className="relative w-full aspect-16/8 rounded-xl overflow-hidden border border-border mb-8">
                         <Image src={blobDisplayUrl(blog.coverImage)} alt={blog.title || "Blog cover"} fill className="object-cover" unoptimized />
                     </div>
                 )}
 
-                <div className="prose prose-invert max-w-none prose-p:text-slate-300 prose-headings:text-white prose-a:text-violet-400">
+                <div className="prose max-w-none dark:prose-invert prose-p:text-muted-foreground prose-headings:text-foreground prose-a:text-violet-500 dark:prose-a:text-primary">
                     <ReactMarkdown
                         remarkPlugins={[remarkGfm, remarkBreaks]}
                         urlTransform={normalizeLinkUrl}
                         components={{
-                            h1: ({ children }) => <h1 className="text-3xl font-bold text-white mt-8 mb-4">{children}</h1>,
-                            h2: ({ children }) => <h2 className="text-2xl font-semibold text-white mt-7 mb-3">{children}</h2>,
-                            h3: ({ children }) => <h3 className="text-xl font-semibold text-white mt-6 mb-3">{children}</h3>,
-                            h4: ({ children }) => <h4 className="text-lg font-semibold text-white mt-5 mb-2">{children}</h4>,
-                            h5: ({ children }) => <h5 className="text-base font-semibold text-white mt-4 mb-2">{children}</h5>,
-                            h6: ({ children }) => <h6 className="text-sm font-semibold text-slate-300 mt-3 mb-2">{children}</h6>,
-                            p: ({ children }) => <p className="text-slate-300 my-4 leading-relaxed">{children}</p>,
-                            hr: () => <hr className="border-t border-slate-700 my-6" />,
+                            h1: ({ children }) => <h1 className="text-3xl font-bold text-foreground mt-8 mb-4">{children}</h1>,
+                            h2: ({ children }) => <h2 className="text-2xl font-semibold text-foreground mt-7 mb-3">{children}</h2>,
+                            h3: ({ children }) => <h3 className="text-xl font-semibold text-foreground mt-6 mb-3">{children}</h3>,
+                            h4: ({ children }) => <h4 className="text-lg font-semibold text-foreground mt-5 mb-2">{children}</h4>,
+                            h5: ({ children }) => <h5 className="text-base font-semibold text-foreground mt-4 mb-2">{children}</h5>,
+                            h6: ({ children }) => <h6 className="text-sm font-semibold text-muted-foreground mt-3 mb-2">{children}</h6>,
+                            p: ({ children }) => <p className="text-muted-foreground my-4 leading-relaxed">{children}</p>,
+                            hr: () => <hr className="border-t border-border my-6" />,
                             a: ({ href, children }) => {
                                 const safeHref = normalizeLinkUrl(href || "");
                                 const isExternal = /^https?:\/\//.test(safeHref);
@@ -206,7 +281,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ id:
                                         href={safeHref}
                                         target={isExternal ? "_blank" : undefined}
                                         rel={isExternal ? "noopener noreferrer" : undefined}
-                                        className="text-violet-400 hover:text-violet-300 underline underline-offset-2 break-all"
+                                        className="text-violet-500 dark:text-primary hover:text-primary dark:hover:text-primary underline underline-offset-2 break-all"
                                     >
                                         {children}
                                     </a>
@@ -220,38 +295,38 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ id:
                                     <img
                                         src={normalizeLinkUrl(src)}
                                         alt={alt || "Blog image"}
-                                        className="block mx-auto my-6 max-w-full h-auto rounded-lg border border-white/10"
+                                        className="block mx-auto my-6 max-w-full h-auto rounded-lg border border-border/70"
                                         loading="lazy"
                                     />
                                 );
                             },
-                            ul: ({ children }) => <ul className="list-disc list-inside my-4 space-y-2 text-slate-300 ml-4">{children}</ul>,
-                            ol: ({ children }) => <ol className="list-decimal list-inside my-4 space-y-2 text-slate-300 ml-4">{children}</ol>,
-                            li: ({ children }) => <li className="text-slate-300 leading-relaxed">{children}</li>,
+                            ul: ({ children }) => <ul className="list-disc list-inside my-4 space-y-2 text-muted-foreground ml-4">{children}</ul>,
+                            ol: ({ children }) => <ol className="list-decimal list-inside my-4 space-y-2 text-muted-foreground ml-4">{children}</ol>,
+                            li: ({ children }) => <li className="text-muted-foreground leading-relaxed">{children}</li>,
                             blockquote: ({ children }) => (
-                                <blockquote className="border-l-4 border-violet-500 pl-4 my-4 italic text-slate-400 bg-violet-500/10 py-2 pr-4 rounded">
+                                <blockquote className="border-l-4 border-violet-500 pl-4 my-4 italic text-muted-foreground bg-violet-500/10 py-2 pr-4 rounded">
                                     {children}
                                 </blockquote>
                             ),
                             code: ({ className, children }) => {
                                 const isCodeBlock = className?.includes('language-');
                                 if (!isCodeBlock) {
-                                    return <code className="bg-slate-900 text-violet-300 px-2 py-1 rounded text-sm font-mono">{children}</code>;
+                                    return <code className="bg-card dark:bg-card text-primary px-2 py-1 rounded text-sm font-mono">{children}</code>;
                                 }
-                                return <code className="bg-slate-900 text-violet-300 px-1">{children}</code>;
+                                return <code className="bg-card text-primary px-1">{children}</code>;
                             },
                             pre: ({ children }) => (
-                                <pre className="bg-slate-900 border border-slate-700 rounded-lg p-4 my-4 overflow-x-auto">
+                                <pre className="bg-card border border-border rounded-lg p-4 my-4 overflow-x-auto">
                                     {children}
                                 </pre>
                             ),
                             table: ({ children }) => (
-                                <table className="border-collapse my-4 w-full border border-slate-700">
+                                <table className="border-collapse my-4 w-full border border-border">
                                     {children}
                                 </table>
                             ),
                             thead: ({ children }) => (
-                                <thead className="bg-slate-800 border-b border-slate-700">
+                                <thead className="ui-surface border-b border-border">
                                     {children}
                                 </thead>
                             ),
@@ -261,28 +336,46 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ id:
                                 </tbody>
                             ),
                             tr: ({ children }) => (
-                                <tr className="border-b border-slate-700">
+                                <tr className="border-b border-border">
                                     {children}
                                 </tr>
                             ),
                             th: ({ children }) => (
-                                <th className="text-white font-semibold text-left px-4 py-2 text-sm">
+                                <th className="text-foreground font-semibold text-left px-4 py-2 text-sm">
                                     {children}
                                 </th>
                             ),
                             td: ({ children }) => (
-                                <td className="text-slate-300 px-4 py-2 text-sm">
+                                <td className="text-muted-foreground px-4 py-2 text-sm">
                                     {children}
                                 </td>
                             ),
-                            strong: ({ children }) => <strong className="font-bold text-white">{children}</strong>,
-                            em: ({ children }) => <em className="italic text-slate-200">{children}</em>,
+                            strong: ({ children }) => <strong className="font-bold text-foreground">{children}</strong>,
+                            em: ({ children }) => <em className="italic text-foreground/90">{children}</em>,
                         }}
                     >
                         {normalizedContent}
                     </ReactMarkdown>
                 </div>
             </article>
+
+            <section className="mt-10">
+                <h2 className="text-xl font-semibold mb-4">Related Posts</h2>
+                {relatedBlogs.length > 0 ? (
+                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {relatedBlogs.map((related) => (
+                            <Link key={related._id} href={`/blogs/${related.slug || related._id}`} className="glass-card p-4 block">
+                                <h3 className="font-semibold text-foreground mb-2 line-clamp-2">{related.title}</h3>
+                                <p className="text-sm text-muted-foreground line-clamp-2">{related.excerpt}</p>
+                            </Link>
+                        ))}
+                    </div>
+                ) : (
+                    <div className="glass-card p-4 text-sm text-muted-foreground">
+                        No related posts yet. Check back for more articles.
+                    </div>
+                )}
+            </section>
         </div>
     );
 }

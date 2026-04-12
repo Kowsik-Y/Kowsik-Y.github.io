@@ -2,7 +2,8 @@ import type { Metadata, Viewport } from "next";
 import { cache } from "react";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { Toaster } from "@/components/ui/sonner";
+import ThemeToaster from "@/components/theme-toaster";
+import NextTopLoader from 'nextjs-toploader';
 import dbConnect from "@/lib/db";
 import Profile from "@/models/Profile";
 
@@ -148,11 +149,12 @@ function createNavigationJsonLd(profile: SiteProfile | null) {
     "@context": "https://schema.org",
     "@type": "ItemList",
     itemListElement: [
-      { "@type": "SiteNavigationElement", position: 1, name: "About", url: `${siteUrl}/about` },
-      { "@type": "SiteNavigationElement", position: 2, name: "Projects", url: `${siteUrl}/projects` },
-      { "@type": "SiteNavigationElement", position: 3, name: "Certifications", url: `${siteUrl}/certifications` },
-      { "@type": "SiteNavigationElement", position: 4, name: "Achievements", url: `${siteUrl}/achievements` },
-      { "@type": "SiteNavigationElement", position: 5, name: "Contact", url: `${siteUrl}/contact` },
+      { "@type": "SiteNavigationElement", position: 1, name: "About", description: `Learn about ${displayName} — AI & ML engineering student, full-stack developer, and AI agent builder. Explore skills, education, and experience.`, url: `${siteUrl}/about` },
+      { "@type": "SiteNavigationElement", position: 2, name: "Projects", description: `Explore projects built by ${displayName} — from AI-powered apps to full-stack platforms and intelligent systems.`, url: `${siteUrl}/projects` },
+      { "@type": "SiteNavigationElement", position: 3, name: "Blogs", description: `Read technical articles, tutorials, and insights on AI, Machine Learning, and web development written by ${displayName}.`, url: `${siteUrl}/blogs` },
+      { "@type": "SiteNavigationElement", position: 4, name: "Certifications", description: `View ${displayName}'s professional certifications in AI, Machine Learning, and software engineering.`, url: `${siteUrl}/certifications` },
+      { "@type": "SiteNavigationElement", position: 5, name: "Achievements", description: `Review highlights, awards, and milestones from ${displayName}'s journey in tech and development.`, url: `${siteUrl}/achievements` },
+      { "@type": "SiteNavigationElement", position: 6, name: "Contact", description: `Get in touch with ${displayName} for collaborations, projects, or professional inquiries.`, url: `${siteUrl}/contact` },
     ],
     name: `${displayName} Navigation`,
   };
@@ -169,7 +171,7 @@ export default async function RootLayout({
   const navigationJsonLd = createNavigationJsonLd(profile);
 
   return (
-    <html lang="en" className="light" data-scroll-behavior="smooth">
+    <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth">
       <head>
         <script
           type="application/ld+json"
@@ -187,8 +189,9 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <NextTopLoader color="#8b5cf6" height={3} showSpinner={false} shadow="0 0 10px #8b5cf6,0 0 5px #8b5cf6" />
         {children}
-        <Toaster richColors position="top-right" />
+        <ThemeToaster />
       </body>
     </html>
   );

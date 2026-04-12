@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
-import { Send, Mail, Github, Linkedin, Code2, Terminal, type LucideIcon } from "lucide-react";
+import { Send, Mail, Github, Linkedin, Code2, Terminal, Copy, type LucideIcon } from "lucide-react";
 import FadeIn from "@/components/ui/fade-in";
 import ContactCanvasClient from "@/components/three/ContactCanvasClient";
 import { Button } from "@/components/ui/button";
@@ -99,6 +99,15 @@ export default function ContactPage() {
         },
     ].filter(Boolean) as { icon: LucideIcon; label: string; value: string; href: string }[];
 
+    const copyValue = async (value: string, label: string) => {
+        try {
+            await navigator.clipboard.writeText(value);
+            toast.success(`${label} copied`);
+        } catch {
+            toast.error("Clipboard access failed");
+        }
+    };
+
     return (
         <div className="relative">
             <div className="fixed inset-0 -z-10 opacity-20 pointer-events-none">
@@ -116,7 +125,7 @@ export default function ContactPage() {
                     <h1 className="text-4xl sm:text-5xl font-bold mb-4">
                         Let&apos;s <span className="gradient-text">Connect</span>
                     </h1>
-                    <p className="text-slate-400 text-lg max-w-2xl mb-14">
+                    <p className="text-muted-foreground text-lg max-w-2xl mb-14">
                         I&apos;m always open to new opportunities, collaborations, or just a chat about AI
                         and technology.
                     </p>
@@ -127,21 +136,21 @@ export default function ContactPage() {
                     <FadeIn delay={0.1}>
                         <form onSubmit={handleSubmit(onSubmit)} className="glass-card p-8 space-y-5">
                             <div>
-                                <Label htmlFor="name" className="text-slate-300 mb-1.5 block">
+                                <Label htmlFor="name" className="text-foreground/80 mb-1.5 block">
                                     Name
                                 </Label>
                                 <Input
                                     id="name"
                                     {...register("name")}
                                     placeholder="Your name"
-                                    className="bg-white/5 border-white/10 text-white placeholder:text-slate-600 focus:border-violet-500"
+                                    className="ui-surface text-foreground placeholder:text-muted-foreground focus:border-primary"
                                 />
                                 {errors.name && (
                                     <p className="text-red-400 text-xs mt-1">{errors.name.message}</p>
                                 )}
                             </div>
                             <div>
-                                <Label htmlFor="email" className="text-slate-300 mb-1.5 block">
+                                <Label htmlFor="email" className="text-foreground/80 mb-1.5 block">
                                     Email
                                 </Label>
                                 <Input
@@ -149,14 +158,14 @@ export default function ContactPage() {
                                     type="email"
                                     {...register("email")}
                                     placeholder="you@example.com"
-                                    className="bg-white/5 border-white/10 text-white placeholder:text-slate-600 focus:border-violet-500"
+                                    className="ui-surface text-foreground placeholder:text-muted-foreground focus:border-primary"
                                 />
                                 {errors.email && (
                                     <p className="text-red-400 text-xs mt-1">{errors.email.message}</p>
                                 )}
                             </div>
                             <div>
-                                <Label htmlFor="message" className="text-slate-300 mb-1.5 block">
+                                <Label htmlFor="message" className="text-foreground/80 mb-1.5 block">
                                     Message
                                 </Label>
                                 <Textarea
@@ -164,7 +173,7 @@ export default function ContactPage() {
                                     {...register("message")}
                                     placeholder="Tell me your message..."
                                     rows={5}
-                                    className="bg-white/5 border-white/10 text-white placeholder:text-slate-600 focus:border-violet-500 resize-none"
+                                    className="ui-surface text-foreground placeholder:text-muted-foreground focus:border-primary resize-none"
                                 />
                                 {errors.message && (
                                     <p className="text-red-400 text-xs mt-1">{errors.message.message}</p>
@@ -173,7 +182,7 @@ export default function ContactPage() {
                             <Button
                                 type="submit"
                                 disabled={submitting}
-                                className="w-full bg-violet-600 hover:bg-violet-500 text-white"
+                                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
                             >
                                 <Send size={15} className="mr-2" />
                                 {submitting ? "Sending..." : "Send Message"}
@@ -185,21 +194,30 @@ export default function ContactPage() {
                     <FadeIn delay={0.2}>
                         <div className="space-y-4">
                             {contactLinks.map(({ icon: Icon, label, value, href }) => (
-                                <a
-                                    key={label}
-                                    href={href}
-                                    target={href.startsWith("mailto") ? undefined : "_blank"}
-                                    rel="noopener noreferrer"
-                                    className="flex items-center gap-4 glass-card p-5"
-                                >
-                                    <div className="p-2 rounded-lg bg-violet-500/15 text-violet-400 shrink-0">
-                                        <Icon size={18} />
-                                    </div>
-                                    <div>
-                                        <p className="text-xs text-slate-500">{label}</p>
-                                        <p className="text-sm text-white font-medium">{value}</p>
-                                    </div>
-                                </a>
+                                <div key={label} className="flex items-center gap-3 glass-card p-5">
+                                    <a
+                                        href={href}
+                                        target={href.startsWith("mailto") ? undefined : "_blank"}
+                                        rel="noopener noreferrer"
+                                        className="flex items-center gap-4 min-w-0 flex-1"
+                                    >
+                                        <div className="p-2 rounded-lg bg-primary/10 text-primary shrink-0">
+                                            <Icon size={18} />
+                                        </div>
+                                        <div className="min-w-0">
+                                            <p className="text-xs text-muted-foreground">{label}</p>
+                                            <p className="text-sm text-foreground font-medium truncate">{value}</p>
+                                        </div>
+                                    </a>
+                                    <button
+                                        type="button"
+                                        onClick={() => copyValue(href.startsWith("mailto:") ? value : href, label)}
+                                        className="ui-icon-button shrink-0 rounded-md p-2"
+                                        aria-label={`Copy ${label}`}
+                                    >
+                                        <Copy size={16} />
+                                    </button>
+                                </div>
                             ))}
                         </div>
                     </FadeIn>
