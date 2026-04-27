@@ -7,16 +7,18 @@ export const metadata: Metadata = {
     description:
         "Highlights, wins, and milestones from Kowsik Y's journey in AI, ML, and software development.",
     alternates: {
-        canonical: "/achievements",
+        canonical: `${siteUrl}/achievements`,
     },
     openGraph: {
         title: "Achievements — Kowsik Y",
         description:
             "Highlights, wins, and milestones from Kowsik Y's journey.",
-        url: "/achievements",
+        url: `${siteUrl}/achievements`,
+        type: "website",
+        siteName: "Kowsik Y",
         images: [
             {
-                url: "/og-achievements.png",
+                url: `${siteUrl}/og-default.svg`,
                 width: 1200,
                 height: 630,
                 alt: "Achievements by Kowsik Y",
@@ -24,9 +26,10 @@ export const metadata: Metadata = {
         ],
     },
     twitter: {
+        card: "summary_large_image",
         title: "Achievements — Kowsik Y",
         description: "Highlights and milestones from Kowsik Y's journey.",
-        images: ["/og-achievements.png"],
+        images: [`${siteUrl}/og-default.svg`],
     },
 };
 

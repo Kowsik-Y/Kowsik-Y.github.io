@@ -7,16 +7,18 @@ export const metadata: Metadata = {
     description:
         "Learn about Kowsik Y — AI & ML engineering student, full-stack developer, and AI agent builder. Explore skills, education, and experience.",
     alternates: {
-        canonical: "/about",
+        canonical: `${siteUrl}/about`,
     },
     openGraph: {
         title: "About — Kowsik Y",
         description:
             "AI & ML student, full-stack developer, and AI agent builder. Skills, education, and background.",
-        url: "/about",
+        url: `${siteUrl}/about`,
+        type: "website",
+        siteName: "Kowsik Y",
         images: [
             {
-                url: "/og-about.png",
+                url: `${siteUrl}/og-default.svg`,
                 width: 1200,
                 height: 630,
                 alt: "About Kowsik Y",
@@ -24,10 +26,11 @@ export const metadata: Metadata = {
         ],
     },
     twitter: {
+        card: "summary_large_image",
         title: "About — Kowsik Y",
         description:
             "AI & ML student, full-stack developer, and AI agent builder.",
-        images: ["/og-about.png"],
+        images: [`${siteUrl}/og-default.svg`],
     },
 };
 

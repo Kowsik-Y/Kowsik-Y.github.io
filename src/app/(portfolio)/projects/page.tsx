@@ -2,6 +2,7 @@ import dbConnect from "@/lib/db";
 import Project from "@/models/Project";
 import ProjectsPageClient from "@/components/portfolio/ProjectsPageClient";
 import type { IProject } from "@/types";
+import { buildProjectSlug, projectPath } from "@/lib/project-slug";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://kowsik.me";
 
@@ -9,6 +10,7 @@ export const revalidate = 300;
 
 type ProjectLean = {
     _id: { toString(): string };
+    slug?: string;
     title: string;
     description: string;
     longDescription?: string;
@@ -28,8 +30,19 @@ export default async function ProjectsPage() {
 
     const projectDocs = (await Project.find({}).sort({ order: 1, createdAt: -1 }).lean()) as ProjectLean[];
 
+    await Promise.all(
+        projectDocs.map(async (doc) => {
+            if (!doc.slug) {
+                const generatedSlug = buildProjectSlug(doc.title, doc._id.toString());
+                await Project.findByIdAndUpdate(doc._id, { slug: generatedSlug });
+                doc.slug = generatedSlug;
+            }
+        })
+    );
+
     const initialProjects: IProject[] = projectDocs.map((doc) => ({
         _id: doc._id.toString(),
+        slug: doc.slug,
         title: doc.title,
         description: doc.description,
         longDescription: doc.longDescription,
@@ -53,7 +66,7 @@ export default async function ProjectsPage() {
             "@type": "ListItem",
             position: index + 1,
             name: project.title,
-            url: `${siteUrl}/projects/${project._id}`,
+            url: `${siteUrl}${projectPath({ _id: project._id, title: project.title, slug: project.slug })}`,
         })),
     };
 

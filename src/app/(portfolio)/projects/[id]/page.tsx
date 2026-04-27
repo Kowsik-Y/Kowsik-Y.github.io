@@ -5,11 +5,19 @@ import Project from "@/models/Project";
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import { detailBreadcrumbs } from "@/lib/breadcrumbs";
 import ProjectDetailContent from "./ProjectDetailContent";
+import { permanentRedirect } from "next/navigation";
+import { blobDisplayUrl } from "@/lib/blob-url";
+import {
+    buildProjectSlug,
+    isObjectIdLike,
+    projectPath,
+} from "@/lib/project-slug";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://kowsik.me";
 
 type ProjectSeoData = {
     _id?: string;
+    slug?: string;
     title?: string;
     description?: string;
     longDescription?: string;
@@ -23,14 +31,28 @@ type ProjectSeoData = {
 
 const getProjectSeoData = cache(async (id: string): Promise<ProjectSeoData | null> => {
     await dbConnect();
-    const project = await Project.findById(id).lean();
-    return project as ProjectSeoData | null;
+
+    const project = isObjectIdLike(id)
+        ? await Project.findById(id).lean()
+        : await Project.findOne({ slug: id }).lean();
+
+    if (!project) return null;
+
+    const typedProject = project as ProjectSeoData;
+    if (!typedProject.slug && typedProject._id) {
+        const generatedSlug = buildProjectSlug(typedProject.title, typedProject._id);
+        await Project.findByIdAndUpdate(typedProject._id, { slug: generatedSlug });
+        typedProject.slug = generatedSlug;
+    }
+
+    return typedProject;
 });
 
 
-function createSoftwareApplicationJsonLd(project: ProjectSeoData, id: string) {
-    const canonicalUrl = `${siteUrl}/projects/${id}`;
-    
+function createSoftwareApplicationJsonLd(project: ProjectSeoData, publicSlug: string) {
+    const canonicalUrl = `${siteUrl}/projects/${publicSlug}`;
+    const ogImage = project.imageUrl ? [blobDisplayUrl(project.imageUrl)] : [];
+
     return {
         "@context": "https://schema.org",
         "@type": "SoftwareApplication",
@@ -44,7 +66,7 @@ function createSoftwareApplicationJsonLd(project: ProjectSeoData, id: string) {
             name: "Kowsik Y",
             url: siteUrl
         },
-        image: project.imageUrl ? [project.imageUrl] : [],
+        image: ogImage,
         datePublished: project.createdAt ? new Date(project.createdAt).toISOString() : new Date().toISOString(),
         dateModified: project.updatedAt ? new Date(project.updatedAt).toISOString() : new Date().toISOString(),
     };
@@ -54,14 +76,18 @@ export async function generateMetadata(
     { params }: { params: Promise<{ id: string }> }
 ): Promise<Metadata> {
     try {
-        const { id } = await params;
-        const project = await getProjectSeoData(id);
+        const { id: slugOrId } = await params;
+        const project = await getProjectSeoData(slugOrId);
 
         if (!project) return { title: "Project Not Found" };
 
+        const projectId = project._id || slugOrId;
+        const publicSlug = project.slug || buildProjectSlug(project.title, projectId);
+        const canonicalPath = projectPath({ _id: projectId, title: project.title, slug: publicSlug });
+
         const ogImage = project.imageUrl
-            ? [{ url: project.imageUrl, alt: project.title }]
-            : undefined;
+            ? [{ url: blobDisplayUrl(project.imageUrl), alt: project.title }]
+            : [{ url: `${siteUrl}/og-default.svg`, alt: "Kowsik Y Project" }];
 
         return {
             title: project.title,
@@ -70,17 +96,19 @@ export async function generateMetadata(
             openGraph: {
                 title: `${project.title} — Kowsik Y`,
                 description: project.description,
-                url: `${siteUrl}/projects/${id}`,
-                type: "article",
+                url: `${siteUrl}${canonicalPath}`,
+                type: "website",
+                siteName: "Kowsik Y",
                 images: ogImage,
             },
             twitter: {
                 title: `${project.title} — Kowsik Y`,
                 description: project.description,
                 card: "summary_large_image",
+                images: ogImage?.map((image) => image.url),
             },
             alternates: {
-                canonical: `${siteUrl}/projects/${id}`,
+                canonical: `${siteUrl}${canonicalPath}`,
             },
         };
     } catch {
@@ -91,8 +119,17 @@ export async function generateMetadata(
 export default async function ProjectDetailPage(
     { params }: { params: Promise<{ id: string }> }
 ) {
-    const { id } = await params;
-    const project = await getProjectSeoData(id);
+    const { id: slugOrId } = await params;
+    const project = await getProjectSeoData(slugOrId);
+
+    const projectId = project?._id || slugOrId;
+    const publicSlug = project
+        ? (project.slug || buildProjectSlug(project.title, projectId))
+        : slugOrId;
+
+    if (project && isObjectIdLike(slugOrId) && publicSlug !== slugOrId) {
+        permanentRedirect(projectPath({ _id: projectId, title: project.title, slug: publicSlug }));
+    }
 
     const breadcrumbJsonLd = {
         "@context": "https://schema.org",
@@ -114,7 +151,7 @@ export default async function ProjectDetailPage(
                 "@type": "ListItem",
                 position: 3,
                 name: project?.title || "Project",
-                item: `${siteUrl}/projects/${id}`,
+                item: `${siteUrl}/projects/${publicSlug}`,
             },
         ],
     };
@@ -124,8 +161,8 @@ export default async function ProjectDetailPage(
         "@type": "CreativeWork",
         name: project?.title || "Project",
         description: project?.longDescription || project?.description || "Project details",
-        url: `${siteUrl}/projects/${id}`,
-        image: project?.imageUrl ? [project.imageUrl] : undefined,
+        url: `${siteUrl}/projects/${publicSlug}`,
+        image: project?.imageUrl ? [blobDisplayUrl(project.imageUrl)] : undefined,
         keywords: project?.techStack,
         creator: {
             "@type": "Person",
@@ -137,6 +174,10 @@ export default async function ProjectDetailPage(
         codeRepository: project?.githubUrl,
         isBasedOn: project?.liveUrl,
     };
+
+    const softwareApplicationJsonLd = project
+        ? createSoftwareApplicationJsonLd(project, publicSlug)
+        : null;
 
     const techSummary = project?.techStack?.length
         ? project.techStack.join(", ")
@@ -188,13 +229,19 @@ export default async function ProjectDetailPage(
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(projectJsonLd) }}
             />
+            {softwareApplicationJsonLd && (
+                <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareApplicationJsonLd) }}
+                />
+            )}
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
             />
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-2">
                 <Breadcrumbs
-                    items={detailBreadcrumbs("Projects", "/projects", project?.title || "Project", `/projects/${id}`)}
+                    items={detailBreadcrumbs("Projects", "/projects", project?.title || "Project", `/projects/${publicSlug}`)}
                 />
             </div>
             <ProjectDetailContent />

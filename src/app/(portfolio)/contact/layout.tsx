@@ -7,16 +7,18 @@ export const metadata: Metadata = {
     description:
         "Get in touch with Kowsik Y — open to collaborations, projects, and opportunities in AI, ML, and full-stack development.",
     alternates: {
-        canonical: "/contact",
+        canonical: `${siteUrl}/contact`,
     },
     openGraph: {
         title: "Contact — Kowsik Y",
         description:
             "Open to collaborations, projects, and opportunities in AI & ML.",
-        url: "/contact",
+        url: `${siteUrl}/contact`,
+        type: "website",
+        siteName: "Kowsik Y",
         images: [
             {
-                url: "/og-contact.png",
+                url: `${siteUrl}/og-default.svg`,
                 width: 1200,
                 height: 630,
                 alt: "Contact Kowsik Y",
@@ -24,9 +26,10 @@ export const metadata: Metadata = {
         ],
     },
     twitter: {
+        card: "summary_large_image",
         title: "Contact — Kowsik Y",
         description: "Get in touch with Kowsik Y for collaborations and projects.",
-        images: ["/og-contact.png"],
+        images: [`${siteUrl}/og-default.svg`],
     },
 };
 

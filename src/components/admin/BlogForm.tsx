@@ -7,6 +7,7 @@ import { z } from "zod";
 import { useEffect, useRef, useState, type ClipboardEvent } from "react";
 import { toast } from "sonner";
 import dynamic from "next/dynamic";
+import TurndownService from "turndown";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
@@ -28,128 +29,63 @@ function toSlug(input: string) {
         .replace(/^-|-$/g, "");
 }
 
-function normalizeInlineText(text: string) {
-    return text.replace(/\s+/g, " ").trim();
-}
-
-function htmlNodeToMarkdown(node: Node): string {
-    if (node.nodeType === Node.TEXT_NODE) {
-        return node.textContent ?? "";
-    }
-
-    if (node.nodeType !== Node.ELEMENT_NODE) {
-        return "";
-    }
-
-    const element = node as HTMLElement;
-    const tag = element.tagName.toLowerCase();
-    const children = Array.from(element.childNodes).map((child) => htmlNodeToMarkdown(child)).join("");
-
-    switch (tag) {
-        case "h1":
-        case "h2":
-        case "h3":
-        case "h4":
-        case "h5":
-        case "h6": {
-            const level = Number(tag.slice(1));
-            return `${"#".repeat(level)} ${normalizeInlineText(children)}\n\n`;
-        }
-        case "p":
-            return `${children.trim()}\n\n`;
-        case "br":
-            return "\n";
-        case "strong":
-        case "b":
-            return `**${children.trim()}**`;
-        case "em":
-        case "i":
-            return `*${children.trim()}*`;
-        case "code":
-            return `\`${children.trim()}\``;
-        case "pre": {
-            const code = element.textContent?.trim() ?? children.trim();
-            return `\n\`\`\`\n${code}\n\`\`\`\n\n`;
-        }
-        case "a": {
-            const href = element.getAttribute("href") ?? "";
-            const text = children.trim() || href;
-            return href ? `[${text}](${href})` : text;
-        }
-        case "img": {
-            const src = element.getAttribute("src") ?? "";
-            const alt = element.getAttribute("alt") ?? "image";
-            return src ? `![${alt}](${src})` : "";
-        }
-        case "ul": {
-            const items = Array.from(element.children)
-                .filter((child) => child.tagName.toLowerCase() === "li")
-                .map((li) => `- ${htmlNodeToMarkdown(li).trim()}`)
-                .join("\n");
-            return `${items}\n\n`;
-        }
-        case "ol": {
-            const items = Array.from(element.children)
-                .filter((child) => child.tagName.toLowerCase() === "li")
-                .map((li, index) => `${index + 1}. ${htmlNodeToMarkdown(li).trim()}`)
-                .join("\n");
-            return `${items}\n\n`;
-        }
-        case "li":
-            return `${children.trim()}`;
-        case "blockquote": {
-            const quoted = children
-                .trim()
-                .split("\n")
-                .map((line) => `> ${line}`)
-                .join("\n");
-            return `${quoted}\n\n`;
-        }
-        case "hr":
-            return "\n---\n\n";
-        case "div":
-        case "section":
-        case "article":
-            return `${children}\n`;
-        default:
-            return children;
-    }
-}
-
-function htmlToMarkdown(html: string) {
-    const doc = new DOMParser().parseFromString(html, "text/html");
-    const content = Array.from(doc.body.childNodes).map((node) => htmlNodeToMarkdown(node)).join("");
-    return content
-        .replace(/\n{3,}/g, "\n\n")
-        .replace(/[ \t]+\n/g, "\n")
-        .trim();
-}
-
 function handleStyledPaste(
     event: ClipboardEvent<HTMLTextAreaElement>,
     value: string,
     onChange: (nextValue: string) => void,
 ) {
     const html = event.clipboardData.getData("text/html");
+    const plainText = event.clipboardData.getData("text/plain");
+
     if (!html) return;
 
     event.preventDefault();
-    const fallbackPlain = event.clipboardData.getData("text/plain");
-    const markdown = htmlToMarkdown(html) || fallbackPlain;
 
-    if (!markdown) return;
+    try {
+        // Native DOM parser is instantaneous and prevents Regex Denial of Service (ReDoS) crashes
+        const doc = new DOMParser().parseFromString(html, "text/html");
 
-    const target = event.currentTarget;
-    const start = target.selectionStart ?? value.length;
-    const end = target.selectionEnd ?? value.length;
-    const nextValue = `${value.slice(0, start)}${markdown}${value.slice(end)}`;
-    onChange(nextValue);
+        // Blast away hidden/heavy nodes before they ever reach the Markdown converter
+        const badNodes = doc.querySelectorAll("style, script, meta, link, noscript, title, head");
+        badNodes.forEach(node => node.remove());
 
-    requestAnimationFrame(() => {
-        const cursor = start + markdown.length;
-        target.selectionStart = cursor;
-        target.selectionEnd = cursor;
-    });
+        const turndownService = new TurndownService({
+            headingStyle: "atx",
+            codeBlockStyle: "fenced",
+        });
+
+        // Remove tracking attributes
+        turndownService.keep(['div', 'span']); // keep them to strip tracking safely
+
+        let markdown = turndownService.turndown(doc.body.innerHTML);
+
+        // Fallback on error or completely empty markdown
+        if (!markdown || markdown.trim() === "") {
+            markdown = plainText;
+        }
+
+        if (!markdown) return;
+
+        const target = event.currentTarget;
+        const start = target.selectionStart ?? value.length;
+        const end = target.selectionEnd ?? value.length;
+        const nextValue = `${value.slice(0, start)}${markdown}${value.slice(end)}`;
+        onChange(nextValue);
+
+        requestAnimationFrame(() => {
+            const cursor = start + markdown.length;
+            target.selectionStart = cursor;
+            target.selectionEnd = cursor;
+        });
+    } catch (e) {
+        console.error("Paste parse error fallback", e);
+        // Fallback to exactly what the clipboard gives if conversion totally blows up
+        if (!plainText) return;
+        const target = event.currentTarget;
+        const start = target.selectionStart ?? value.length;
+        const end = target.selectionEnd ?? value.length;
+        onChange(`${value.slice(0, start)}${plainText}${value.slice(end)}`);
+    }
 }
 
 const schema = z.object({

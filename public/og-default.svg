@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Kowsik Y Portfolio</title>
+  <desc id="desc">AI, ML, and full-stack developer portfolio preview image.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="55%" stop-color="#1e1b4b" />
+      <stop offset="100%" stop-color="#0b1120" />
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#22d3ee" />
+      <stop offset="100%" stop-color="#8b5cf6" />
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)" />
+  <circle cx="1030" cy="120" r="190" fill="#8b5cf6" opacity="0.16" />
+  <circle cx="180" cy="560" r="220" fill="#22d3ee" opacity="0.14" />
+  <rect x="80" y="90" width="1040" height="450" rx="34" fill="#ffffff" opacity="0.04" />
+
+  <text x="120" y="245" fill="#e2e8f0" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="30" letter-spacing="8">
+    KOWSIK Y
+  </text>
+  <text x="120" y="338" fill="#f8fafc" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="72" font-weight="700">
+    Portfolio
+  </text>
+  <text x="120" y="392" fill="#cbd5e1" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="34">
+    AI, ML and Full-Stack Projects
+  </text>
+
+  <rect x="120" y="444" width="350" height="8" rx="4" fill="url(#accent)" />
+  <text x="120" y="500" fill="#94a3b8" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="26">
+    https://kowsik.me
+  </text>
+</svg>

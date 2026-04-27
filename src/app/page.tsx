@@ -60,9 +60,10 @@ export async function generateMetadata(): Promise<Metadata> {
       description,
       url: siteUrl,
       type: "website",
+      siteName: displayName,
       images: [
         {
-          url: "/og-home.png",
+          url: `${siteUrl}/og-default.svg`,
           width: 1200,
           height: 630,
           alt: `${displayName} Portfolio`,
@@ -73,7 +74,7 @@ export async function generateMetadata(): Promise<Metadata> {
       card: "summary_large_image",
       title: `${displayName} - ${displayTitle}`,
       description,
-      images: ["/og-home.png"],
+      images: [`${siteUrl}/og-default.svg`],
     },
   };
 }

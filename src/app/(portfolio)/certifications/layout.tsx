@@ -7,16 +7,18 @@ export const metadata: Metadata = {
     description:
         "Professional certifications and credentials earned by Kowsik Y in AI, ML, and software development.",
     alternates: {
-        canonical: "/certifications",
+        canonical: `${siteUrl}/certifications`,
     },
     openGraph: {
         title: "Certifications — Kowsik Y",
         description:
             "Professional certifications and credentials in AI, ML, and software development.",
-        url: "/certifications",
+        url: `${siteUrl}/certifications`,
+        type: "website",
+        siteName: "Kowsik Y",
         images: [
             {
-                url: "/og-certifications.png",
+                url: `${siteUrl}/og-default.svg`,
                 width: 1200,
                 height: 630,
                 alt: "Certifications by Kowsik Y",
@@ -24,9 +26,10 @@ export const metadata: Metadata = {
         ],
     },
     twitter: {
+        card: "summary_large_image",
         title: "Certifications — Kowsik Y",
         description: "Professional certifications and credentials by Kowsik Y.",
-        images: ["/og-certifications.png"],
+        images: [`${siteUrl}/og-default.svg`],
     },
 };
 

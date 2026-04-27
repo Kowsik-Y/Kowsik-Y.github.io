@@ -82,12 +82,21 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: displayName,
       type: "website",
       locale: "en_US",
+      images: [
+        {
+          url: `${siteUrl}/og-default.svg`,
+          width: 1200,
+          height: 630,
+          alt: `${displayName} Portfolio`,
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title: `${displayName} — ${displayTitle}`,
       description,
       creator: "@kowsiky",
+      images: [`${siteUrl}/og-default.svg`],
     },
   };
 }

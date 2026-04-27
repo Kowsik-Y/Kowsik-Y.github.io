@@ -95,43 +95,13 @@ const getRelatedBlogs = cache(async (currentBlogId: string, tags: string[]): Pro
         .lean();
 
     return (related as Array<RelatedBlog & { _id: { toString(): string } }>).map((item) => ({
-        _id: (item._id as any).toString(),
+        _id: item._id.toString(),
         slug: item.slug,
         title: item.title,
         excerpt: item.excerpt,
         tags: item.tags ?? [],
     }));
 });
-
-
-function createArticleJsonLd(blog: BlogPageData, publicSlug: string) {
-    const canonicalUrl = `${siteUrl}/blogs/${publicSlug}`;
-    const image = blog.coverImage ? [blobDisplayUrl(blog.coverImage)] : [];
-    
-    return {
-        "@context": "https://schema.org",
-        "@type": "TechArticle",
-        headline: blog.title,
-        description: blog.excerpt,
-        image: image,
-        datePublished: blog.createdAt ? new Date(blog.createdAt).toISOString() : new Date().toISOString(),
-        dateModified: blog.updatedAt ? new Date(blog.updatedAt).toISOString() : new Date().toISOString(),
-        author: [{
-            "@type": "Person",
-            name: "Kowsik Y",
-            url: siteUrl
-        }],
-        publisher: {
-            "@type": "Person",
-            name: "Kowsik Y"
-        },
-        mainEntityOfPage: {
-            "@type": "WebPage",
-            "@id": canonicalUrl
-        },
-        keywords: blog.tags?.join(", ") ?? ""
-    };
-}
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
     const { id: slugOrId } = await params;
@@ -153,12 +123,15 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
             description: blog.excerpt,
             url: `${siteUrl}/blogs/${publicSlug}`,
             type: "article",
-            images: blog.coverImage ? [{ url: blog.coverImage, alt: blog.title }] : undefined,
+            images: blog.coverImage
+                ? [{ url: blobDisplayUrl(blog.coverImage), alt: blog.title }]
+                : [{ url: `${siteUrl}/og-default.svg`, alt: "Kowsik Y Blog" }],
         },
         twitter: {
             title: `${blog.title} — Kowsik Y`,
             description: blog.excerpt,
             card: "summary_large_image",
+            images: blog.coverImage ? [blobDisplayUrl(blog.coverImage)] : [`${siteUrl}/og-default.svg`],
         },
     };
 }
@@ -206,7 +179,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ id:
         description: blog.excerpt,
         datePublished: blog.createdAt ? new Date(blog.createdAt).toISOString() : undefined,
         dateModified: blog.updatedAt ? new Date(blog.updatedAt).toISOString() : undefined,
-        image: blog.coverImage ? [blog.coverImage] : undefined,
+        image: blog.coverImage ? [blobDisplayUrl(blog.coverImage)] : undefined,
         author: {
             "@type": "Person",
             name: "Kowsik Y",

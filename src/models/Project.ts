@@ -1,6 +1,7 @@
 import mongoose, { Schema, Document, models } from "mongoose";
 
 export interface ProjectDocument extends Document {
+  slug?: string;
   title: string;
   description: string;
   longDescription?: string;
@@ -16,6 +17,7 @@ export interface ProjectDocument extends Document {
 
 const ProjectSchema = new Schema<ProjectDocument>(
   {
+    slug: { type: String, index: true, unique: true, sparse: true },
     title: { type: String, required: true },
     description: { type: String, required: true },
     longDescription: String,

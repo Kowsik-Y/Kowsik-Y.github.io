@@ -6,15 +6,17 @@ export const metadata: Metadata = {
     title: "Blogs",
     description: "Read blog posts by Kowsik Y on AI, machine learning, software engineering, and portfolio-building insights.",
     alternates: {
-        canonical: "/blogs",
+        canonical: `${siteUrl}/blogs`,
     },
     openGraph: {
         title: "Blogs — Kowsik Y",
         description: "Insights and articles on AI, ML, and full-stack development.",
-        url: "/blogs",
+        url: `${siteUrl}/blogs`,
+        type: "website",
+        siteName: "Kowsik Y",
         images: [
             {
-                url: "/og-blogs.png",
+                url: `${siteUrl}/og-default.svg`,
                 width: 1200,
                 height: 630,
                 alt: "Blogs by Kowsik Y",
@@ -22,9 +24,10 @@ export const metadata: Metadata = {
         ],
     },
     twitter: {
+        card: "summary_large_image",
         title: "Blogs — Kowsik Y",
         description: "Insights and articles on AI, ML, and full-stack development.",
-        images: ["/og-blogs.png"],
+        images: [`${siteUrl}/og-default.svg`],
     },
 };
 

@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import dbConnect from "@/lib/db";
 import Project from "@/models/Project";
 import Blog from "@/models/Blog";
+import { buildProjectSlug } from "@/lib/project-slug";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://kowsik.me";
 
@@ -55,7 +56,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     await dbConnect();
     const [projects, blogs] = await Promise.all([
       Project.find({})
-        .select("_id updatedAt createdAt")
+        .select("_id title slug updatedAt createdAt")
         .lean(),
       Blog.find({ published: true })
         .select("_id slug updatedAt createdAt")
@@ -63,9 +64,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ]);
 
     const projectRoutes: MetadataRoute.Sitemap = projects.map((p) => {
-      const doc = p as { _id: unknown; updatedAt?: Date; createdAt?: Date };
+      const doc = p as {
+        _id: { toString(): string };
+        title?: string;
+        slug?: string;
+        updatedAt?: Date;
+        createdAt?: Date;
+      };
+      const projectId = doc._id.toString();
+      const publicSlug = doc.slug || buildProjectSlug(doc.title, projectId);
+
+      if (!doc.slug) {
+        void Project.findByIdAndUpdate(projectId, { slug: publicSlug });
+      }
+
       return {
-        url: `${siteUrl}/projects/${doc._id}`,
+        url: `${siteUrl}/projects/${publicSlug}`,
         lastModified: doc.updatedAt ?? doc.createdAt ?? new Date(),
         changeFrequency: "monthly" as const,
         priority: 0.8,

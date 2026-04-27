@@ -18,6 +18,7 @@ import {
     DialogTitle,
 } from "@/components/ui/dialog";
 import type { IProject } from "@/types";
+import { projectPath } from "@/lib/project-slug";
 
 type ProjectCardProps = {
     project: IProject;
@@ -27,6 +28,11 @@ type ProjectCardProps = {
 
 function ProjectCard({ project, index, onPreview }: ProjectCardProps) {
     const router = useRouter();
+    const projectHref = projectPath({
+        _id: project._id,
+        title: project.title,
+        slug: project.slug,
+    });
 
     const hasGallery = project.screenshots.length > 0 || Boolean(project.imageUrl);
 
@@ -35,8 +41,8 @@ function ProjectCard({ project, index, onPreview }: ProjectCardProps) {
             <div
                 role="link"
                 tabIndex={0}
-                onClick={() => router.push(`/projects/${project._id}`)}
-                onKeyDown={(e) => e.key === "Enter" && router.push(`/projects/${project._id}`)}
+                onClick={() => router.push(projectHref)}
+                onKeyDown={(e) => e.key === "Enter" && router.push(projectHref)}
                 className="block h-full group cursor-pointer"
             >
                 <div className={`glass-card h-full flex flex-col p-6 transition-transform duration-200 ${project.featured ? "gradient-border" : ""}`}>
@@ -200,7 +206,7 @@ export default function ProjectsPageClient({ initialProjects }: ProjectsPageClie
 
                 <FadeIn delay={0.03}>
                     <div className="flex flex-col sm:flex-row items-center gap-4 mb-10 w-full z-10">
-                        <FilterDropdown 
+                        <FilterDropdown
                             options={techOptions}
                             activeOption={activeTech}
                             onSelect={setActiveTech}
