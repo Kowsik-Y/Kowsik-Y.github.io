@@ -50,7 +50,7 @@ export async function generateMetadata(): Promise<Metadata> {
     `Portfolio of ${displayName}. ${displayTitle}, full-stack developer, and AI agent builder. Explore projects, skills, and achievements.`;
 
   return {
-    title: `${displayName} - ${displayTitle} | Portfolio`,
+    title: `${displayName} | AI, ML & Full-Stack Developer Portfolio`,
     description,
     alternates: {
       canonical: siteUrl,
@@ -263,6 +263,40 @@ export default async function HomePage() {
             </FadeIn>
           </div>
         </section>
+
+        {/* ── SEO Content Section ── */}
+        <section className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20 border-t border-border/50">
+          <FadeIn>
+            <div className="prose prose-invert max-w-none text-muted-foreground">
+              <h2 className="text-3xl font-bold text-foreground mb-6">Expertise in AI, Machine Learning & Full-Stack Development</h2>
+              <p className="mb-4">
+                As a passionate technology enthusiast, my journey bridges the gap between complex <strong>Artificial Intelligence (AI)</strong> models and intuitive <strong>Full-Stack web applications</strong>. 
+                Whether it&apos;s building scalable architectures, integrating cutting-edge machine learning capabilities into software, or crafting sleek user interfaces, my portfolio reflects a dedication to modern engineering practices.
+              </p>
+              
+              <h3 className="text-2xl font-bold text-foreground mt-8 mb-4">Core Focus Areas</h3>
+              <div className="grid sm:grid-cols-3 gap-6 my-8">
+                <Link href="/ai-ml-projects" className="glass-card p-6 rounded-xl hover:ring-1 ring-violet-500/50 transition-all group block">
+                  <h4 className="text-foreground font-bold mb-2 group-hover:text-violet-400 transition-colors">AI & ML Solutions</h4>
+                  <p className="text-sm">Explore deep learning, predictive models, and data-driven architectures.</p>
+                </Link>
+                <Link href="/full-stack-projects" className="glass-card p-6 rounded-xl hover:ring-1 ring-cyan-500/50 transition-all group block">
+                  <h4 className="text-foreground font-bold mb-2 group-hover:text-cyan-400 transition-colors">Full-Stack Development</h4>
+                  <p className="text-sm">Discover end-to-end applications built with scalable frontend and backend technologies.</p>
+                </Link>
+                <Link href="/genai-projects" className="glass-card p-6 rounded-xl hover:ring-1 ring-fuchsia-500/50 transition-all group block">
+                  <h4 className="text-foreground font-bold mb-2 group-hover:text-fuchsia-400 transition-colors">Generative AI</h4>
+                  <p className="text-sm">See advanced agent builders, LLM integrations, and custom AI chatbots.</p>
+                </Link>
+              </div>
+
+              <p className="mt-6 mb-4">
+                I continuously explore the evolving landscape of <strong>Generative AI</strong> and state-of-the-art backend systems. By combining frameworks like Next.js and React with powerful Python-based ML libraries such as TensorFlow, PyTorch, and LangChain, I create solutions that are both intelligent and user-friendly. Check out my <Link href="/blogs" className="text-violet-400 hover:underline">technical blogs</Link> to learn more about my development processes and insights.
+              </p>
+            </div>
+          </FadeIn>
+        </section>
+
         <ChatWidget />
       </main>
     </>

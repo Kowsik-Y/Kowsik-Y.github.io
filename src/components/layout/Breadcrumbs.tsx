@@ -12,8 +12,23 @@ type BreadcrumbsProps = {
 export default function Breadcrumbs({ items, className }: BreadcrumbsProps) {
     if (!items.length) return null;
 
+    const breadcrumbJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: items.map((item, index) => ({
+            "@type": "ListItem",
+            position: index + 1,
+            name: item.label,
+            item: `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://kowsik.me"}${item.href}`,
+        })),
+    };
+
     return (
         <nav aria-label="Breadcrumb" className={className}>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+            />
             <ol className="flex flex-wrap items-center gap-2 text-sm">
                 {items.map((item, index) => {
                     const isLast = item.current || index === items.length - 1;

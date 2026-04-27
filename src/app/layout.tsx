@@ -25,6 +25,7 @@ type SiteProfile = {
   bio?: string;
   githubUrl?: string;
   linkedinUrl?: string;
+  email?: string;
 };
 
 const getSiteProfile = cache(async (): Promise<SiteProfile | null> => {
@@ -90,6 +91,10 @@ export async function generateMetadata(): Promise<Metadata> {
           alt: `${displayName} Portfolio`,
         },
       ],
+      emails: profile?.email ? [profile.email] : undefined,
+    },
+    other: {
+      "og:logo": `${siteUrl}/og-default.svg`
     },
     twitter: {
       card: "summary_large_image",
