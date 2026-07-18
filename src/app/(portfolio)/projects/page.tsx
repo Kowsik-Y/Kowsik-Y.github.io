@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import dbConnect from "@/lib/db";
 import Project from "@/models/Project";
 import ProjectsPageClient from "@/components/portfolio/ProjectsPageClient";
@@ -23,6 +24,11 @@ type ProjectLean = {
     featured?: boolean;
     order?: number;
     createdAt?: Date;
+};
+
+export const metadata: Metadata = {
+    title: "Projects",
+    description: "Explore my latest projects, applications, and experiments.",
 };
 
 export default async function ProjectsPage() {

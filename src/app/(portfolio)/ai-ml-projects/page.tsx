@@ -4,6 +4,8 @@ import ProjectsPageClient from "@/components/portfolio/ProjectsPageClient";
 import type { IProject } from "@/types";
 import { buildProjectSlug } from "@/lib/project-slug";
 import type { Metadata } from "next";
+import TensorFlowCanvasClient from "@/components/three/TensorFlowCanvasClient";
+import ScrollSection from "@/components/ui/ScrollSection";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://kowsik.me";
 
@@ -79,5 +81,18 @@ export default async function AiMlProjectsPage() {
         createdAt: doc.createdAt?.toISOString(),
     }));
 
-    return <ProjectsPageClient initialProjects={initialProjects} />;
+    return (
+        <>
+            {/* TensorFlow Neural Network Background */}
+            <ScrollSection id="tensorflow-bg" start="top top" end="bottom top" scrub={1} pin={true} pinSpacing={false}>
+                <TensorFlowCanvasClient scrollProgress={1} />
+            </ScrollSection>
+
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-28">
+                <ScrollSection id="ai-projects" start="top 80%" end="bottom 20%" scrub={0.5}>
+                    <ProjectsPageClient initialProjects={initialProjects} />
+                </ScrollSection>
+            </div>
+        </>
+    );
 }

@@ -8,11 +8,10 @@ import ReactMarkdown from "react-markdown";
 import remarkBreaks from "remark-breaks";
 import remarkGfm from "remark-gfm";
 import { ArrowLeft } from "lucide-react";
-import Breadcrumbs from "@/components/layout/Breadcrumbs";
-import { detailBreadcrumbs } from "@/lib/breadcrumbs";
 import { permanentRedirect } from "next/navigation";
 import { blobDisplayUrl } from "@/lib/blob-url";
 import { getReadingTimeMinutes, getWordCount } from "@/lib/content-metrics";
+import BentoCard from "@/components/ui/BentoCard";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://kowsik.me";
 
@@ -144,7 +143,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ id:
         return (
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-28 text-center">
                 <p className="text-muted-foreground mb-6">Blog post not found.</p>
-                <Link href="/blogs" className="text-primary hover:text-primary inline-flex items-center gap-2">
+                <Link href="/blogs" className="text-foreground font-bold hover:opacity-70 inline-flex items-center gap-2">
                     <ArrowLeft size={16} /> Back to Blogs
                 </Link>
             </div>
@@ -189,23 +188,20 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ id:
     };
 
     return (
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-16">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20 dot-pattern">
             <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
             <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }} />
 
-            <Breadcrumbs
-                className="mb-6"
-                items={detailBreadcrumbs("Blogs", "/blogs", blog.title || "Blog", `/blogs/${publicSlug}`)}
-            />
 
-            <Link href="/blogs" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors mb-8">
+            <Link href="/blogs" className="inline-flex items-center gap-2 text-sm font-bold text-muted-foreground hover:text-foreground transition-colors mb-8">
                 <ArrowLeft size={16} /> Back to Blogs
             </Link>
 
-            <article className="glass-card p-6 sm:p-8">
-                <h1 className="text-3xl sm:text-4xl font-bold text-foreground mb-4 leading-tight">{blog.title}</h1>
-                <p className="text-muted-foreground mb-3">{blog.excerpt}</p>
-                <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground mb-6">
+            <BentoCard className="p-8 sm:p-12 mb-12">
+                <h1 className="text-3xl sm:text-5xl font-bold text-foreground mb-6 leading-tight">{blog.title}</h1>
+                <p className="text-xl text-muted-foreground mb-6 leading-relaxed">{blog.excerpt}</p>
+                
+                <div className="flex flex-wrap items-center gap-3 text-sm font-medium text-muted-foreground mb-8">
                     <span>{readingTime} min read</span>
                     <span className="text-border">•</span>
                     <span>{wordCount.toLocaleString()} words</span>
@@ -218,9 +214,9 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ id:
                 </div>
 
                 {blog.tags && blog.tags.length > 0 && (
-                    <div className="flex flex-wrap gap-2 mb-6">
+                    <div className="flex flex-wrap gap-2 mb-8">
                         {blog.tags.map((tag) => (
-                            <span key={tag} className="px-2.5 py-1 rounded-full text-xs font-medium border border-violet-500/30 text-violet-700 dark:text-primary bg-violet-500/10">
+                            <span key={tag} className="px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wide border border-border bg-background">
                                 {tag}
                             </span>
                         ))}
@@ -228,24 +224,24 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ id:
                 )}
 
                 {blog.coverImage && (
-                    <div className="relative w-full aspect-16/8 rounded-xl overflow-hidden border border-border mb-8">
+                    <div className="relative w-full aspect-video rounded-[calc(var(--radius-3xl)-1rem)] overflow-hidden border border-border mb-12 bg-secondary">
                         <Image src={blobDisplayUrl(blog.coverImage)} alt={blog.title || "Blog cover"} fill className="object-cover" unoptimized />
                     </div>
                 )}
 
-                <div className="prose max-w-none dark:prose-invert prose-p:text-muted-foreground prose-headings:text-foreground prose-a:text-violet-500 dark:prose-a:text-primary">
+                <div className="prose max-w-none dark:prose-invert prose-p:text-muted-foreground prose-headings:text-foreground prose-a:text-foreground prose-a:font-bold prose-strong:text-foreground">
                     <ReactMarkdown
                         remarkPlugins={[remarkGfm, remarkBreaks]}
                         urlTransform={normalizeLinkUrl}
                         components={{
-                            h1: ({ children }) => <h1 className="text-3xl font-bold text-foreground mt-8 mb-4">{children}</h1>,
-                            h2: ({ children }) => <h2 className="text-2xl font-semibold text-foreground mt-7 mb-3">{children}</h2>,
-                            h3: ({ children }) => <h3 className="text-xl font-semibold text-foreground mt-6 mb-3">{children}</h3>,
-                            h4: ({ children }) => <h4 className="text-lg font-semibold text-foreground mt-5 mb-2">{children}</h4>,
-                            h5: ({ children }) => <h5 className="text-base font-semibold text-foreground mt-4 mb-2">{children}</h5>,
-                            h6: ({ children }) => <h6 className="text-sm font-semibold text-muted-foreground mt-3 mb-2">{children}</h6>,
-                            p: ({ children }) => <p className="text-muted-foreground my-4 leading-relaxed">{children}</p>,
-                            hr: () => <hr className="border-t border-border my-6" />,
+                            h1: ({ children }) => <h1 className="text-3xl font-bold text-foreground mt-12 mb-6">{children}</h1>,
+                            h2: ({ children }) => <h2 className="text-2xl font-bold text-foreground mt-10 mb-5">{children}</h2>,
+                            h3: ({ children }) => <h3 className="text-xl font-bold text-foreground mt-8 mb-4">{children}</h3>,
+                            h4: ({ children }) => <h4 className="text-lg font-bold text-foreground mt-6 mb-3">{children}</h4>,
+                            h5: ({ children }) => <h5 className="text-base font-bold text-foreground mt-5 mb-3">{children}</h5>,
+                            h6: ({ children }) => <h6 className="text-sm font-bold text-muted-foreground uppercase tracking-wider mt-5 mb-3">{children}</h6>,
+                            p: ({ children }) => <p className="text-muted-foreground my-5 leading-loose text-lg">{children}</p>,
+                            hr: () => <hr className="border-t border-border my-8" />,
                             a: ({ href, children }) => {
                                 const safeHref = normalizeLinkUrl(href || "");
                                 const isExternal = /^https?:\/\//.test(safeHref);
@@ -254,7 +250,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ id:
                                         href={safeHref}
                                         target={isExternal ? "_blank" : undefined}
                                         rel={isExternal ? "noopener noreferrer" : undefined}
-                                        className="text-violet-500 dark:text-primary hover:text-primary dark:hover:text-primary underline underline-offset-2 break-all"
+                                        className="text-foreground hover:opacity-70 underline underline-offset-4 decoration-2 break-all transition-opacity"
                                     >
                                         {children}
                                     </a>
@@ -268,58 +264,60 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ id:
                                     <img
                                         src={normalizeLinkUrl(src)}
                                         alt={alt || "Blog image"}
-                                        className="block mx-auto my-6 max-w-full h-auto rounded-lg border border-border/70"
+                                        className="block mx-auto my-8 max-w-full h-auto rounded-2xl border border-border"
                                         loading="lazy"
                                     />
                                 );
                             },
-                            ul: ({ children }) => <ul className="list-disc list-inside my-4 space-y-2 text-muted-foreground ml-4">{children}</ul>,
-                            ol: ({ children }) => <ol className="list-decimal list-inside my-4 space-y-2 text-muted-foreground ml-4">{children}</ol>,
-                            li: ({ children }) => <li className="text-muted-foreground leading-relaxed">{children}</li>,
+                            ul: ({ children }) => <ul className="list-disc list-inside my-6 space-y-3 text-muted-foreground text-lg ml-2">{children}</ul>,
+                            ol: ({ children }) => <ol className="list-decimal list-inside my-6 space-y-3 text-muted-foreground text-lg ml-2">{children}</ol>,
+                            li: ({ children }) => <li className="text-muted-foreground leading-loose">{children}</li>,
                             blockquote: ({ children }) => (
-                                <blockquote className="border-l-4 border-violet-500 pl-4 my-4 italic text-muted-foreground bg-violet-500/10 py-2 pr-4 rounded">
+                                <blockquote className="border-l-4 border-foreground pl-6 my-8 italic text-foreground/80 bg-secondary py-4 pr-6 rounded-r-2xl text-lg font-medium">
                                     {children}
                                 </blockquote>
                             ),
                             code: ({ className, children }) => {
                                 const isCodeBlock = className?.includes('language-');
                                 if (!isCodeBlock) {
-                                    return <code className="bg-card dark:bg-card text-primary px-2 py-1 rounded text-sm font-mono">{children}</code>;
+                                    return <code className="bg-secondary text-foreground px-2 py-1 rounded-md text-sm font-mono border border-border">{children}</code>;
                                 }
-                                return <code className="bg-card text-primary px-1">{children}</code>;
+                                return <code className="bg-transparent text-foreground px-1 font-mono text-sm">{children}</code>;
                             },
                             pre: ({ children }) => (
-                                <pre className="bg-card border border-border rounded-lg p-4 my-4 overflow-x-auto">
+                                <pre className="bg-secondary border border-border rounded-2xl p-6 my-8 overflow-x-auto text-sm">
                                     {children}
                                 </pre>
                             ),
                             table: ({ children }) => (
-                                <table className="border-collapse my-4 w-full border border-border">
-                                    {children}
-                                </table>
+                                <div className="overflow-x-auto my-8 rounded-2xl border border-border">
+                                    <table className="border-collapse w-full">
+                                        {children}
+                                    </table>
+                                </div>
                             ),
                             thead: ({ children }) => (
-                                <thead className="ui-surface border-b border-border">
+                                <thead className="bg-secondary border-b border-border">
                                     {children}
                                 </thead>
                             ),
                             tbody: ({ children }) => (
-                                <tbody>
+                                <tbody className="divide-y divide-border">
                                     {children}
                                 </tbody>
                             ),
                             tr: ({ children }) => (
-                                <tr className="border-b border-border">
+                                <tr>
                                     {children}
                                 </tr>
                             ),
                             th: ({ children }) => (
-                                <th className="text-foreground font-semibold text-left px-4 py-2 text-sm">
+                                <th className="text-foreground font-bold text-left px-6 py-4 text-sm uppercase tracking-wider">
                                     {children}
                                 </th>
                             ),
                             td: ({ children }) => (
-                                <td className="text-muted-foreground px-4 py-2 text-sm">
+                                <td className="text-muted-foreground px-6 py-4 text-base leading-relaxed">
                                     {children}
                                 </td>
                             ),
@@ -330,23 +328,25 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ id:
                         {normalizedContent}
                     </ReactMarkdown>
                 </div>
-            </article>
+            </BentoCard>
 
-            <section className="mt-10">
-                <h2 className="text-xl font-semibold mb-4">Related Posts</h2>
+            <section className="mt-16">
+                <h2 className="text-sm font-bold text-muted-foreground uppercase tracking-widest mb-6 px-2">Related Posts</h2>
                 {relatedBlogs.length > 0 ? (
-                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
                         {relatedBlogs.map((related) => (
-                            <Link key={related._id} href={`/blogs/${related.slug || related._id}`} className="glass-card p-4 block">
-                                <h3 className="font-semibold text-foreground mb-2 line-clamp-2">{related.title}</h3>
-                                <p className="text-sm text-muted-foreground line-clamp-2">{related.excerpt}</p>
+                            <Link key={related._id} href={`/blogs/${related.slug || related._id}`} className="block h-full outline-none">
+                                <BentoCard className="p-6 h-full hover:bg-secondary transition-colors cursor-pointer group">
+                                    <h3 className="font-bold text-lg text-foreground mb-3 line-clamp-2 group-hover:opacity-80 transition-opacity">{related.title}</h3>
+                                    <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2">{related.excerpt}</p>
+                                </BentoCard>
                             </Link>
                         ))}
                     </div>
                 ) : (
-                    <div className="glass-card p-4 text-sm text-muted-foreground">
+                    <BentoCard className="p-8 text-center text-sm font-medium text-muted-foreground">
                         No related posts yet. Check back for more articles.
-                    </div>
+                    </BentoCard>
                 )}
             </section>
         </div>

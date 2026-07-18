@@ -45,7 +45,7 @@ export async function GET(req: NextRequest) {
                 )
                     .sort({ order: 1, createdAt: -1 })
                     .lean(),
-                Blog.find(includeAdminMeta ? {} : { published: true })
+                Blog.find(includeAdminMeta ? {} : { published: true }, { content: 0 })
                     .sort({ order: 1, createdAt: -1 })
                     .lean(),
                 Skill.find({}).sort({ category: 1, name: 1 }).lean(),

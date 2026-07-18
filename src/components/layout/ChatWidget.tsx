@@ -13,19 +13,19 @@ interface Message {
 function MessageBubble({ msg }: { msg: Message }) {
     const isUser = msg.role === "user";
     return (
-        <div className={`flex gap-2.5 ${isUser ? "flex-row-reverse" : "flex-row"}`}>
+        <div className={`flex gap-3 ${isUser ? "flex-row-reverse" : "flex-row"}`}>
             <div
-                className={`shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-xs ${isUser
-                    ? "bg-violet-600 text-white"
-                    : "ui-surface border border-violet-500/30 text-primary"
+                className={`shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-xs border ${isUser
+                    ? "bg-foreground text-background border-foreground"
+                    : "bg-secondary text-foreground border-border"
                     }`}
             >
                 {isUser ? <User size={14} /> : <Bot size={14} />}
             </div>
             <div
-                className={`max-w-[80%] px-3 py-2 rounded-2xl text-sm leading-relaxed text-wrap ${isUser
-                    ? "bg-violet-600 text-white rounded-tr-sm"
-                    : "ui-surface border border-border text-foreground/90 rounded-tl-sm"
+                className={`max-w-[80%] px-4 py-3 rounded-2xl text-sm leading-relaxed text-wrap ${isUser
+                    ? "bg-foreground text-background rounded-tr-sm"
+                    : "bg-secondary text-foreground rounded-tl-sm border border-border"
                     }`}
             >
                 {isUser ? (
@@ -34,17 +34,17 @@ function MessageBubble({ msg }: { msg: Message }) {
                     <ReactMarkdown
                         // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         components={{
-                            p: ({ children }: { children: ReactNode }) => <p className="mb-1 last:mb-0">{children}</p>,
-                            strong: ({ children }: { children: ReactNode }) => <strong className="font-semibold text-foreground">{children}</strong>,
-                            em: ({ children }: { children: ReactNode }) => <em className="italic text-foreground/80">{children}</em>,
-                            ul: ({ children }: { children: ReactNode }) => <ul className="list-disc list-inside space-y-0.5 my-1">{children}</ul>,
-                            ol: ({ children }: { children: ReactNode }) => <ol className="list-decimal list-inside space-y-0.5 my-1">{children}</ol>,
-                            li: ({ children }: { children: ReactNode }) => <li className="text-foreground/90">{children}</li>,
-                            code: ({ children }: { children: ReactNode }) => <code className="ui-surface-strong text-primary px-1 py-0.5 rounded text-xs font-mono">{children}</code>,
-                            a: ({ children, ...props }: { children: ReactNode;[k: string]: unknown }) => <a {...props as React.AnchorHTMLAttributes<HTMLAnchorElement>} target="_blank" rel="noopener noreferrer" className="text-primary underline underline-offset-2 hover:text-primary">{children}</a>,
-                            h1: ({ children }: { children: ReactNode }) => <p className="font-bold text-foreground mt-1">{children}</p>,
-                            h2: ({ children }: { children: ReactNode }) => <p className="font-bold text-foreground mt-1">{children}</p>,
-                            h3: ({ children }: { children: ReactNode }) => <p className="font-semibold text-foreground mt-0.5">{children}</p>,
+                            p: ({ children }: { children: ReactNode }) => <p className="mb-2 last:mb-0">{children}</p>,
+                            strong: ({ children }: { children: ReactNode }) => <strong className="font-bold">{children}</strong>,
+                            em: ({ children }: { children: ReactNode }) => <em className="italic opacity-90">{children}</em>,
+                            ul: ({ children }: { children: ReactNode }) => <ul className="list-disc list-inside space-y-1 my-2">{children}</ul>,
+                            ol: ({ children }: { children: ReactNode }) => <ol className="list-decimal list-inside space-y-1 my-2">{children}</ol>,
+                            li: ({ children }: { children: ReactNode }) => <li className="opacity-90">{children}</li>,
+                            code: ({ children }: { children: ReactNode }) => <code className="bg-background/50 px-1.5 py-0.5 rounded text-xs font-mono border border-border/50">{children}</code>,
+                            a: ({ children, ...props }: { children: ReactNode;[k: string]: unknown }) => <a {...props as React.AnchorHTMLAttributes<HTMLAnchorElement>} target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:opacity-70 font-semibold">{children}</a>,
+                            h1: ({ children }: { children: ReactNode }) => <p className="font-bold mt-2 mb-1 text-base">{children}</p>,
+                            h2: ({ children }: { children: ReactNode }) => <p className="font-bold mt-2 mb-1 text-base">{children}</p>,
+                            h3: ({ children }: { children: ReactNode }) => <p className="font-semibold mt-1 mb-1">{children}</p>,
                             // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         } as any}
                     >
@@ -115,43 +115,43 @@ export default function ChatWidget() {
         <>
             {/* Chat panel */}
             <div
-                className={`fixed bottom-20 right-4 sm:right-6 z-50 w-90 max-w-[calc(100vw-2rem)] flex flex-col rounded-2xl border border-border bg-card backdrop-blur-xl shadow-2xl shadow-violet-900/30 transition-all duration-300 origin-bottom-right ${open ? "scale-100 opacity-100 pointer-events-auto" : "scale-90 opacity-0 pointer-events-none"
+                className={`fixed bottom-24 right-4 sm:right-6 z-50 w-96 max-w-[calc(100vw-2rem)] flex flex-col bg-card border border-border shadow-2xl rounded-[var(--radius-3xl)] overflow-hidden transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] origin-bottom-right ${open ? "scale-100 opacity-100 pointer-events-auto translate-y-0" : "scale-95 opacity-0 pointer-events-none translate-y-4"
                     }`}
             >
                 {/* Header */}
-                <div className="flex items-center justify-between px-4 py-3 border-b border-border">
-                    <div className="flex items-center gap-2.5">
-                        <div className="w-8 h-8 rounded-full bg-violet-600 flex items-center justify-center">
-                            <Bot size={16} className="text-white" />
+                <div className="flex items-center justify-between px-6 py-4 bg-secondary border-b border-border">
+                    <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-foreground flex items-center justify-center border border-border">
+                            <Bot size={18} className="text-background" />
                         </div>
                         <div>
-                            <p className="text-sm font-semibold text-foreground leading-none">Ask Kowsik</p>
-                            <p className="text-xs text-muted-foreground/80 mt-0.5 flex items-center gap-1">
-                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block animate-pulse" />
+                            <p className="text-sm font-bold text-foreground leading-tight">Ask Kowsik</p>
+                            <p className="text-xs font-semibold text-muted-foreground mt-0.5 flex items-center gap-1.5">
+                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block animate-pulse" />
                                 Online
                             </p>
                         </div>
                     </div>
                     <button
                         onClick={() => setOpen(false)}
-                        className="p-1.5 rounded-lg text-muted-foreground/80 hover:text-foreground hover:bg-white/10 transition-colors"
+                        className="w-8 h-8 rounded-full flex items-center justify-center text-muted-foreground hover:bg-background hover:text-foreground border border-transparent hover:border-border transition-colors"
                     >
                         <X size={16} />
                     </button>
                 </div>
 
                 {/* Messages */}
-                <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4 max-h-120 min-h-48 h-full scrollbar-thin">
+                <div className="flex-1 overflow-y-auto px-5 py-6 space-y-6 max-h-[500px] min-h-[300px] h-full scrollbar-thin">
                     {messages.map((msg, i) => (
                         <MessageBubble key={i} msg={msg} />
                     ))}
                     {loading && (
-                        <div className="flex gap-2.5">
-                            <div className="shrink-0 w-7 h-7 rounded-full ui-surface border border-violet-500/30 text-primary flex items-center justify-center">
+                        <div className="flex gap-3">
+                            <div className="shrink-0 w-8 h-8 rounded-full bg-secondary border border-border text-foreground flex items-center justify-center">
                                 <Bot size={14} />
                             </div>
-                            <div className="px-3 py-2.5 rounded-2xl rounded-tl-sm ui-surface border border-border">
-                                <Loader2 size={14} className="text-primary animate-spin" />
+                            <div className="px-4 py-3 rounded-2xl rounded-tl-sm bg-secondary border border-border flex items-center justify-center">
+                                <Loader2 size={16} className="text-foreground/50 animate-spin" />
                             </div>
                         </div>
                     )}
@@ -159,22 +159,22 @@ export default function ChatWidget() {
                 </div>
 
                 {/* Input */}
-                <div className="px-3 py-3 border-t border-border">
-                    <div className="flex items-center gap-2 bg-white/5 rounded-xl px-3 py-1.5 border border-border focus-within:border-violet-500/50 transition-colors">
+                <div className="p-4 bg-card border-t border-border">
+                    <div className="flex items-center gap-2 bg-secondary rounded-full pl-5 pr-2 py-2 border border-border focus-within:border-foreground/30 transition-colors">
                         <input
                             ref={inputRef}
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
                             onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && send()}
-                            placeholder="Ask about skills, projects…"
-                            className="flex-1 bg-transparent text-sm text-foreground placeholder:text-muted-foreground outline-none"
+                            placeholder="Message..."
+                            className="flex-1 bg-transparent text-sm font-medium text-foreground placeholder:text-muted-foreground outline-none"
                         />
                         <button
                             onClick={send}
                             disabled={!input.trim() || loading}
-                            className="shrink-0 p-1.5 rounded-lg bg-violet-600 hover:bg-violet-500 text-white disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                            className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center bg-foreground text-background disabled:opacity-30 disabled:cursor-not-allowed hover:scale-95 transition-transform"
                         >
-                            <Send size={13} />
+                            <Send size={14} className="-ml-0.5" />
                         </button>
                     </div>
                 </div>
@@ -183,10 +183,10 @@ export default function ChatWidget() {
             {/* Floating toggle button */}
             <button
                 onClick={() => setOpen((o) => !o)}
-                className={`fixed bottom-5 right-4 sm:right-6 z-50 w-13 h-13 rounded-full bg-violet-600 hover:bg-violet-500 text-white shadow-lg shadow-violet-600/40 flex items-center justify-center transition-all duration-200`}
+                className={`fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-foreground text-background shadow-2xl flex items-center justify-center transition-transform hover:scale-95 active:scale-90`}
                 aria-label="Toggle chat"
             >
-                {open ? <X size={22} /> : <MessageCircle size={22} />}
+                {open ? <X size={24} /> : <MessageCircle size={24} />}
             </button>
         </>
     );

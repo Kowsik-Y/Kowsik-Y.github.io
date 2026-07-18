@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "seo-fundamentals": {
+      "source": "sickn33/antigravity-awesome-skills",
+      "sourceType": "github",
+      "skillPath": "skills/seo-fundamentals/SKILL.md",
+      "computedHash": "683257758560206f495d2a133b0ff5d5275da7c428aba2d5bf86f9502d5dcf20"
+    }
+  }
+}

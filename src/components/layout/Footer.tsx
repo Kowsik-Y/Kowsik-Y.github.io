@@ -26,38 +26,43 @@ export default async function Footer() {
     ].filter(Boolean) as { href: string; label: string; icon: LucideIcon }[];
 
     return (
-        <footer className="border-t border-border/60 mt-20">
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-9 flex flex-col sm:flex-row items-center justify-between gap-4">
-                <div>
-                    <p className="text-sm text-muted-foreground">{profile?.name}</p>
-                    {profile?.email && (
-                        <p className="text-xs text-muted-foreground mt-0.5">
-                            Get in touch —{" "}
-                            <a
-                                href={`mailto:${profile.email}`}
-                                className="text-primary hover:text-violet-500 transition-colors"
+        <footer className="relative mt-20">
+            {/* Animated gradient top border */}
+            <div className="h-px w-full bg-gradient-to-r from-transparent via-violet-500/50 to-transparent" />
+            <div className="h-px w-full bg-gradient-to-r from-transparent via-cyan-400/30 to-transparent mt-px" />
+
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
+                    <div className="text-center sm:text-left">
+                        <p className="text-sm font-medium text-foreground/80">{profile?.name}</p>
+                        {profile?.email && (
+                            <p className="text-xs text-muted-foreground mt-1">
+                                Get in touch —{" "}
+                                <a
+                                    href={`mailto:${profile.email}`}
+                                    className="text-violet-400 hover:text-violet-300 transition-colors"
+                                >
+                                    {profile.email}
+                                </a>
+                            </p>
+                        )}
+                    </div>
+                    <div className="flex items-center gap-2">
+                        {socials.map(({ href, label, icon: Icon }) => (
+                            <Link
+                                key={label}
+                                href={href}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label={label}
+                                className="ui-icon-button p-2.5 rounded-xl hover:neon-glow-violet-sm transition-all duration-300"
                             >
-                                {profile.email}
-                            </a>
-                        </p>
-                    )}
-                </div>
-                <div className="flex items-center gap-3">
-                    {socials.map(({ href, label, icon: Icon }) => (
-                        <Link
-                            key={label}
-                            href={href}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label={label}
-                            className="ui-icon-button p-2 rounded-lg"
-                        >
-                            <Icon size={18} />
-                        </Link>
-                    ))}
+                                <Icon size={16} />
+                            </Link>
+                        ))}
+                    </div>
                 </div>
             </div>
         </footer>
     );
 }
-

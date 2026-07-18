@@ -6,6 +6,7 @@ import ThemeToaster from "@/components/theme-toaster";
 import NextTopLoader from 'nextjs-toploader';
 import dbConnect from "@/lib/db";
 import Profile from "@/models/Profile";
+import ScrollProvider from "@/components/providers/ScrollProvider";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://kowsik.me";
 
@@ -203,8 +204,10 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <NextTopLoader color="#8b5cf6" height={3} showSpinner={false} shadow="0 0 10px #8b5cf6,0 0 5px #8b5cf6" />
-        {children}
+        <NextTopLoader color="var(--foreground)" height={3} showSpinner={false} shadow="0 0 10px var(--foreground),0 0 5px var(--foreground)" />
+        <ScrollProvider>
+          {children}
+        </ScrollProvider>
         <ThemeToaster />
       </body>
     </html>

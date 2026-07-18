@@ -5,9 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
-import { Send, Mail, Github, Linkedin, Code2, Terminal, Copy, type LucideIcon } from "lucide-react";
-import FadeIn from "@/components/ui/fade-in";
-import ContactCanvasClient from "@/components/three/ContactCanvasClient";
+import { Mail, Github, Linkedin, Code2, Terminal, Copy, Check, type LucideIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -16,6 +14,8 @@ import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import { sectionBreadcrumbs } from "@/lib/breadcrumbs";
 import type { IProfile } from "@/types";
 import { usePortfolioStore } from "@/lib/stores/portfolioStore";
+import BentoCard from "@/components/ui/BentoCard";
+import MagneticButton from "@/components/ui/MagneticButton";
 
 const schema = z.object({
     name: z.string().min(2, "Name must be at least 2 characters"),
@@ -27,15 +27,13 @@ type FormValues = z.infer<typeof schema>;
 
 export default function ContactPage() {
     const [submitting, setSubmitting] = useState(false);
+    const [copiedLabel, setCopiedLabel] = useState<string | null>(null);
     const profile = (usePortfolioStore((s) => s.profile) ?? {}) as Partial<IProfile>;
-    const hydrated = usePortfolioStore((s) => s.hydrated);
     const fetchOverview = usePortfolioStore((s) => s.fetchOverview);
 
     useEffect(() => {
-        if (!hydrated) {
-            void fetchOverview();
-        }
-    }, [fetchOverview, hydrated]);
+        fetchOverview();
+    }, [fetchOverview]);
 
     const {
         register,
@@ -65,162 +63,116 @@ export default function ContactPage() {
         }
     };
 
-    // Build contact links dynamically from profile
     const contactLinks = [
-        profile.email && {
-            icon: Mail,
-            label: "Email",
-            value: profile.email,
-            href: `mailto:${profile.email}`,
-        },
-        profile.githubUrl && {
-            icon: Github,
-            label: "GitHub",
-            value: `@${profile.githubUrl.replace(/\/$/, "").split("/").pop()}`,
-            href: profile.githubUrl,
-        },
-        profile.linkedinUrl && {
-            icon: Linkedin,
-            label: "LinkedIn",
-            value: `@${profile.linkedinUrl.replace(/\/$/, "").split("/").pop()}`,
-            href: profile.linkedinUrl,
-        },
-        profile.leetcodeUrl && {
-            icon: Code2,
-            label: "LeetCode",
-            value: `@${profile.leetcodeUrl.replace(/\/$/, "").split("/").pop()}`,
-            href: profile.leetcodeUrl,
-        },
-        profile.hackerrankUrl && {
-            icon: Terminal,
-            label: "HackerRank",
-            value: `@${profile.hackerrankUrl.replace(/\/$/, "").split("/").pop()}`,
-            href: profile.hackerrankUrl,
-        },
+        profile.email && { icon: Mail, label: "Email", value: profile.email, href: `mailto:${profile.email}` },
+        profile.githubUrl && { icon: Github, label: "GitHub", value: `@${profile.githubUrl.replace(/\/$/, "").split("/").pop()}`, href: profile.githubUrl },
+        profile.linkedinUrl && { icon: Linkedin, label: "LinkedIn", value: `@${profile.linkedinUrl.replace(/\/$/, "").split("/").pop()}`, href: profile.linkedinUrl },
+        profile.leetcodeUrl && { icon: Code2, label: "LeetCode", value: `@${profile.leetcodeUrl.replace(/\/$/, "").split("/").pop()}`, href: profile.leetcodeUrl },
+        profile.hackerrankUrl && { icon: Terminal, label: "HackerRank", value: `@${profile.hackerrankUrl.replace(/\/$/, "").split("/").pop()}`, href: profile.hackerrankUrl },
     ].filter(Boolean) as { icon: LucideIcon; label: string; value: string; href: string }[];
 
     const copyValue = async (value: string, label: string) => {
         try {
             await navigator.clipboard.writeText(value);
+            setCopiedLabel(label);
             toast.success(`${label} copied`);
+            setTimeout(() => setCopiedLabel(null), 2000);
         } catch {
             toast.error("Clipboard access failed");
         }
     };
 
     return (
-        <div className="relative">
-            <div className="fixed inset-0 -z-10 opacity-20 pointer-events-none">
-                <ContactCanvasClient />
-            </div>
-            <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-28">
-                <Breadcrumbs
-                    className="mb-6"
-                    items={sectionBreadcrumbs("Contact", "/contact")}
-                />
-                <FadeIn>
-                    <div className="mb-2 text-sm font-medium text-violet-400 uppercase tracking-widest">
-                        Get In Touch
-                    </div>
-                    <h1 className="text-4xl sm:text-5xl font-bold mb-4">
-                        Let&apos;s <span className="gradient-text">Connect</span>
-                    </h1>
-                    <p className="text-muted-foreground text-lg max-w-2xl mb-14">
-                        I&apos;m always open to new opportunities, collaborations, or just a chat about AI
-                        and technology.
+        <div className="min-h-screen pt-32 pb-20 dot-pattern">
+            <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="mb-12">
+                    <h1 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4">Let&apos;s Connect</h1>
+                    <p className="text-muted-foreground text-lg max-w-xl">
+                        I&apos;m always open to new opportunities, collaborations, or just a chat about AI and technology.
                     </p>
-                </FadeIn>
+                </div>
 
-                <div className="grid md:grid-cols-2 gap-10">
+                <div className="grid md:grid-cols-12 gap-6">
                     {/* Form */}
-                    <FadeIn delay={0.1}>
-                        <form onSubmit={handleSubmit(onSubmit)} className="glass-card p-8 space-y-5">
+                    <BentoCard className="md:col-span-7 p-8 sm:p-10" delay={0.1}>
+                        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                             <div>
-                                <Label htmlFor="name" className="text-foreground/80 mb-1.5 block">
-                                    Name
-                                </Label>
+                                <Label htmlFor="name" className="font-semibold mb-2 block">Name</Label>
                                 <Input
                                     id="name"
                                     {...register("name")}
                                     placeholder="Your name"
-                                    className="ui-surface text-foreground placeholder:text-muted-foreground focus:border-primary"
+                                    className="h-12 bg-secondary border-transparent focus:bg-background focus:border-foreground transition-colors rounded-xl px-4"
                                 />
-                                {errors.name && (
-                                    <p className="text-red-400 text-xs mt-1">{errors.name.message}</p>
-                                )}
+                                {errors.name && <p className="text-red-500 text-xs mt-1.5 font-medium">{errors.name.message}</p>}
                             </div>
                             <div>
-                                <Label htmlFor="email" className="text-foreground/80 mb-1.5 block">
-                                    Email
-                                </Label>
+                                <Label htmlFor="email" className="font-semibold mb-2 block">Email</Label>
                                 <Input
                                     id="email"
                                     type="email"
                                     {...register("email")}
                                     placeholder="you@example.com"
-                                    className="ui-surface text-foreground placeholder:text-muted-foreground focus:border-primary"
+                                    className="h-12 bg-secondary border-transparent focus:bg-background focus:border-foreground transition-colors rounded-xl px-4"
                                 />
-                                {errors.email && (
-                                    <p className="text-red-400 text-xs mt-1">{errors.email.message}</p>
-                                )}
+                                {errors.email && <p className="text-red-500 text-xs mt-1.5 font-medium">{errors.email.message}</p>}
                             </div>
                             <div>
-                                <Label htmlFor="message" className="text-foreground/80 mb-1.5 block">
-                                    Message
-                                </Label>
+                                <Label htmlFor="message" className="font-semibold mb-2 block">Message</Label>
                                 <Textarea
                                     id="message"
                                     {...register("message")}
                                     placeholder="Tell me your message..."
                                     rows={5}
-                                    className="ui-surface text-foreground placeholder:text-muted-foreground focus:border-primary resize-none"
+                                    className="bg-secondary border-transparent focus:bg-background focus:border-foreground transition-colors rounded-xl p-4 resize-none"
                                 />
-                                {errors.message && (
-                                    <p className="text-red-400 text-xs mt-1">{errors.message.message}</p>
-                                )}
+                                {errors.message && <p className="text-red-500 text-xs mt-1.5 font-medium">{errors.message.message}</p>}
                             </div>
                             <Button
                                 type="submit"
                                 disabled={submitting}
-                                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
+                                className="w-full h-12 rounded-full font-bold text-base"
                             >
-                                <Send size={15} className="mr-2" />
                                 {submitting ? "Sending..." : "Send Message"}
                             </Button>
                         </form>
-                    </FadeIn>
+                    </BentoCard>
 
                     {/* Contact links */}
-                    <FadeIn delay={0.2}>
-                        <div className="space-y-4">
-                            {contactLinks.map(({ icon: Icon, label, value, href }) => (
-                                <div key={label} className="flex items-center gap-3 glass-card p-5">
-                                    <a
-                                        href={href}
-                                        target={href.startsWith("mailto") ? undefined : "_blank"}
-                                        rel="noopener noreferrer"
-                                        className="flex items-center gap-4 min-w-0 flex-1"
-                                    >
-                                        <div className="p-2 rounded-lg bg-primary/10 text-primary shrink-0">
-                                            <Icon size={18} />
-                                        </div>
-                                        <div className="min-w-0">
-                                            <p className="text-xs text-muted-foreground">{label}</p>
-                                            <p className="text-sm text-foreground font-medium truncate">{value}</p>
-                                        </div>
-                                    </a>
-                                    <button
-                                        type="button"
-                                        onClick={() => copyValue(href.startsWith("mailto:") ? value : href, label)}
-                                        className="ui-icon-button shrink-0 rounded-md p-2"
-                                        aria-label={`Copy ${label}`}
-                                    >
-                                        <Copy size={16} />
-                                    </button>
+                    <div className="md:col-span-5 flex flex-col gap-4">
+                        {contactLinks.map(({ icon: Icon, label, value, href }, i) => (
+                            <BentoCard key={label} delay={0.15 + (i * 0.05)} className="p-4 flex items-center gap-4 group">
+                                <div className="w-12 h-12 rounded-2xl bg-secondary flex items-center justify-center shrink-0">
+                                    <Icon size={20} className="text-foreground" />
                                 </div>
-                            ))}
-                        </div>
-                    </FadeIn>
+                                <div className="min-w-0 flex-1">
+                                    <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest">{label}</p>
+                                    <a 
+                                        href={href} 
+                                        target={href.startsWith("mailto") ? undefined : "_blank"} 
+                                        rel="noopener noreferrer"
+                                        className="text-sm font-medium truncate block hover:opacity-70 transition-opacity"
+                                    >
+                                        {value}
+                                    </a>
+                                </div>
+                                <MagneticButton
+                                    as="button"
+                                    type="button"
+                                    strength={15}
+                                    onClick={() => copyValue(href.startsWith("mailto:") ? value : href, label)}
+                                    className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center shrink-0 group-hover:bg-foreground group-hover:text-background transition-colors"
+                                    aria-label={`Copy ${label}`}
+                                >
+                                    {copiedLabel === label ? (
+                                        <Check size={16} className="text-emerald-500" />
+                                    ) : (
+                                        <Copy size={16} />
+                                    )}
+                                </MagneticButton>
+                            </BentoCard>
+                        ))}
+                    </div>
                 </div>
             </div>
         </div>

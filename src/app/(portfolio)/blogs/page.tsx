@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import dbConnect from "@/lib/db";
 import Blog from "@/models/Blog";
 import BlogsPageClient from "@/components/portfolio/BlogsPageClient";
@@ -19,6 +20,11 @@ type BlogLean = {
     order?: number;
     createdAt?: Date;
     updatedAt?: Date;
+};
+
+export const metadata: Metadata = {
+    title: "Blogs",
+    description: "Read my latest articles, tutorials, and thoughts on AI, ML, and web development.",
 };
 
 export default async function BlogsPage() {

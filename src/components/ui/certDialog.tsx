@@ -6,11 +6,11 @@ import { Award, ExternalLink, X } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
+import MagneticButton from "@/components/ui/MagneticButton";
 
 export default function CertDialog({ cert, onClose }: { cert: ICertificate | IAchievement; onClose: () => void }) {
     const [mounted, setMounted] = useState(false);
 
-    
     useEffect(() => {
         setTimeout(() => setMounted(true), 0);
         document.body.style.overflow = "hidden";
@@ -21,23 +21,23 @@ export default function CertDialog({ cert, onClose }: { cert: ICertificate | IAc
 
     const modalContent = (
         <div
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-md"
             onClick={onClose}
         >
             <div
-                className="relative w-full max-w-xl glass-card rounded-2xl overflow-hidden shadow-2xl shadow-violet-500/20"
+                className="relative w-full max-w-xl bg-card border border-border rounded-[2rem] overflow-hidden shadow-2xl"
                 onClick={(e) => e.stopPropagation()}
             >
                 <button
                     onClick={onClose}
-                    className="absolute top-3 right-3 z-10 p-1.5 rounded-full bg-white/10 text-muted-foreground cursor-pointer hover:bg-white/20 transition-colors"
+                    className="absolute top-4 right-4 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-background/50 backdrop-blur-md border border-border text-foreground cursor-pointer hover:bg-background transition-colors"
                     aria-label="Close"
                 >
                     <X size={16} />
                 </button>
 
                 {cert.imageUrl && (
-                    <div className="relative w-full h-auto aspect-video">
+                    <div className="relative w-full h-auto aspect-video bg-secondary">
                         <Image
                             src={blobDisplayUrl(cert.imageUrl)}
                             alt={('name' in cert ? cert.name : cert.title) || ''}
@@ -45,36 +45,40 @@ export default function CertDialog({ cert, onClose }: { cert: ICertificate | IAc
                             className="object-cover"
                             unoptimized
                         />
-                        <div className="absolute inset-0 bg-linear-to-b from-transparent via-transparent to-black/60" />
                     </div>
                 )}
 
-                <div className="p-6">
-                    <div className="flex items-start gap-4 mb-4">
-                        <div className="p-2.5 rounded-xl bg-violet-500/15 text-violet-400 shrink-0">
-                            <Award size={22} />
+                <div className="p-8">
+                    <div className="flex items-start gap-4 mb-6">
+                        <div className="w-12 h-12 flex flex-col items-center justify-center rounded-2xl bg-secondary text-foreground shrink-0">
+                            <Award size={24} />
                         </div>
                         <div>
-                            <h2 className="font-bold text-lg text-foreground leading-snug">{'name' in cert ? cert.name : cert.title}</h2>
-                            <p className="text-sm text-violet-300 mt-0.5">{(('issue' in cert ? cert.issue : '') || ('org' in cert ? cert.org : '')) as string}</p>
+                            <h2 className="font-bold text-2xl text-foreground leading-snug mb-1">
+                                {'name' in cert ? cert.name : cert.title}
+                            </h2>
+                            <p className="text-sm font-semibold text-muted-foreground">
+                                {(('issue' in cert ? cert.issue : '') || ('org' in cert ? cert.org : '')) as string}
+                            </p>
                             {'description' in cert && cert.description && (
-                                <p className="text-xs text-muted-foreground/80 mt-1">{cert.description}</p>
+                                <p className="text-sm text-muted-foreground mt-3 leading-relaxed">{cert.description}</p>
                             )}
                             {cert.date && (
-                                <p className="text-xs text-muted-foreground/80 mt-1">{cert.date}</p>
+                                <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground/70 mt-4">{cert.date}</p>
                             )}
                         </div>
                     </div>
 
                     {cert.link && (
-                        <a
+                        <MagneticButton
+                            as="a"
                             href={cert.link}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-sm font-medium transition-colors mt-2"
+                            className="flex items-center justify-center gap-2 w-full px-6 py-3.5 rounded-xl bg-foreground text-background font-bold transition-transform hover:scale-[0.98]"
                         >
-                            <ExternalLink size={14} /> View Certificate
-                        </a>
+                            <ExternalLink size={16} /> View Credential
+                        </MagneticButton>
                     )}
                 </div>
             </div>
