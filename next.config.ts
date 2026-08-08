@@ -1,6 +1,21 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  async redirects() {
+    return [
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'www.kowsik.me',
+          },
+        ],
+        destination: 'https://kowsik.me/:path*',
+        permanent: true,
+      },
+    ];
+  },
   images: {
     localPatterns: [
       {

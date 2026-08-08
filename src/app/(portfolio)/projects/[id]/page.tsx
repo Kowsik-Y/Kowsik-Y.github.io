@@ -5,7 +5,7 @@ import Project from "@/models/Project";
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import { detailBreadcrumbs } from "@/lib/breadcrumbs";
 import ProjectDetailContent from "./ProjectDetailContent";
-import { permanentRedirect } from "next/navigation";
+import { permanentRedirect, notFound } from "next/navigation";
 import { blobDisplayUrl } from "@/lib/blob-url";
 import {
     buildProjectSlug,
@@ -122,12 +122,14 @@ export default async function ProjectDetailPage(
     const { id: slugOrId } = await params;
     const project = await getProjectSeoData(slugOrId);
 
-    const projectId = project?._id || slugOrId;
-    const publicSlug = project
-        ? (project.slug || buildProjectSlug(project.title, projectId))
-        : slugOrId;
+    if (!project) {
+        notFound();
+    }
 
-    if (project && isObjectIdLike(slugOrId) && publicSlug !== slugOrId) {
+    const projectId = project._id || slugOrId;
+    const publicSlug = project.slug || buildProjectSlug(project.title, projectId);
+
+    if (isObjectIdLike(slugOrId) && publicSlug !== slugOrId) {
         permanentRedirect(projectPath({ _id: projectId, title: project.title, slug: publicSlug }));
     }
 

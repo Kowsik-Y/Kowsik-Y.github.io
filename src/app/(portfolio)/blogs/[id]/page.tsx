@@ -8,7 +8,7 @@ import ReactMarkdown from "react-markdown";
 import remarkBreaks from "remark-breaks";
 import remarkGfm from "remark-gfm";
 import { ArrowLeft } from "lucide-react";
-import { permanentRedirect } from "next/navigation";
+import { permanentRedirect, notFound } from "next/navigation";
 import { blobDisplayUrl } from "@/lib/blob-url";
 import { getReadingTimeMinutes, getWordCount } from "@/lib/content-metrics";
 import BentoCard from "@/components/ui/BentoCard";
@@ -140,14 +140,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ id:
     const blog = await getBlog(slugOrId);
 
     if (!blog || !blog.published) {
-        return (
-            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-28 text-center">
-                <p className="text-muted-foreground mb-6">Blog post not found.</p>
-                <Link href="/blogs" className="text-foreground font-bold hover:opacity-70 inline-flex items-center gap-2">
-                    <ArrowLeft size={16} /> Back to Blogs
-                </Link>
-            </div>
-        );
+        notFound();
     }
 
     const isObjectIdPath = /^[a-f\d]{24}$/i.test(slugOrId);
