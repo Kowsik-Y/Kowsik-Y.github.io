@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Github, Linkedin, Code2, Terminal, Mail, Globe, Link as LinkIcon, type LucideIcon } from "lucide-react";
+import { Github, Linkedin, Code2, Terminal, Mail, Globe, Link as LinkIcon, Phone, type LucideIcon } from "lucide-react";
 
 async function getProfile() {
     try {
@@ -22,6 +22,7 @@ export default async function Footer() {
         profile?.hackerrankUrl && { href: profile.hackerrankUrl, label: "HackerRank", icon: Terminal },
         profile?.websiteUrl && { href: profile.websiteUrl, label: "Website", icon: Globe },
         profile?.email && { href: `mailto:${profile.email}`, label: "Email", icon: Mail },
+        profile?.phone && { href: `tel:${profile.phone}`, label: "Phone", icon: Phone },
         ...((profile?.customLinks ?? []).filter((cl: { label: string; url: string }) => cl.url).map((cl: { label: string; url: string }) => ({ href: cl.url, label: cl.label || cl.url, icon: LinkIcon }))),
     ].filter(Boolean) as { href: string; label: string; icon: LucideIcon }[];
 

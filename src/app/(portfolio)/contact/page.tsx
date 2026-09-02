@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
-import { Mail, Github, Linkedin, Code2, Terminal, Copy, Check, type LucideIcon } from "lucide-react";
+import { Mail, Github, Linkedin, Code2, Terminal, Copy, Check, Phone, type LucideIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -65,6 +65,7 @@ export default function ContactPage() {
 
     const contactLinks = [
         profile.email && { icon: Mail, label: "Email", value: profile.email, href: `mailto:${profile.email}` },
+        profile.phone && { icon: Phone, label: "Phone", value: profile.phone, href: `tel:${profile.phone}` },
         profile.githubUrl && { icon: Github, label: "GitHub", value: `@${profile.githubUrl.replace(/\/$/, "").split("/").pop()}`, href: profile.githubUrl },
         profile.linkedinUrl && { icon: Linkedin, label: "LinkedIn", value: `@${profile.linkedinUrl.replace(/\/$/, "").split("/").pop()}`, href: profile.linkedinUrl },
         profile.leetcodeUrl && { icon: Code2, label: "LeetCode", value: `@${profile.leetcodeUrl.replace(/\/$/, "").split("/").pop()}`, href: profile.leetcodeUrl },

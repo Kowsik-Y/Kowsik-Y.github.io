@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { cache } from "react";
 import Navbar from "@/components/layout/Navbar";
 import FadeIn from "@/components/ui/fade-in";
-import { ArrowUpRight, Github, Linkedin, User, Code2, Terminal, Mail, Globe, MapPin } from "lucide-react";
+import { ArrowUpRight, Github, Linkedin, User, Code2, Terminal, Mail, Phone, Globe, MapPin } from "lucide-react";
 import dbConnect from "@/lib/db";
 import Profile from "@/models/Profile";
 import { blobDisplayUrl } from "@/lib/blob-url";
@@ -26,6 +26,7 @@ type HomeProfile = {
   hackerrankUrl?: string;
   websiteUrl?: string;
   email?: string;
+  phone?: string;
   cgpa?: string;
   semester?: string;
   interests?: string[];
@@ -158,15 +159,16 @@ export default async function HomePage() {
             </BentoCard>
 
             {/* 5. Social Links row (Spans 12 columns, grid inside) */}
-            <div className="md:col-span-12 grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+            <div className="md:col-span-12 grid grid-cols-2 md:grid-cols-5 gap-4 sm:gap-6">
               {[
                 { label: "GitHub", url: profile?.githubUrl, icon: Github },
                 { label: "LinkedIn", url: profile?.linkedinUrl, icon: Linkedin },
                 { label: "LeetCode", url: profile?.leetcodeUrl, icon: Code2 },
                 { label: "Mail", url: profile?.email ? `mailto:${profile.email}` : undefined, icon: Mail },
+                { label: "Phone", url: profile?.phone ? `tel:${profile.phone}` : undefined, icon: Phone },
               ].map((social, i) => social.url ? (
                 <BentoCard key={social.label} interactive delay={0.3 + (i * 0.05)} className="p-6 flex flex-col items-center justify-center text-center group">
-                  <a href={social.url} target={social.label === "Mail" ? undefined : "_blank"} rel="noopener noreferrer" className="absolute inset-0 z-10">
+                  <a href={social.url} target={social.label === "Mail" || social.label === "Phone" ? undefined : "_blank"} rel="noopener noreferrer" className="absolute inset-0 z-10">
                     <span className="sr-only">{social.label}</span>
                   </a>
                   <MagneticButton strength={20} className="w-12 h-12 rounded-full bg-secondary text-secondary-foreground mb-3 flex items-center justify-center group-hover:bg-foreground group-hover:text-background transition-colors">

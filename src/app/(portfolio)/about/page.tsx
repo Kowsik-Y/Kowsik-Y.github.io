@@ -7,7 +7,7 @@ import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import { sectionBreadcrumbs } from "@/lib/breadcrumbs";
 import EducationTimeline from "@/components/portfolio/EducationTimeline";
 import SkillsMatrix from "@/components/portfolio/SkillsMatrix";
-import { Code2, Wrench, Heart, Globe, MapPin, User, Github, Linkedin, Terminal, Mail, Link as LinkIcon, GraduationCap, BarChart3, Award, FolderKanban } from "lucide-react";
+import { Code2, Wrench, Heart, Globe, MapPin, User, Github, Linkedin, Terminal, Mail, Phone, Link as LinkIcon, GraduationCap, BarChart3, Award, FolderKanban } from "lucide-react";
 import type { IProfile } from "@/types";
 import { usePortfolioStore } from "@/lib/stores/portfolioStore";
 import { blobDisplayUrl } from "@/lib/blob-url";
@@ -84,13 +84,14 @@ export default function AboutPage() {
                                     { icon: Linkedin, url: profile.linkedinUrl, label: "LinkedIn" },
                                     { icon: Code2, url: profile.leetcodeUrl, label: "LeetCode" },
                                     { icon: Terminal, url: profile.hackerrankUrl, label: "HackerRank" },
-                                    { icon: Mail, url: profile.email ? `mailto:${profile.email}` : undefined, label: "Email" }
+                                    { icon: Mail, url: profile.email ? `mailto:${profile.email}` : undefined, label: "Email" },
+                                    { icon: Phone, url: profile.phone ? `tel:${profile.phone}` : undefined, label: "Phone" }
                                 ].map((item) => item.url && (
                                     <MagneticButton
                                         key={item.label}
                                         as="a"
                                         href={item.url}
-                                        target={item.label === "Email" ? undefined : "_blank"}
+                                        target={item.label === "Email" || item.label === "Phone" ? undefined : "_blank"}
                                         rel="noopener noreferrer"
                                         className="flex items-center gap-2 px-4 py-2 rounded-full bg-secondary text-secondary-foreground hover:bg-foreground hover:text-background transition-colors font-medium text-sm"
                                     >

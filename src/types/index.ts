@@ -94,6 +94,7 @@ export interface IProfile {
   githubUrl: string;
   linkedinUrl: string;
   email?: string;
+  phone?: string;
   leetcodeUrl?: string;
   hackerrankUrl?: string;
   githubStatsUrl?: string;

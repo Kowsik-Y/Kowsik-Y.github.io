@@ -11,6 +11,7 @@ const ProfileSchema = new Schema(
     githubUrl: { type: String, default: "" },
     linkedinUrl: { type: String, default: "" },
     email: { type: String, default: "" },
+    phone: { type: String, default: "" },
     leetcodeUrl: { type: String, default: "" },
     hackerrankUrl: { type: String, default: "" },
     githubStatsUrl: { type: String, default: "" },

@@ -14,7 +14,7 @@ import type { IProfile } from "@/types";
 
 const EMPTY: IProfile = {
     name: "", title: "", bio: "", photoUrl: "",
-    githubUrl: "", linkedinUrl: "", email: "",
+    githubUrl: "", linkedinUrl: "", email: "", phone: "",
     leetcodeUrl: "", hackerrankUrl: "", websiteUrl: "",
     githubStatsUrl: "", githubStreakUrl: "", snakeSourceUrl: "",
     cgpa: "", semester: "", interests: [], availability: "",
@@ -173,6 +173,10 @@ export default function AdminProfilePage() {
                         <div>
                             <Label className="text-foreground/80 mb-1 block">Email</Label>
                             <Input value={form.email ?? ""} onChange={set("email")} placeholder="you@example.com" className="bg-foreground/5 border-border/60 text-foreground" />
+                        </div>
+                        <div>
+                            <Label className="text-foreground/80 mb-1 block">Phone</Label>
+                            <Input value={form.phone ?? ""} onChange={set("phone")} placeholder="+1 234 567 8900" className="bg-foreground/5 border-border/60 text-foreground" />
                         </div>
                         <div>
                             <Label className="text-foreground/80 mb-1 block">LeetCode URL</Label>
