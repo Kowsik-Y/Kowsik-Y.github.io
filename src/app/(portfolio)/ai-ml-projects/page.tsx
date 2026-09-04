@@ -10,7 +10,7 @@ import ScrollSection from "@/components/ui/ScrollSection";
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://kowsik.me";
 
 export const metadata: Metadata = {
-  title: "AI & ML Projects | Kowsik Y",
+  title: "AI & ML Projects — Deep Learning & Computer Vision",
   description: "Explore Artificial Intelligence and Machine Learning projects built by Kowsik Y, featuring predictive models, computer vision, and more.",
   alternates: {
     canonical: `${siteUrl}/ai-ml-projects`,

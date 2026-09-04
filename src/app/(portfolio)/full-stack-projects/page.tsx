@@ -8,7 +8,7 @@ import type { Metadata } from "next";
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://kowsik.me";
 
 export const metadata: Metadata = {
-  title: "Full-Stack Development Projects | Kowsik Y",
+  title: "Full-Stack Development Projects — Next.js & Node",
   description: "Discover end-to-end full-stack applications built with Next.js, React, Node.js and more by Kowsik Y.",
   alternates: {
     canonical: `${siteUrl}/full-stack-projects`,

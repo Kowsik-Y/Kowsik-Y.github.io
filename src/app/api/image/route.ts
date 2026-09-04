@@ -30,6 +30,8 @@ export async function GET(req: Request) {
         "Content-Type": contentType,
         // Cache for 1 day in CDN / 1 hour in browser
         "Cache-Control": "public, s-maxage=86400, max-age=3600, stale-while-revalidate=3600",
+        // Prevent search engines from indexing image proxy URLs
+        "X-Robots-Tag": "noindex, nofollow",
       },
     });
   } catch {

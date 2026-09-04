@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://kowsik.me";
 
 export const metadata: Metadata = {
-    title: "About",
+    title: "About Me — Skills, Education & Background",
     description:
         "Learn about Kowsik Y — AI & ML engineering student, full-stack developer, and AI agent builder. Explore skills, education, and experience.",
     alternates: {

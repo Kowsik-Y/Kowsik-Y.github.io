@@ -51,11 +51,11 @@ export async function generateMetadata(): Promise<Metadata> {
   const displayTitle = profile?.title?.trim() || "AI & ML Engineer";
   const description =
     profile?.bio?.trim() ||
-    `Portfolio of ${displayName}. ${displayTitle}, full-stack developer, and AI agent builder. Explore projects, skills, and achievements.`;
+    `Portfolio of ${displayName} (Kowsiky). ${displayTitle}, full-stack developer, and AI agent builder. Explore projects, skills, and achievements.`;
 
   return {
     title: {
-      absolute: `${displayName} | Minimalist Portfolio`,
+      absolute: `${displayName}`,
     },
     description,
     alternates: {

@@ -45,7 +45,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const displayTitle = profile?.title?.trim() || "AI, ML & Full-Stack Portfolio";
   const description =
     profile?.bio?.trim() ||
-    "Portfolio of Kowsik Y — Artificial Intelligence & Machine Learning student, full-stack developer, and AI agent builder.";
+    "Portfolio of Kowsik Y (Kowsiky) — Artificial Intelligence & Machine Learning student, full-stack developer, and AI agent builder.";
 
   return {
     metadataBase: new URL(siteUrl),
@@ -63,8 +63,12 @@ export async function generateMetadata(): Promise<Metadata> {
       "Python",
       "portfolio",
       "Kowsik",
+      "Kowsik Y",
+      "Kowsiky",
       "full-stack developer",
       "AI agent",
+      "AI engineer",
+      "ML engineer",
     ],
     authors: [{ name: displayName, url: siteUrl }],
     creator: displayName,
@@ -124,6 +128,7 @@ function createPersonJsonLd(profile: SiteProfile | null) {
     "@context": "https://schema.org",
     "@type": "Person",
     name: displayName,
+    alternateName: ["Kowsik", "Kowsik Y", "Kowsiky"],
     url: siteUrl,
     sameAs: [profile?.githubUrl, profile?.linkedinUrl].filter(Boolean),
     jobTitle: displayTitle,

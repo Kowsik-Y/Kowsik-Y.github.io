@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://kowsik.me";
 
 export const metadata: Metadata = {
-    title: "Certifications",
+    title: "Certifications & Credentials",
     description:
         "Professional certifications and credentials earned by Kowsik Y in AI, ML, and software development.",
     alternates: {

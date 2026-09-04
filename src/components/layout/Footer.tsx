@@ -33,34 +33,47 @@ export default async function Footer() {
             <div className="h-px w-full bg-gradient-to-r from-transparent via-cyan-400/30 to-transparent mt-px" />
 
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-                <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
-                    <div className="text-center sm:text-left">
-                        <p className="text-sm font-medium text-foreground/80">{profile?.name}</p>
-                        {profile?.email && (
-                            <p className="text-xs text-muted-foreground mt-1">
-                                Get in touch —{" "}
-                                <a
-                                    href={`mailto:${profile.email}`}
-                                    className="text-violet-400 hover:text-violet-300 transition-colors"
-                                >
-                                    {profile.email}
-                                </a>
-                            </p>
-                        )}
+                <div className="flex flex-col gap-8">
+                    {/* Navigation Links */}
+                    <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-4 text-sm font-medium">
+                        <Link href="/about" className="text-muted-foreground hover:text-foreground transition-colors">About</Link>
+                        <Link href="/projects" className="text-muted-foreground hover:text-foreground transition-colors">Projects</Link>
+                        <Link href="/blogs" className="text-muted-foreground hover:text-foreground transition-colors">Blogs</Link>
+                        <Link href="/certifications" className="text-muted-foreground hover:text-foreground transition-colors">Certifications</Link>
+                        <Link href="/achievements" className="text-muted-foreground hover:text-foreground transition-colors">Achievements</Link>
+                        <Link href="/contact" className="text-muted-foreground hover:text-foreground transition-colors">Contact</Link>
                     </div>
-                    <div className="flex items-center gap-2">
-                        {socials.map(({ href, label, icon: Icon }) => (
-                            <Link
-                                key={label}
-                                href={href}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                aria-label={label}
-                                className="ui-icon-button p-2.5 rounded-xl hover:neon-glow-violet-sm transition-all duration-300"
-                            >
-                                <Icon size={16} />
-                            </Link>
-                        ))}
+
+                    {/* Bottom Row: Name, Email & Socials */}
+                    <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pt-6 border-t border-border/50">
+                        <div className="text-center sm:text-left">
+                            <p className="text-sm font-medium text-foreground/80">{profile?.name || "Kowsik Y"}</p>
+                            {profile?.email && (
+                                <p className="text-xs text-muted-foreground mt-1">
+                                    Get in touch —{" "}
+                                    <a
+                                        href={`mailto:${profile.email}`}
+                                        className="text-violet-400 hover:text-violet-300 transition-colors"
+                                    >
+                                        {profile.email}
+                                    </a>
+                                </p>
+                            )}
+                        </div>
+                        <div className="flex items-center gap-2">
+                            {socials.map(({ href, label, icon: Icon }) => (
+                                <Link
+                                    key={label}
+                                    href={href}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    aria-label={label}
+                                    className="ui-icon-button p-2.5 rounded-xl hover:neon-glow-violet-sm transition-all duration-300"
+                                >
+                                    <Icon size={16} />
+                                </Link>
+                            ))}
+                        </div>
                     </div>
                 </div>
             </div>

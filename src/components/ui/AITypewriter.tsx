@@ -4,9 +4,6 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
 const SEQUENCE = [
-  { text: "> Initializing Kowsik.Agent...", className: "text-xs sm:text-sm text-emerald-500 font-mono mb-1" },
-  { text: "> Loading neural weights...", className: "text-xs sm:text-sm text-emerald-500/70 font-mono mb-4" },
-  { text: "Hello, human.", className: "text-2xl sm:text-3xl text-muted-foreground font-mono mb-4" },
   { text: "I'm Kowsik Y.", className: "text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight mb-2 gradient-text-minimal inline-block" },
   { text: "GenAI & ML Engineer", className: "text-2xl sm:text-3xl lg:text-4xl text-muted-foreground font-medium" }
 ];
@@ -46,7 +43,7 @@ export default function AITypewriter() {
   }, [currentLineIndex, currentText]);
 
   return (
-    <div className="flex flex-col items-start min-h-[250px] font-sans">
+    <div className="flex flex-col items-start min-h-62.5 font-sans">
       {SEQUENCE.map((line, index) => {
         if (index > currentLineIndex) return null;
 

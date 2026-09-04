@@ -10,7 +10,7 @@ import ScrollSection from "@/components/ui/ScrollSection";
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://kowsik.me";
 
 export const metadata: Metadata = {
-  title: "Generative AI Projects | Kowsik Y",
+  title: "Generative AI Projects — LLMs & Agents",
   description: "Browse state-of-the-art Generative AI projects built by Kowsik Y, including LLM agents, RAG pipelines, and intelligent chatbots.",
   alternates: {
     canonical: `${siteUrl}/genai-projects`,
