@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { cache } from "react";
 import Navbar from "@/components/layout/Navbar";
 import FadeIn from "@/components/ui/fade-in";
-import { ArrowUpRight, Github, Linkedin, User, Code2, Terminal, Mail, Phone, Globe, MapPin } from "lucide-react";
+import { ArrowUpRight, Github, Linkedin, User, Code2, Terminal, Mail, Phone, Globe, MapPin, FileText } from "lucide-react";
 import dbConnect from "@/lib/db";
 import Profile from "@/models/Profile";
 import { blobDisplayUrl } from "@/lib/blob-url";
@@ -111,6 +111,12 @@ export default async function HomePage() {
                 >
                   Contact Me
                 </MagneticButton>
+                <MagneticButton
+                  href="/resume"
+                  className="border border-border/80 bg-background/60 hover:bg-foreground hover:text-background text-foreground px-6 py-3 rounded-full font-medium hover:scale-95 transition-all inline-flex items-center gap-2"
+                >
+                  <FileText size={16} /> Resume
+                </MagneticButton>
               </div>
             </BentoCard>
 
@@ -148,7 +154,7 @@ export default async function HomePage() {
               <h2 className="text-sm font-semibold uppercase tracking-widest mb-6">Expertise</h2>
               <div className="flex flex-wrap gap-2 mb-6">
                 {(profile?.interests?.length ? profile.interests : ["Deep Learning", "Next.js", "React", "Python", "Generative AI", "TypeScript"]).map((item) => (
-                  <span key={item} className="px-4 py-2 rounded-full text-sm font-medium border border-border bg-background">
+                  <span key={item} className="px-4 py-2 cursor-default rounded-full text-sm font-medium border border-border bg-background">
                     {item}
                   </span>
                 ))}

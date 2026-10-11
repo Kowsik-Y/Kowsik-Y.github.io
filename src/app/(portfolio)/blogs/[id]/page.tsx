@@ -106,7 +106,12 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     const { id: slugOrId } = await params;
     const blog = await getBlog(slugOrId);
 
-    if (!blog) return { title: "Blog Not Found" };
+    if (!blog || !blog.published) {
+        return {
+            title: "Blog Not Found",
+            robots: { index: false, follow: false },
+        };
+    }
 
     const publicSlug = blog.slug || slugOrId;
 

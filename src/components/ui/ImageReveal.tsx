@@ -42,6 +42,7 @@ export default function ImageReveal({
     return (
         <div 
             ref={containerRef}
+            style={{ position: "relative" }}
             className={`relative overflow-hidden rounded-2xl group ${aspectClasses[aspectRatio]} ${containerClassName}`}
         >
             <motion.div 

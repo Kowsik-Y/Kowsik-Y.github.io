@@ -98,10 +98,9 @@ export default function Navbar() {
                     initial={{ y: -50, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                    className={`flex items-center p-1.5 rounded-full transition-all duration-500 shadow-soft ${
-                    scrolled
-                        ? "glass-nav"
-                        : "bg-background/80 border border-border"
+                    suppressHydrationWarning
+                    className={`flex items-center p-1.5 rounded-full transition-all duration-300 border border-border/60 bg-background/5 backdrop-blur-sm shadow-sm${
+                    scrolled ? "bg-background/5 backdrop-blur-sm shadow-md scale-[0.98]" : ""
                 }`}>
                     
                     {/* Desktop links */}
@@ -140,12 +139,12 @@ export default function Navbar() {
                         })}
                     </ul>
 
-                    <div className="hidden md:block ml-2 mr-1">
+                    <div className="hidden md:block ml-2 mr-1 relative z-10">
                         <ThemeToggle />
                     </div>
 
                     {/* Mobile toggle */}
-                    <div className="md:hidden flex items-center gap-2 px-2">
+                    <div className="md:hidden flex items-center gap-2 px-2 relative z-10">
                         <span className="text-sm font-medium ml-2">Menu</span>
                         <button
                             className="w-8 h-8 rounded-full bg-secondary text-secondary-foreground flex items-center justify-center relative overflow-hidden"
@@ -172,7 +171,7 @@ export default function Navbar() {
                             transition={{ duration: 0.2, type: "spring", bounce: 0.3 }}
                             className="md:hidden absolute top-full left-0 right-0 mt-4 pointer-events-auto"
                         >
-                            <div className="glass-nav rounded-3xl p-4 flex flex-col gap-2 shadow-soft">
+                            <div className="rounded-3xl p-4 flex flex-col gap-2 border border-border/60 bg-background/80 backdrop-blur-lg shadow-lg">
                                 <ul className="flex flex-col">
                                     {[...NAV_LINKS, ...MORE_LINKS].map(({ href, label }) => {
                                         const active = pathname === href;

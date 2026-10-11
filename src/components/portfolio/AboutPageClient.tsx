@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Code2, Wrench, Heart, Globe, User, Github, Linkedin, Terminal, Mail, Phone, GraduationCap, BarChart3, Award, FolderKanban } from "lucide-react";
+import { Code2, Wrench, Heart, Globe, User, Github, Linkedin, Terminal, Mail, Phone, GraduationCap, BarChart3, Award, FolderKanban, FileText } from "lucide-react";
 import type { IProfile, ISkill, IEducation, ILanguage } from "@/types";
 import { blobDisplayUrl } from "@/lib/blob-url";
 import BentoCard from "@/components/ui/BentoCard";
@@ -74,6 +74,13 @@ export default function AboutPageClient({
                             </p>
                             
                             <div className="flex flex-wrap items-center gap-3">
+                                <MagneticButton
+                                    as="a"
+                                    href={profile.resumeUrl || "/resume"}
+                                    className="flex items-center gap-2 px-4 py-2 rounded-full bg-violet-600 text-white hover:bg-violet-700 transition-colors font-medium text-sm shadow-soft"
+                                >
+                                    <FileText size={16} /> Resume
+                                </MagneticButton>
                                 {[
                                     { icon: Github, url: profile.githubUrl, label: "GitHub" },
                                     { icon: Linkedin, url: profile.linkedinUrl, label: "LinkedIn" },

@@ -90,7 +90,7 @@
   --accent-foreground: oklch(0.98 0 0);
   
   --destructive: oklch(0.65 0.22 22);
-  --border: oklch(0.18 0 0); /* Subtle dark border */
+  --border: oklch(24.884% 0.0015 16.221); /* Subtle dark border */
   --input: oklch(0.18 0 0);
   --ring: oklch(0.98 0 0);
 }
@@ -195,13 +195,7 @@
     background-clip: text;
   }
 
-  /* Blur backdrop for nav */
-  .glass-nav {
-    background: color-mix(in srgb, var(--background) 70%, transparent);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border: 1px solid color-mix(in srgb, var(--border) 60%, transparent);
-  }
+
 
   /* Dot pattern background */
   .dot-pattern {
@@ -344,3 +338,13 @@ html:not(.dark)::view-transition-new(root) { animation: none; z-index: 1; }
     transition-duration: 0.01ms !important;
   }
 }
+
+body.resume-fullscreen header,
+body.resume-fullscreen nav,
+body.resume-fullscreen [data-chat-widget] {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  opacity: 0 !important;
+}
+

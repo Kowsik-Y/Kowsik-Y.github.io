@@ -15,11 +15,16 @@ import ImageReveal from "@/components/ui/ImageReveal";
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
-export default function ProjectDetailContent() {
+interface Props {
+  initialProject?: IProject;
+}
+
+export default function ProjectDetailContent({ initialProject }: Props) {
     const { id } = useParams<{ id: string }>();
-    const { data: project, isLoading } = useSWR<IProject>(
+    const { data: project } = useSWR<IProject>(
         id ? `/api/projects/${id}` : null,
-        fetcher
+        fetcher,
+        { fallbackData: initialProject }
     );
     const [activeScreenshot, setActiveScreenshot] = useState(0);
     const [lightboxOpen, setLightboxOpen] = useState(false);
@@ -39,15 +44,6 @@ export default function ProjectDetailContent() {
         setActiveScreenshot((prev) => (prev + 1) % screenshots.length);
     };
 
-    if (isLoading) {
-        return (
-            <div className="relative min-h-screen pt-32 pb-20 dot-pattern">
-                <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="bg-card border border-border rounded-[2rem] p-8 animate-pulse h-96" />
-                </div>
-            </div>
-        );
-    }
 
     if (!project) {
         return (

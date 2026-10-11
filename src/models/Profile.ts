@@ -8,6 +8,7 @@ const ProfileSchema = new Schema(
     title: { type: String, default: "" },
     bio: { type: String, default: "" },
     photoUrl: { type: String, default: "" },
+    resumeUrl: { type: String, default: "/resume.pdf" },
     githubUrl: { type: String, default: "" },
     linkedinUrl: { type: String, default: "" },
     email: { type: String, default: "" },

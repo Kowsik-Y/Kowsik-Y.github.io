@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import { Github, ExternalLink, Star, ArrowUpRight, Images, X, ChevronLeft, ChevronRight } from "lucide-react";
@@ -40,15 +41,10 @@ function ProjectCard({ project, index, onPreview }: ProjectCardProps) {
         <BentoCard 
             interactive 
             delay={index * 0.05} 
-            className={`flex flex-col group h-full ${project.featured ? "md:col-span-2 !bg-foreground !text-background" : "bg-card"}`}
+            className={`flex flex-col group h-full ${project.featured ? "md:col-span-2 bg-foreground! text-background!" : "bg-card"}`}
         >
-            <div 
-                role="link"
-                tabIndex={0}
-                onClick={() => router.push(projectHref)}
-                onKeyDown={(e) => e.key === "Enter" && router.push(projectHref)}
-                className="flex-1 flex flex-col p-6 outline-none"
-            >
+            <div className="flex-1 flex flex-col p-6 outline-none">
+                <Link href={projectHref} className="flex-1 flex flex-col group/link">
                 {/* Header */}
                 <div className="flex items-start gap-5 mb-6">
                     {project.imageUrl && (
@@ -102,6 +98,7 @@ function ProjectCard({ project, index, onPreview }: ProjectCardProps) {
                 }`}>
                     {project.description}
                 </p>
+                </Link>
 
 
 

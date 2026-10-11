@@ -5,6 +5,7 @@ import Project from "@/models/Project";
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import { detailBreadcrumbs } from "@/lib/breadcrumbs";
 import ProjectDetailContent from "./ProjectDetailContent";
+import type { IProject } from "@/types";
 import { permanentRedirect, notFound } from "next/navigation";
 import { blobDisplayUrl } from "@/lib/blob-url";
 import {
@@ -79,7 +80,12 @@ export async function generateMetadata(
         const { id: slugOrId } = await params;
         const project = await getProjectSeoData(slugOrId);
 
-        if (!project) return { title: "Project Not Found" };
+        if (!project) {
+            return {
+                title: "Project Not Found",
+                robots: { index: false, follow: false },
+            };
+        }
 
         const projectId = project._id || slugOrId;
         const publicSlug = project.slug || buildProjectSlug(project.title, projectId);
@@ -241,7 +247,22 @@ export default async function ProjectDetailPage(
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
             />
-            <ProjectDetailContent />
+            <ProjectDetailContent initialProject={{
+                _id: String(project._id || projectId),
+                slug: publicSlug,
+                title: project.title || "Project",
+                description: project.description || "",
+                longDescription: project.longDescription,
+                techStack: project.techStack || [],
+                githubUrl: project.githubUrl,
+                liveUrl: project.liveUrl,
+                otherLinks: (project as any).otherLinks || [],
+                imageUrl: project.imageUrl,
+                screenshots: (project as any).screenshots || [],
+                featured: (project as any).featured || false,
+                order: (project as any).order || 0,
+                createdAt: project.createdAt ? new Date(project.createdAt).toISOString() : undefined,
+            }} />
         </>
     );
 }

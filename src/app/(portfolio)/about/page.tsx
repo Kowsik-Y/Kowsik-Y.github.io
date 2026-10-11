@@ -33,10 +33,36 @@ export default async function AboutPage() {
             Certificate.countDocuments({}),
         ]);
 
-    const profile = (profileDoc as Partial<IProfile>) ?? {};
-    const serializedSkills = (skills as LeanDoc<ISkill>[]).map(serialize);
-    const serializedEducation = (education as LeanDoc<IEducation>[]).map(serialize);
-    const serializedLanguages = (languages as LeanDoc<ILanguage>[]).map(serialize);
+    const rawProfile = profileDoc ? JSON.parse(JSON.stringify(profileDoc)) : {};
+    const profile = {
+        ...rawProfile,
+        _id: rawProfile._id ? String(rawProfile._id) : undefined,
+        customLinks: Array.isArray(rawProfile.customLinks)
+            ? rawProfile.customLinks.map((item: any) => ({
+                label: String(item.label || ""),
+                url: String(item.url || ""),
+            }))
+            : [],
+        githubActivityLinks: Array.isArray(rawProfile.githubActivityLinks)
+            ? rawProfile.githubActivityLinks.map((item: any) => ({
+                label: String(item.label || ""),
+                url: String(item.url || ""),
+            }))
+            : [],
+    };
+
+    const serializedSkills = JSON.parse(JSON.stringify(skills)).map((s: any) => ({
+        ...s,
+        _id: String(s._id || ""),
+    }));
+    const serializedEducation = JSON.parse(JSON.stringify(education)).map((e: any) => ({
+        ...e,
+        _id: String(e._id || ""),
+    }));
+    const serializedLanguages = JSON.parse(JSON.stringify(languages)).map((l: any) => ({
+        ...l,
+        _id: String(l._id || ""),
+    }));
 
     return (
         <AboutPageClient

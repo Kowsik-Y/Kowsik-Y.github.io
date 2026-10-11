@@ -91,6 +91,7 @@ export interface IProfile {
   title: string;
   bio: string;
   photoUrl: string;
+  resumeUrl?: string;
   githubUrl: string;
   linkedinUrl: string;
   email?: string;

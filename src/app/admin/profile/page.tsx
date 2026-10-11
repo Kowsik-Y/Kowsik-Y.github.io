@@ -7,13 +7,15 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import ImageUpload from "@/components/ui/image-upload";
+import FileUpload from "@/components/ui/file-upload";
 import { blobDisplayUrl } from "@/lib/blob-url";
-import { Plus, Trash2, Github, Globe, Link as LinkIcon, type LucideIcon } from "lucide-react";
+import { Plus, Trash2, Github, Globe, Link as LinkIcon, FileText, type LucideIcon } from "lucide-react";
 
 import type { IProfile } from "@/types";
 
 const EMPTY: IProfile = {
     name: "", title: "", bio: "", photoUrl: "",
+    resumeUrl: "/resume.pdf",
     githubUrl: "", linkedinUrl: "", email: "", phone: "",
     leetcodeUrl: "", hackerrankUrl: "", websiteUrl: "",
     githubStatsUrl: "", githubStreakUrl: "", snakeSourceUrl: "",
@@ -159,6 +161,23 @@ export default function AdminProfilePage() {
                             className="bg-foreground/5 border-border/60 text-foreground resize-none"
                         />
                     </div>
+                </div>
+
+                {/* ── Resume / CV ── */}
+                <div className="glass-card p-6 space-y-4">
+                    <SectionHeader icon={FileText} label="Resume / Curriculum Vitae" />
+                    <p className="text-muted-foreground/80 text-xs -mt-1">
+                        Your public resume is displayed at{" "}
+                        <a href="/resume" target="_blank" rel="noopener noreferrer" className="text-violet-500 hover:underline">
+                            /resume
+                        </a>{" "}
+                        and available as a direct download.
+                    </p>
+                    <FileUpload
+                        label="Resume PDF Document"
+                        value={form.resumeUrl || "/resume.pdf"}
+                        onChange={(url) => setForm((prev) => ({ ...prev, resumeUrl: url }))}
+                    />
                 </div>
 
                 {/* ── Socials ── */}

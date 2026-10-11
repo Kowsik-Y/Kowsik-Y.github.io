@@ -41,6 +41,7 @@ export default async function Footer() {
                         <Link href="/blogs" className="text-muted-foreground hover:text-foreground transition-colors">Blogs</Link>
                         <Link href="/certifications" className="text-muted-foreground hover:text-foreground transition-colors">Certifications</Link>
                         <Link href="/achievements" className="text-muted-foreground hover:text-foreground transition-colors">Achievements</Link>
+                        <Link href="/resume" className="text-muted-foreground hover:text-foreground transition-colors">Resume</Link>
                         <Link href="/contact" className="text-muted-foreground hover:text-foreground transition-colors">Contact</Link>
                     </div>
 
